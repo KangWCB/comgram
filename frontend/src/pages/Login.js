@@ -53,10 +53,10 @@ const LoginPage = () => {
     const testfunc = () => {
         let acctoken = localStorage.getItem('accessToken');
         axios.get('/api/members/info', {headers : 
-            {token: acctoken}})
+            {'X-AUTH-TOKEN': acctoken}})
         .then((res) => {
             console.log(res.data);
-            setText(res.data);
+            setText(res.data['nickname']);
         })
         .catch((err) => {
             console.log(err);
