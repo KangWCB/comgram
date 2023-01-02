@@ -1,5 +1,6 @@
 package KangWCB.comgram.member;
 
+import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import lombok.*;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @ToString
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
