@@ -8,15 +8,16 @@ const LoginPage = () => {
     const [name, setName] = useState(""); 
     const [nickname, setNickname] = useState(""); 
     const userObject = {
-        email,
-        pw,
-        name,
-        nickname,
+        'email' : email,
+        'pw' : pw,
+        'name' : name,
+        'nickname' : nickname,
     }
+
     const registerHandler = () => {
         console.log(userObject);
-        console.log("hi");
-        axios.post('/api/members/register', userObject)
+        const config = {"Content-Type" : 'application/json'};
+        axios.post('/api/members/register', userObject, config)
         .then((res) => {
             console.log(res.data);
         })
