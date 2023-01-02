@@ -81,6 +81,10 @@ const LoginPage = () => {
                 <br/>
                 
                 <button onClick={() => registerHandler()}>가입</button>
+                <button onClick={() => loginHandler()}>로그인</button>
+                <br/>status : {status}
+                <br/><button onClick={() => testfunc()}>test</button>
+                <br/>text : {text}
             </div>
         </div>
     )
