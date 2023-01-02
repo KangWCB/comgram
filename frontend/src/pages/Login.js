@@ -1,15 +1,16 @@
-import { useState, React} from 'react';
+import {useState, React} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
+
 const LoginPage = () => {
     console.log("hi1");
     const [email, setEmail] = useState(""); 
-    const [pw, setPw] = useState(""); 
+    const [password, setPassword] = useState(""); 
     const [name, setName] = useState(""); 
     const [nickname, setNickname] = useState(""); 
     const userObject = {
         'email' : email,
-        'pw' : pw,
+        'password' : password,
         'name' : name,
         'nickname' : nickname,
     }
@@ -32,7 +33,7 @@ const LoginPage = () => {
                 <input onChange={(e) => setEmail(e.target.value)}/>
                 <br/>
                 <label>pw</label>
-                <input onChange={(e) => setPw(e.target.value)}/>
+                <input onChange={(e) => setPassword(e.target.value)}/>
                 <br/>
                 <label>Name</label>
                 <input onChange={(e) => setName(e.target.value)}/>
