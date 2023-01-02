@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 
 const LoginPage = () => {
-    console.log("hi1");
     const [email, setEmail] = useState(""); 
     const [password, setPassword] = useState(""); 
     const [name, setName] = useState(""); 
     const [nickname, setNickname] = useState(""); 
     const [status, setStatus] = useState("");
+    const [text, setText] = useState("");
 
 
     const registerHandler = () => {
@@ -39,6 +39,8 @@ const LoginPage = () => {
         const config = {"Content-Type" : 'application/json'};
         axios.post('/api/members/login', userObject, config)
         .then((res) => {
+            localStorage.setItem('accessToken', res.data);
+            axios.defaults.headers.common['x-access-token'] = res.data;
             console.log(res.data);
             setStatus("로그인 성공");
         })
@@ -47,6 +49,20 @@ const LoginPage = () => {
             setStatus("로그인 실패");
         });
     };
+
+    const testfunc = () => {
+        let acctoken = localStorage.getItem('accessToken');
+        axios.get('/api/members/info', {headers : 
+            {token: acctoken}})
+        .then((res) => {
+            console.log(res.data);
+            setText(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }
+
 
     return (
         <div className="App">
@@ -65,8 +81,6 @@ const LoginPage = () => {
                 <br/>
                 
                 <button onClick={() => registerHandler()}>가입</button>
-                <button onClick={() => loginHandler()}>로그인</button>
-                <br/>status : {status}
             </div>
         </div>
     )
