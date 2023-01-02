@@ -5,9 +5,12 @@ import KangWCB.comgram.config.jwt.SecurityUser;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
+import KangWCB.comgram.member.dto.MemberUpdateForm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,7 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     // 회원가입
     @PostMapping("/register")
@@ -42,6 +46,7 @@ public class MemberController {
         return jwtTokenProvider.createToken(member.getEmail(), member.getRole());
     }
 
+    // 회원 정보 출력
     @GetMapping("/info")
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
         return MemberInfoDto.builder()
@@ -49,6 +54,15 @@ public class MemberController {
                 .nickname(member.getMember().getNickname())
                 .build();
     }
+
+    // 회원수정
+    @PostMapping("/{id}/update")
+    public ResponseEntity memberUpdate(@RequestBody MemberUpdateForm memberUpdateForm,
+                                       @PathVariable(name = "id") Long memberId){
+        Long updateMemberId = memberService.update(memberUpdateForm, memberId);
+        return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
+    }
+
 
 //    @Data
 //    @AllArgsConstructor

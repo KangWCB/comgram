@@ -1,6 +1,7 @@
 package KangWCB.comgram.member;
 
 import KangWCB.comgram.member.dto.MemberFormDto;
+import KangWCB.comgram.member.dto.MemberUpdateForm;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -25,7 +26,7 @@ public class Member {
 
     // 개인 정보
     private String name;
-    private String nickname;
+    private String nickName;
 
     //프로필 사진
     @Enumerated(EnumType.STRING)
@@ -36,7 +37,7 @@ public class Member {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.nickname = nickname;
+        this.nickName = nickname;
         this.role = role;
     }
 
@@ -51,4 +52,10 @@ public class Member {
                 .build();
         return member;
     }
+
+    public void updateMember(MemberUpdateForm memberUpdateForm){
+        this.nickName = memberUpdateForm.getNickname();
+        this.name = memberUpdateForm.getName();
+    }
+
 }
