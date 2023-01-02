@@ -6,16 +6,12 @@ import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/members")
@@ -51,7 +47,7 @@ public class MemberController {
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
         return MemberInfoDto.builder()
                 .email(member.getMember().getEmail())
-                .nickname(member.getMember().getNickname())
+                .nickname(member.getMember().getNickName())
                 .build();
     }
 
@@ -61,6 +57,12 @@ public class MemberController {
                                        @PathVariable(name = "id") Long memberId){
         Long updateMemberId = memberService.update(memberUpdateForm, memberId);
         return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
+    }
+
+    // 회원 삭제
+    @DeleteMapping("/{id}/delete")
+    public void memberDelete(@PathVariable(name = "id") Long memberId){
+        memberRepository.deleteById(memberId);
     }
 
 
