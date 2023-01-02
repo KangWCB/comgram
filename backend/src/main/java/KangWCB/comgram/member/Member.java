@@ -1,5 +1,7 @@
 package KangWCB.comgram.member;
 
+import KangWCB.comgram.member.dto.MemberFormDto;
+import KangWCB.comgram.member.dto.MemberUpdateForm;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,7 +26,7 @@ public class Member {
 
     // 개인 정보
     private String name;
-    private String nickname;
+    private String nickName;
 
     //프로필 사진
     @Enumerated(EnumType.STRING)
@@ -35,20 +37,25 @@ public class Member {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.nickname = nickname;
+        this.nickName = nickname;
         this.role = role;
     }
 
-//    //== 생성 메소드
-//    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
-//        Member member = Member.builder()
-//                .name(memberFormDto.getName())
-//                .email(memberFormDto.getEmail())
-//                .password(passwordEncoder.encode(memberFormDto.getPassword())) // 암호화
-//                .nickname(memberFormDto.getNickName())
-//                .gender(memberFormDto.getGender())
-//                .role(Role.USER)
-//                .build();
-//        return member;
-//    }
+    //== 생성 메소드
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+        Member member = Member.builder()
+                .name(memberFormDto.getName())
+                .email(memberFormDto.getEmail())
+                .password(passwordEncoder.encode(memberFormDto.getPassword())) // 암호화
+                .nickname(memberFormDto.getNickname())
+                .role(Role.USER)
+                .build();
+        return member;
+    }
+
+    public void updateMember(MemberUpdateForm memberUpdateForm){
+        this.nickName = memberUpdateForm.getNickname();
+        this.name = memberUpdateForm.getName();
+    }
+
 }

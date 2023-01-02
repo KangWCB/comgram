@@ -65,7 +65,7 @@ const LoginPage = () => {
             {'Authorization': acctoken}})
         .then((res) => {
             console.log(res.data);
-            setText(res.data);
+            setText(res.data['nickname']);
         })
         .catch((err) => {
             console.log(err);
