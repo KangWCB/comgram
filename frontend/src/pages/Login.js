@@ -1,6 +1,7 @@
 import {useState, React} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
+import './Login.css';
 
 const LoginPage = () => {
     const [email, setEmail] = useState(""); 
@@ -50,10 +51,18 @@ const LoginPage = () => {
         });
     };
 
+    const formChange = (e) => {
+        const container = document.getElementById('container');
+        let id = e.currentTarget.id;  
+        if(id === 'signUp')
+            container.classList.add("right-panel-active");
+        else if(id === 'signIn')
+            container.classList.remove("right-panel-active");
+    };
     const testfunc = () => {
         let acctoken = localStorage.getItem('accessToken');
         axios.get('/api/members/info', {headers : 
-            {token: acctoken}})
+            {'Authorization': acctoken}})
         .then((res) => {
             console.log(res.data);
             setText(res.data);
@@ -64,29 +73,68 @@ const LoginPage = () => {
     }
 
 
+
     return (
-        <div className="App">
-            <div>
-                <label>Email</label>
-                <input onChange={(e) => setEmail(e.target.value)}/>
-                <br/>
-                <label>pw</label>
-                <input onChange={(e) => setPassword(e.target.value)}/>
-                <br/>
-                <label>Name</label>
-                <input onChange={(e) => setName(e.target.value)}/>
-                <br/>
-                <label>Nickname</label>
-                <input onChange={(e) => setNickname(e.target.value)}/>
-                <br/>
-                
-                <button onClick={() => registerHandler()}>가입</button>
-                <button onClick={() => loginHandler()}>로그인</button>
-                <br/>status : {status}
-                <br/><button onClick={() => testfunc()}>test</button>
-                <br/>text : {text}
+        
+    <div className="container" id="container">
+        <div className="form-container sign-up-container">
+          <form>
+            {/*test*/}
+            <h5>status:{status}</h5> 
+            <h5>text:{text}</h5> 
+            {/*test*/}
+            <h1>Create Account</h1>
+            <div className="social-container">
+              
             </div>
+            <span>or use your email for registration</span>
+            
+            <input type="email" placeholder="Email"
+            onChange={(e) => setEmail((e.target.value))}/>
+            <input type="password" placeholder="Password"
+            onChange={(e) => setPassword((e.target.value))}/>
+            <input type="text" placeholder="Name" 
+            onChange={(e) => setName((e.target.value))}/>
+            <input type="text" placeholder="NickName" 
+            onChange={(e) => setNickname((e.target.value))}/>
+            <button onClick={() => registerHandler()}>Sign Up</button>
+          </form>
         </div>
+        <div className="form-container sign-in-container">
+          <form>
+            {/*test*/}
+            <h5>status:{status}</h5> 
+            <h5>text:{text}</h5> 
+            {/*test*/}
+            <h1>Sign in</h1>
+            <div className="social-container">
+              
+            </div>
+            <span>or use your account</span>
+            <input type="email" placeholder="Email"
+            onChange={(e) => setEmail((e.target.value))}/>
+            <input type="password" placeholder="Password"
+            onChange={(e) => setPassword((e.target.value))}/>
+            <a href="#">Forgot your password?</a>
+            <button onClick={() => loginHandler()}>Sign In</button>
+          </form>
+        </div>
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1>Welcome Back!</h1>
+              <p>To keep connected with us please login with your personal info</p>
+              <button className="ghost" id="signIn" onClick={(e) => formChange(e)}>Sign In</button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1>Hello, Friend!</h1>
+              <p>Enter your personal details and start journey with us</p>
+              <button className="ghost" id="signUp" onClick={(e) => formChange(e)}>Sign Up</button>
+            </div>   
+          </div>
+
+        </div>
+      </div>
     )
 };
 export default LoginPage;
