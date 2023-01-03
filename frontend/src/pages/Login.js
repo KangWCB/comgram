@@ -1,5 +1,5 @@
-import {useState, React} from 'react';
-import ReactDOM from 'react-dom/client';
+import {useState, React, useEffect} from 'react';
+import {Link, useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import './Login.css';
 
@@ -10,13 +10,17 @@ const LoginPage = () => {
     const [nickname, setNickname] = useState(""); 
     const [status, setStatus] = useState("");
     const [text, setText] = useState("");
+    const navigate = useNavigate();
 
-
+    useEffect(() => {
+      let acctoken = localStorage.getItem('accessToken');
+      if(acctoken) // 토큰 있으면 메인페이지 이동
+      {
+        navigate("/");
+        console.log(`token: ${acctoken}`);
+      }
+    },[]);
     const registerHandler = () => {
-        setEmail(document.getElementById('signUp_email').value);
-        setPassword(document.getElementById('signUp_Password').value);
-        setName(document.getElementById('signUp_Name').value);
-        setNickname(document.getElementById('signUp_NickName').value);
         const userObject = {
             'email' : email,
             'password' : password,
@@ -45,13 +49,18 @@ const LoginPage = () => {
         axios.post('/api/members/login', userObject, config)
         .then((res) => {
             localStorage.setItem('accessToken', res.data);
-            axios.defaults.headers.common['Authorization'] = res.data;
+            axios.defaults.headers.common['x-access-token'] = res.data;
             console.log(res.data);
             setStatus("로그인 성공");
+            let acctoken = localStorage.getItem('accessToken');
+            console.log(`test: ${acctoken}`);
+
+            localStorage.setItem('Islogin', true);
         })
         .catch((err) => {
             console.log(err);
             setStatus("로그인 실패");
+            localStorage.setItem('Islogin', false);
         });
     };
 
@@ -69,7 +78,7 @@ const LoginPage = () => {
             {'Authorization': acctoken}})
         .then((res) => {
             console.log(res.data);
-            setText(res.data['nickname']);
+            setText(res.data);
         })
         .catch((err) => {
             console.log(err);
@@ -79,7 +88,7 @@ const LoginPage = () => {
 
 
     return (
-        
+    <div className='body'>
     <div className="container" id="container">
         <div className="form-container sign-up-container">
           <form>
@@ -93,10 +102,14 @@ const LoginPage = () => {
             </div>
             <span>or use your email for registration</span>
             
-            <input type="email" placeholder="Email" id="signUp_email"/>
-            <input type="password" placeholder="Password" id="signUp_Password"/>
-            <input type="text" placeholder="Name" id="signUp_Name"/>
-            <input type="text" placeholder="NickName" id="signUp_NickName"/>
+            <input type="email" placeholder="Email"
+            onChange={(e) => setEmail((e.target.value))}/>
+            <input type="password" placeholder="Password"
+            onChange={(e) => setPassword((e.target.value))}/>
+            <input type="text" placeholder="Name" 
+            onChange={(e) => setName((e.target.value))}/>
+            <input type="text" placeholder="NickName" 
+            onChange={(e) => setNickname((e.target.value))}/>
             <button onClick={() => registerHandler()}>Sign Up</button>
           </form>
         </div>
@@ -116,7 +129,9 @@ const LoginPage = () => {
             <input type="password" placeholder="Password"
             onChange={(e) => setPassword((e.target.value))}/>
             <a href="#">Forgot your password?</a>
-            <button onClick={() => loginHandler()}>Sign In</button>
+            <Link to="/">
+              <button onClick={() => loginHandler()}>Sign In</button>
+            </Link>
           </form>
         </div>
         <div className="overlay-container">
@@ -134,6 +149,7 @@ const LoginPage = () => {
           </div>
 
         </div>
+      </div>
       </div>
     )
 };
