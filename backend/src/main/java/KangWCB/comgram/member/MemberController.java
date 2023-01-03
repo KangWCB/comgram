@@ -2,25 +2,40 @@ package KangWCB.comgram.member;
 
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
 import KangWCB.comgram.config.jwt.SecurityUser;
+import KangWCB.comgram.error.ErrorResult;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
+
+    // @ResponseStatus(HttpStatus.BAD_REQUEST) : 상태코드도 바꿔주고 싶을 때 사용
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    // 서블릿 컨테이너까지 지저분하게 가지 않고, 정상 흐름으로 끝날 수 있음
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResult illegalExHandle(IllegalArgumentException e) {
+        log.error("[exceptionHandle] ex", e);
+        return new ErrorResult("BAD", e.getMessage());
+    }
 
     // 회원가입
     @PostMapping("/register")
