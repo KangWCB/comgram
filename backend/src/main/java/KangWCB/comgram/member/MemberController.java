@@ -28,14 +28,13 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
 
-    // @ResponseStatus(HttpStatus.BAD_REQUEST) : 상태코드도 바꿔주고 싶을 때 사용
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    // 서블릿 컨테이너까지 지저분하게 가지 않고, 정상 흐름으로 끝날 수 있음
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResult illegalExHandle(IllegalArgumentException e) {
-        log.error("[exceptionHandle] ex", e);
-        return new ErrorResult("BAD", e.getMessage());
-    }
+//    @ExceptionHandler
+//    // ResponseEntity<ErrorResult> 사용
+//    public ResponseEntity<ErrorResult> userExHandle(Exception e) {
+//        log.error("[exceptionHandle] ex", e);
+//        ErrorResult errorResult = new ErrorResult("USER-EX", e.getMessage());
+//        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
+//    }
 
     // 회원가입
     @PostMapping("/register")
