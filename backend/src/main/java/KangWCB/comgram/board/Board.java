@@ -6,6 +6,9 @@ import KangWCB.comgram.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,15 +22,18 @@ public class Board extends BaseTimeEntity {
     private String content; // 본문
     private int viewCount; // 조회수
 
+    private Long imgId; // 저장된 이미지 id
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member; // 작성자
 
 
     @Builder
-    public Board(String content, int viewCount, Member member) {
+    public Board(String content, int viewCount, Member member, Long imgId) {
         this.content = content;
         this.viewCount = viewCount;
         this.member = member;
+        this.imgId = imgId;
     }
 
     // 생성 메소드
@@ -35,6 +41,7 @@ public class Board extends BaseTimeEntity {
         Board writeBoard = Board.builder()
                 .content(boardFormDto.getContent())
                 .viewCount(0)
+                .imgId(boardFormDto.getImgId())
                 .member(boardFormDto.getMember())
                 .build();
 

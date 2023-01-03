@@ -7,8 +7,10 @@ import lombok.Data;
 
 @Data
 public class BoardFormDto {
+
     private String content;// 본문
     private Member member; // 저장된 img id
+    private Long imgId;
 
     @Builder
     public BoardFormDto(String content, Member member) {
