@@ -1,9 +1,12 @@
 package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.dto.BoardFormDto;
+import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +28,6 @@ public class BoardController {
     private final PhotoService photoService;
 
     @PostMapping("/write")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity write(@RequestParam(value = "content") String content,
                                   @RequestParam(value="photo", required=false) MultipartFile file,
                                   @AuthenticationPrincipal SecurityUser member) {
@@ -43,8 +45,18 @@ public class BoardController {
             log.info("exception:{}",e.getMessage());
             return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
-
-        log.info("controller: {}",boardService.write(boardFormDto));
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/list")
+    public Result<List> list(){
+        List<BoardMainDto> boardMainDtos = boardService.allList();
+        return new Result<>(boardMainDtos);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
     }
 }

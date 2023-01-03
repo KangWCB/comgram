@@ -27,7 +27,7 @@ public class InitDb {
     public void init(){
 
         initService.dbInit1();
-        initService.dbInit2();
+//        initService.dbInit2();
     }
 
     @Component
