@@ -45,7 +45,7 @@ const LoginPage = () => {
         axios.post('/api/members/login', userObject, config)
         .then((res) => {
             localStorage.setItem('accessToken', res.data);
-            axios.defaults.headers.common['x-access-token'] = res.data;
+            axios.defaults.headers.common['Authorization'] = res.data;
             console.log(res.data);
             setStatus("로그인 성공");
         })
