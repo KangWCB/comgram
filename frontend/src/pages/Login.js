@@ -13,6 +13,10 @@ const LoginPage = () => {
 
 
     const registerHandler = () => {
+        setEmail(document.getElementById('signUp_email').value);
+        setPassword(document.getElementById('signUp_Password').value);
+        setName(document.getElementById('signUp_Name').value);
+        setNickname(document.getElementById('signUp_NickName').value);
         const userObject = {
             'email' : email,
             'password' : password,
@@ -89,14 +93,10 @@ const LoginPage = () => {
             </div>
             <span>or use your email for registration</span>
             
-            <input type="email" placeholder="Email"
-            onChange={(e) => setEmail((e.target.value))}/>
-            <input type="password" placeholder="Password"
-            onChange={(e) => setPassword((e.target.value))}/>
-            <input type="text" placeholder="Name" 
-            onChange={(e) => setName((e.target.value))}/>
-            <input type="text" placeholder="NickName" 
-            onChange={(e) => setNickname((e.target.value))}/>
+            <input type="email" placeholder="Email" id="signUp_email"/>
+            <input type="password" placeholder="Password" id="signUp_Password"/>
+            <input type="text" placeholder="Name" id="signUp_Name"/>
+            <input type="text" placeholder="NickName" id="signUp_NickName"/>
             <button onClick={() => registerHandler()}>Sign Up</button>
           </form>
         </div>
