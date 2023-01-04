@@ -30,28 +30,14 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final PhotoService photoService;
-
     @Value("${default.profile}")
     private String defaultProfile;
-
-//    @ExceptionHandler
-//    // ResponseEntity<ErrorResult> 사용
-//    public ResponseEntity<ErrorResult> userExHandle(Exception e) {
-//        log.error("[exceptionHandle] ex", e);
-//        ErrorResult errorResult = new ErrorResult("USER-EX", e.getMessage());
-//        return new ResponseEntity<>(errorResult, HttpStatus.BAD_REQUEST);
-//    }
-
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody MemberFormDto memberFormDto,
-                         @RequestParam(name = "photo",required = false) MultipartFile file,
-                                     Model model) {
+    public ResponseEntity register(@RequestBody MemberFormDto memberFormDto) {
         Member saveMember = memberRepository.save(Member.createMember(memberFormDto, passwordEncoder));
-        model.addAttribute("memberId",saveMember.getId());
         return new ResponseEntity<>(saveMember.getId(), HttpStatus.CREATED);
     }
-
     // 로그인
     @PostMapping("/login")
     public String login(@RequestBody MemberLoginDto memberLoginDto) {
@@ -62,7 +48,6 @@ public class MemberController {
         }
         return jwtTokenProvider.createToken(member.getEmail(), member.getRole());
     }
-
     // 회원 정보 출력
     @GetMapping("/info")
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
@@ -72,7 +57,6 @@ public class MemberController {
                 .profilePhotoUrl(getSavePath(member))
                 .build();
     }
-
     /**
      * 프로필 사진 주소
      */
@@ -80,7 +64,6 @@ public class MemberController {
         Long photoProfileId = member.getMember().getPhotoProfileId();
         return photoProfileId!= null ?  photoService.findSavePath(photoProfileId): defaultProfile;
     }
-
     // 회원수정
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
@@ -89,18 +72,9 @@ public class MemberController {
         Long updateMemberId = memberService.update(memberUpdateForm, memberId,file);
         return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
     }
-
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
     public void memberDelete(@PathVariable(name = "id") Long memberId){
         memberRepository.deleteById(memberId);
     }
-
-
-//    @Data
-//    @AllArgsConstructor
-//    static class Result<T> {
-//        private T data;
-//    }
-
 }
