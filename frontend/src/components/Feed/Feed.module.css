@@ -18,3 +18,23 @@
     border: 5pt groove #3f51b5;
 }
 
+
+.photo {
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 500px;
+    border: 5pt groove #3f51b5;
+}
+
+
+.likeIcon {
+    text-align: left;
+    color: red;
+}
+
+.comment {
+    text-align: left;
+    margin-left: 10%;
+    
+}

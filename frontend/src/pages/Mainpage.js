@@ -3,12 +3,10 @@ import {useState, React, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import styles from './Mainpage.module.css'
-import { BsHeart, BsHeartFill } from "react-icons/bs";
+import Feed from '../components/Feed/Feed';
 
 const Mainpage = () => {
     const [nickname, setNickname] = useState("");
-    const [like, setLike] = useState(false);
-    
     
     let Islogin = false;
     let acctoken = localStorage.getItem('accessToken');
@@ -63,9 +61,6 @@ const Mainpage = () => {
         });
     };
 
-    const likeHandler = () => {
-        setLike(!like);
-    };
 
     return (
         <div className={styles.container}>
@@ -75,20 +70,8 @@ const Mainpage = () => {
         <button onClick={() => logoutHandler()}>Logout</button>
         <br/>nick : {nickname}
         <br/>tk : {acctoken}
+        <Feed/>
 
-        <div className={styles.content}>
-
-            <img className={styles.photo} src="img/hi.png"></img>
-
-            <div className={styles.comment}>
-                <div className='like' onClick={likeHandler}>
-                {
-                    like ? (<BsHeart className={styles.likeIcon}/>) : (<BsHeartFill className={styles.likeIcon}/>)
-                }
-                <h3>ㅋㅋ</h3>
-            </div>
-            </div>
-        </div>
             
         </div>
         
