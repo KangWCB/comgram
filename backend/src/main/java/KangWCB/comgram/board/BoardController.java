@@ -49,8 +49,8 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public Result<List> list(){
-        List<BoardMainDto> boardMainDtos = boardService.allList();
+    public Result<List> list(@AuthenticationPrincipal SecurityUser user){
+        List<BoardMainDto> boardMainDtos = boardService.allList(user.getMember().getId());
         return new Result<>(boardMainDtos);
     }
 

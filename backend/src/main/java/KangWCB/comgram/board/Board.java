@@ -28,6 +28,7 @@ public class Board extends BaseTimeEntity {
     private Long imgId; // 저장된 이미지 id
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member; // 작성자
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)

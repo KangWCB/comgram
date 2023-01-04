@@ -14,6 +14,13 @@ import java.util.Optional;
 public interface BoardLikeRepository extends JpaRepository<BoardLike,Long> {
     Optional <BoardLike> findByMemberAndBoard(Member member, Board board);
 
+
     @Query("select count(bl) from BoardLike bl where bl.board.id = :boardId")
     Long countLikes(@Param("boardId") Long boardId);
+
+
+    @Query("select bl from BoardLike bl where bl.board.id= :boardId and bl.member = :member")
+    Optional<BoardLike> existsBoardLike(@Param("boardId") Long boarId,
+                                        @Param("member") Member member);
+
 }

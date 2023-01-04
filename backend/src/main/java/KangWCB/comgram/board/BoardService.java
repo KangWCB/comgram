@@ -6,6 +6,7 @@ import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.repository.BoardQueryRepository;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
+import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class BoardService {
     private final BoardQueryRepository queryRepository;
     private final PhotoRepository photoRepository;
     private final BoardLikeRepository boardLikeRepository;
-
+    private final MemberRepository memberRepository;
     /**
      * 글 작성
      */
@@ -36,15 +37,28 @@ public class BoardService {
         return saveBoards.getId();
     }
 
-    public List<BoardMainDto> allList() {
+    public List<BoardMainDto> allList(Long memberId) {
         List<Board> allBoard = boardRepository.findAll();
         List<BoardMainDto> boardMainDtos = new ArrayList<>();
+        Member member = memberRepository.findById(memberId).orElseThrow();
         for (Board board : allBoard) {
             Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
             Long likesCount = boardLikeRepository.countLikes(board.getId());
-            BoardMainDto boardMainDto = BoardMainDto.builder().content(board.getContent()).savedImgPath(photo.getSavedPath()).likeCount(likesCount).build();
+            BoardMainDto boardMainDto = BoardMainDto.builder()
+                    .id(board.getId())
+                    .content(board.getContent())
+                    .contentImgPath(photo.getSavedPath())
+                    .likeCount(likesCount)
+                    .nickName(board.getMember().getNickName())
+                    .profileImgPath(board.getMember().getProfileImgPath())
+                    .pushLike(isPushLike(member, board))
+                    .build();
             boardMainDtos.add(boardMainDto);
         }
         return boardMainDtos;
+    }
+
+    private boolean isPushLike(Member member, Board board) {
+        return boardLikeRepository.existsBoardLike(board.getId(), member).isPresent() ? true : false;
     }
 }

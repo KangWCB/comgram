@@ -24,7 +24,7 @@ public class BoardLikeController {
             @PathVariable(name = "boardId") Long boardId){
         boolean result = false;
         if (securityUser != null){
-            result = boardLikeService.addLike(securityUser.getMember(),boardId);
+            result = boardLikeService.addLike(securityUser.getMember().getId(),boardId);
         }
         return result ?
                 new ResponseEntity<>(HttpStatus.OK)
