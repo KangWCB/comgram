@@ -25,8 +25,6 @@ public class MemberFormDto {
     @NotEmpty(message = "칸을 채워주세요.")
     private String nickname;
 
-    private Long imgId;
-
     private Role role;
 
     @Builder

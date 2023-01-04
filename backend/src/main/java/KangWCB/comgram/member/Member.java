@@ -51,7 +51,7 @@ public class Member extends BaseTimeEntity {
                 .email(memberFormDto.getEmail())
                 .password(passwordEncoder.encode(memberFormDto.getPassword())) // 암호화
                 .nickname(memberFormDto.getNickname())
-                .photoProfileId(memberFormDto.getImgId())
+                .photoProfileId(null)
                 .role(Role.USER)
                 .build();
         return member;
@@ -62,4 +62,7 @@ public class Member extends BaseTimeEntity {
         this.name = memberUpdateForm.getName();
     }
 
+    public void updatePhoto(Long savedImgId) {
+        this.photoProfileId = savedImgId;
+    }
 }

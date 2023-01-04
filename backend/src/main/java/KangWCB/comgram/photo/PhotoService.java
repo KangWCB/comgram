@@ -62,7 +62,7 @@ public class PhotoService {
     }
 
     public String findSavePath(Long imgId){
-        Photo photo = fileRepository.findById(imgId).orElse(null);
+        Photo photo = fileRepository.findById(imgId).orElseThrow();
         return photo.getSavedPath();
     }
 

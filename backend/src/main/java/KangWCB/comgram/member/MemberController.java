@@ -2,7 +2,6 @@ package KangWCB.comgram.member;
 
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
 import KangWCB.comgram.config.jwt.SecurityUser;
-import KangWCB.comgram.error.ErrorResult;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
@@ -10,17 +9,16 @@ import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/members")
@@ -33,6 +31,9 @@ public class MemberController {
     private final MemberService memberService;
     private final PhotoService photoService;
 
+    @Value("${default.profile}")
+    private String defaultProfile;
+
 //    @ExceptionHandler
 //    // ResponseEntity<ErrorResult> 사용
 //    public ResponseEntity<ErrorResult> userExHandle(Exception e) {
@@ -43,21 +44,12 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity register(MemberFormDto memberFormDto,
-                         @RequestParam(name = "photo") MultipartFile file,
+    public ResponseEntity register(@RequestBody MemberFormDto memberFormDto,
+                         @RequestParam(name = "photo",required = false) MultipartFile file,
                                      Model model) {
-        try{
-            Long savedImgId = photoService.saveFile(file);
-            if(savedImgId!=null){
-                memberFormDto.setImgId(savedImgId);
-            }
-            Member saveMember = memberRepository.save(Member.createMember(memberFormDto, passwordEncoder));
-            model.addAttribute("memberId",saveMember.getId());
-        } catch (UsernameNotFoundException e){
-            log.info("exception:{}",e.getMessage());
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(model.getAttribute("memberId"), HttpStatus.CREATED);
+        Member saveMember = memberRepository.save(Member.createMember(memberFormDto, passwordEncoder));
+        model.addAttribute("memberId",saveMember.getId());
+        return new ResponseEntity<>(saveMember.getId(), HttpStatus.CREATED);
     }
 
     // 로그인
@@ -85,14 +77,16 @@ public class MemberController {
      * 프로필 사진 주소
      */
     private String getSavePath(SecurityUser member) {
-        return photoService.findSavePath(member.getMember().getPhotoProfileId());
+        Long photoProfileId = member.getMember().getPhotoProfileId();
+        return photoProfileId!= null ?  photoService.findSavePath(photoProfileId): defaultProfile;
     }
 
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(@RequestBody MemberUpdateForm memberUpdateForm,
+    public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
+                                       @RequestParam(name = "photo") Optional<MultipartFile> file,
                                        @PathVariable(name = "id") Long memberId){
-        Long updateMemberId = memberService.update(memberUpdateForm, memberId);
+        Long updateMemberId = memberService.update(memberUpdateForm, memberId,file);
         return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
     }
 
