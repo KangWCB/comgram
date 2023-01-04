@@ -13,7 +13,4 @@ import java.util.Set;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board,Long> {
-
-     @Query("select count(b.likes) from Board b where b.id = :id")
-     Long countLikes(@Param("id") Long boardId);
 }

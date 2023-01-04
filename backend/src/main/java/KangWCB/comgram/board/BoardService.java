@@ -1,5 +1,6 @@
 package KangWCB.comgram.board;
 
+import KangWCB.comgram.board.boardLike.BoardLikeRepository;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.repository.BoardQueryRepository;
@@ -24,6 +25,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository queryRepository;
     private final PhotoRepository photoRepository;
+    private final BoardLikeRepository boardLikeRepository;
 
     /**
      * 글 작성
@@ -39,7 +41,7 @@ public class BoardService {
         List<BoardMainDto> boardMainDtos = new ArrayList<>();
         for (Board board : allBoard) {
             Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
-            Long likesCount = boardRepository.countLikes(board.getId());
+            Long likesCount = boardLikeRepository.countLikes(board.getId());
             BoardMainDto boardMainDto = BoardMainDto.builder().content(board.getContent()).savedImgPath(photo.getSavedPath()).likeCount(likesCount).build();
             boardMainDtos.add(boardMainDto);
         }

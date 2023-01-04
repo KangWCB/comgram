@@ -14,6 +14,7 @@ public class BoardLikeService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardRepository boardRepository;
 
+    @Transactional
     public boolean addLike(Member member, Long boardId){
         Board findBoard = boardRepository.findById(boardId).orElseThrow();
 
