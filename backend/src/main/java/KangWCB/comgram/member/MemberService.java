@@ -22,4 +22,5 @@ public class MemberService {
         return findMember.getId();
     }
 
+
 }

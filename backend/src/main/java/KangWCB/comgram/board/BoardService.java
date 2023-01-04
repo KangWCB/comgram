@@ -9,6 +9,7 @@ import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
+import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class BoardService {
     private final PhotoRepository photoRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final MemberRepository memberRepository;
+    private final PhotoService photoService;
     /**
      * 글 작성
      */
@@ -50,7 +52,7 @@ public class BoardService {
                     .contentImgPath(photo.getSavedPath())
                     .likeCount(likesCount)
                     .nickName(board.getMember().getNickName())
-                    .profileImgPath(board.getMember().getProfileImgPath())
+                    .profileImgPath(photoService.findSavePath(board.getMember().getPhotoProfileId()))
                     .pushLike(isPushLike(member, board))
                     .build();
             boardMainDtos.add(boardMainDto);
