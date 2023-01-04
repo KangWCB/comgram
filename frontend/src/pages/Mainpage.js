@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import styles from './Mainpage.module.css'
 import Feed from '../components/Feed/Feed';
+import Profile from '../components/Profile/Profile';
 
 const Mainpage = () => {
     const [nickname, setNickname] = useState("");
@@ -71,6 +72,7 @@ const Mainpage = () => {
         <br/>nick : {nickname}
         <br/>tk : {acctoken}
         <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
+        <Profile inherit_token={acctoken}/> {/*토큰 상속*/}
 
             
         </div>
