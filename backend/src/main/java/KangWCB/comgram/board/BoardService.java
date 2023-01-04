@@ -39,7 +39,8 @@ public class BoardService {
         List<BoardMainDto> boardMainDtos = new ArrayList<>();
         for (Board board : allBoard) {
             Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
-            BoardMainDto boardMainDto = BoardMainDto.builder().content(board.getContent()).savedImgPath(photo.getSavedPath()).build();
+            Long likesCount = boardRepository.countLikes(board.getId());
+            BoardMainDto boardMainDto = BoardMainDto.builder().content(board.getContent()).savedImgPath(photo.getSavedPath()).likeCount(likesCount).build();
             boardMainDtos.add(boardMainDto);
         }
         return boardMainDtos;

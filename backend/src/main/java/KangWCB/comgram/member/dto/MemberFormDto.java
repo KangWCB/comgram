@@ -1,15 +1,14 @@
 package KangWCB.comgram.member.dto;
 
 import KangWCB.comgram.member.Role;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberFormDto {
 
     @Email
@@ -28,4 +27,12 @@ public class MemberFormDto {
 
     private Role role;
 
+    @Builder
+    public MemberFormDto(String email, String password, String name, String nickname, Role role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.role = role;
+    }
 }

@@ -9,4 +9,5 @@ import lombok.Data;
 public class BoardMainDto {
     private String  content;
     private String  savedImgPath;
+    private Long likeCount;
 }

@@ -11,11 +11,11 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-@Table(name = "File")
+@Table(name = "Photo")
 public class Photo extends BaseTimeEntity {
     @Id
     @GeneratedValue
-    @Column(name="file_id")
+    @Column(name="photo_id")
     private Long id;
     private String orgNm;
 
