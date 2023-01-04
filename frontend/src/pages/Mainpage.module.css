@@ -1,0 +1,20 @@
+.container {
+    -ms-user-select: none; 
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+
+.content {
+    
+    position: relative;
+    text-align: center;
+    margin-left: 15%;
+    margin-right: 15%;
+    border: 5pt groove #3f51b5;
+}
+
