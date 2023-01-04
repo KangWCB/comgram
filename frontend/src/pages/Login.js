@@ -14,7 +14,8 @@ const LoginPage = () => {
 
     useEffect(() => {
       let acctoken = localStorage.getItem('accessToken');
-      if(acctoken) // 토큰 있으면 메인페이지 이동
+      let islogin = localStorage.getItem('isLogin');
+      if(acctoken && islogin) // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
         navigate("/");
         console.log(`token: ${acctoken}`);
@@ -55,12 +56,12 @@ const LoginPage = () => {
             let acctoken = localStorage.getItem('accessToken');
             console.log(`test: ${acctoken}`);
 
-            localStorage.setItem('Islogin', true);
+            localStorage.setItem('IsLogin', true);
         })
         .catch((err) => {
             console.log(err);
             setStatus("로그인 실패");
-            localStorage.setItem('Islogin', false);
+            localStorage.setItem('IsLogin', false);
         });
     };
 
