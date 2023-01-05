@@ -23,7 +23,6 @@ public class MemberService {
     public Long update(MemberUpdateForm memberUpdateForm, Long memberId, Optional<MultipartFile> file){
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("회원이 없습니다."));
-
         try{
             if(file.isPresent()){
                 Long savedImgId = photoService.saveFile(file.orElseThrow());

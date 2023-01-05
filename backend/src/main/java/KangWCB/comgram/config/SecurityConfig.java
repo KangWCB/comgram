@@ -19,13 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-
     private final JwtTokenProvider jwtTokenProvider;
-
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final UserOAuth2Service userOAuth2Service;
-
-
     // 비밀번호 암호화
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -7,6 +7,8 @@ import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.PhotoService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,19 +37,22 @@ public class MemberController {
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody MemberFormDto memberFormDto) {
-        Member saveMember = memberRepository.save(Member.createMember(memberFormDto, passwordEncoder));
-        return new ResponseEntity<>(saveMember.getId(), HttpStatus.CREATED);
+        Member savedMember = memberRepository.save(Member.createMember(memberFormDto, passwordEncoder));
+        return new ResponseEntity<>(savedMember.getId(), HttpStatus.CREATED);
     }
+
     // 로그인
     @PostMapping("/login")
-    public String login(@RequestBody MemberLoginDto memberLoginDto) {
+    public Result<String> login(@RequestBody MemberLoginDto memberLoginDto) {
         Member member = memberRepository.findByEmail(memberLoginDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입 되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new IllegalArgumentException("이메일 또는 비밀번호가 맞지 않습니다.");
         }
-        return jwtTokenProvider.createToken(member.getEmail(), member.getRole());
+        Result<String> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
+        return result;
     }
+
     // 회원 정보 출력
     @GetMapping("/info")
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
@@ -76,5 +81,15 @@ public class MemberController {
     @DeleteMapping("/{id}/delete")
     public void memberDelete(@PathVariable(name = "id") Long memberId){
         memberRepository.deleteById(memberId);
+    }
+
+    /**
+     * Login 토큰
+     */
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T token;
+        private Long id;
     }
 }

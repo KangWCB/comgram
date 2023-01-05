@@ -9,6 +9,5 @@ import javax.validation.constraints.NotEmpty;
 public class MemberLoginDto {
 
     private String email;
-
     private String password;
 }

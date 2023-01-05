@@ -61,6 +61,6 @@ public class BoardService {
     }
 
     private boolean isPushLike(Member member, Board board) {
-        return boardLikeRepository.existsBoardLike(board.getId(), member).isPresent() ? true : false;
+        return board.likes.contains(member);
     }
 }

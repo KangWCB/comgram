@@ -19,8 +19,4 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike,Long> {
     Long countLikes(@Param("boardId") Long boardId);
 
 
-    @Query("select bl from BoardLike bl where bl.board.id= :boardId and bl.member = :member")
-    Optional<BoardLike> existsBoardLike(@Param("boardId") Long boarId,
-                                        @Param("member") Member member);
-
 }

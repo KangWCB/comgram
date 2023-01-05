@@ -32,7 +32,7 @@ public class Board extends BaseTimeEntity {
     private Member member; // 작성자
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    Set<BoardLike> likes = new HashSet<>();
+    Set<BoardLike> likes = new HashSet<>(); // 좋아요 누른 항목
 
 
     @Builder
