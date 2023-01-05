@@ -49,6 +49,7 @@ public class BoardMainDto {
                 .contentImgPath(photo.getSavedPath())
                 .likeCount(board.getLikes().stream().count())
                 .nickName(board.getMember().getNickName())
+                .commentCount(board.getComments().stream().count())
                 .profileImgPath(savedImgPath)
                 .pushLike(pushLike)
                 .regTime(board.getRegTime())

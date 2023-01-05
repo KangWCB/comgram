@@ -16,6 +16,7 @@ import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,8 @@ import java.util.NoSuchElementException;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardService {
+    @Value("${default.profile}")
+    private String defaultProfile;
 
     private final BoardRepository boardRepository;
     private final BoardLikeQueryRepository boardLikeQueryRepository;
@@ -60,14 +63,16 @@ public class BoardService {
                 Member likeMember = boardLikeQueryRepository.findLikeMember(board);
                 boardMainDto.setBoardMainLikeInfo(new BoardMainLikeInfo(likeMember.getName(), getSavePath(likeMember)));
             }
-
             boardMainDtos.add(boardMainDto);
         }
         return boardMainDtos;
     }
 
     private String getSavePath(Member member) {
-        return photoService.findSavePath(member.getPhotoProfileId());
+        if (member.getPhotoProfileId() != null){
+            return photoService.findSavePath(member.getPhotoProfileId());
+        }
+        return defaultProfile;
     }
 
     private boolean isPushLike(Member member, Board board) {

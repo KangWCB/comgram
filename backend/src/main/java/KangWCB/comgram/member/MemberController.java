@@ -70,6 +70,7 @@ public class MemberController {
         Long photoProfileId = member.getMember().getPhotoProfileId();
         return photoProfileId!= null ?  photoService.findSavePath(photoProfileId): defaultProfile;
     }
+
     // 회원수정
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
