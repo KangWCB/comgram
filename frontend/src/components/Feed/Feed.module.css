@@ -103,5 +103,9 @@
 }
 
 .moreViewBtn{
+    background-color:transparent;
+    background-image: none !important;
+    border-color: transparent;
+    border: none;
     color: gray;
 }

@@ -8,14 +8,19 @@ const Profile = (inherit_token) => {
 
     const imgHandler = (e) => {
         setProfileImg(URL.createObjectURL(e.target.files[0]));
+        console.log("사진세팅완");
     };
 
 
     const modifyProfile = (token, img) => {
+        console.log("호출");
         const formData = new FormData();
         formData.append('image', img);
+        let tmp = localStorage.getItem('userId');
+        let tmp2 = `api/members/${tmp}/update`
+        console.log(tmp2);
         axios({
-            url: '/api/members/profile',
+            url: tmp2,
             method: 'POST',
             data: formData,
             Headers: {
@@ -24,7 +29,7 @@ const Profile = (inherit_token) => {
             }
         })
         .then(res => {
-            console.log(res.data);
+            console.log(`${res.data}`);
         })
         .catch(err => {
             console.log(err);
@@ -33,8 +38,8 @@ const Profile = (inherit_token) => {
 
     return (
         <div>
-            <input onChange={imgHandler}type="file" accept="image/*" ></input>
-            <button onClick={modifyProfile(acctoken, profileImg)}>업로드</button>
+            <input onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
+            <button onClick={() => modifyProfile(acctoken, profileImg)}>업로드</button>
         </div>
     )
 

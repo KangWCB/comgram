@@ -49,12 +49,17 @@ const LoginPage = () => {
         const config = {"Content-Type" : 'application/json'};
         axios.post('/api/members/login', userObject, config)
         .then((res) => {
-            localStorage.setItem('accessToken', res.data);
-            axios.defaults.headers.common['x-access-token'] = res.data;
+            localStorage.setItem('accessToken', res.data[`token`]);
+            axios.defaults.headers.common['x-access-token'] = res.data[`token`];
             console.log(res.data);
+            localStorage.setItem('userId', res.data[`id`]);
+            
             setStatus("로그인 성공");
+
             let acctoken = localStorage.getItem('accessToken');
             console.log(`test: ${acctoken}`);
+            let asd = localStorage.getItem('userId');
+            console.log(`test: ${asd}`);
 
             localStorage.setItem('IsLogin', true);
         })
