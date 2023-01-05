@@ -1,14 +1,13 @@
 package KangWCB.comgram.board.boardLike;
 
 import KangWCB.comgram.board.Board;
+import KangWCB.comgram.board.boardLike.repository.BoardLikeRepository;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

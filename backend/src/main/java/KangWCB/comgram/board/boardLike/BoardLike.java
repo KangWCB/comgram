@@ -1,6 +1,7 @@
 package KangWCB.comgram.board.boardLike;
 
 import KangWCB.comgram.board.Board;
+import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.Member;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BoardLike {
+public class BoardLike extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name="board_like_id")
