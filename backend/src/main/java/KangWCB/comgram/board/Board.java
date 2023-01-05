@@ -1,5 +1,6 @@
 package KangWCB.comgram.board;
 
+import KangWCB.comgram.board.boardLike.BoardLike;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.Member;
@@ -8,7 +9,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,7 +28,11 @@ public class Board extends BaseTimeEntity {
     private Long imgId; // 저장된 이미지 id
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member; // 작성자
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    Set<BoardLike> likes = new HashSet<>(); // 좋아요 누른 항목
 
 
     @Builder

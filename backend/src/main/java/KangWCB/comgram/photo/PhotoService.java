@@ -56,11 +56,14 @@ public class PhotoService {
             throw new IllegalStateException("파일저장 실패");
 
         }
-
         // 데이터베이스에 파일 정보 저장
         Photo savedFile = fileRepository.save(file);
-
         return savedFile.getId();
+    }
+
+    public String findSavePath(Long imgId){
+        Photo photo = fileRepository.findById(imgId).orElseThrow();
+        return photo.getSavedPath();
     }
 
 //    /**

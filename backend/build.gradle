@@ -45,6 +45,9 @@ dependencies {
 	// 3. querydsl dependencies 추가
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// kakao 로그인
+	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
 }
 
 tasks.named('test') {
