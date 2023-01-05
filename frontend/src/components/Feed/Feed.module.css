@@ -102,10 +102,21 @@
     text-align: left;
 }
 
-.moreViewBtn{
+.tpBtn{
     background-color:transparent;
     background-image: none !important;
     border-color: transparent;
     border: none;
     color: gray;
+}
+
+.comment_ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+.comment_span {
+    text-align: left;
+    font-size: 14px;
+    padding-right: 4px;
 }

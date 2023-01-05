@@ -4,7 +4,7 @@
    -khtml-user-select: none;
    -webkit-user-select: none;
    user-select: none;
-    position: relative;
+    position: fixed;
     text-align: center;
     z-index: 2;
 }

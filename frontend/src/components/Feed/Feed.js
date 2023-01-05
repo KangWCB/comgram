@@ -18,6 +18,7 @@ const Feed = (inherit_token) => {
     let writeTime = "2시간 전";
     let origin_context = "";
     let cut_context = "";
+    let commentCount = 800;
     
 
     let acctoken = inherit_token;
@@ -28,11 +29,11 @@ const Feed = (inherit_token) => {
         },
         {
             userName: "sibal2",
-            comment: "죽여주세요 제발" 
+            comment: "죽여주세요 제발2" 
         },
         {
             userName: "sibal3",
-            comment: "죽여주세요 제발" 
+            comment: "죽여주세요 제발3" 
         },
     ];
 
@@ -95,6 +96,11 @@ const Feed = (inherit_token) => {
         });
     };
     
+    // 댓글 표시 css
+    const commentHandler = commentList.map((data,idx) => <li key={idx}>
+        <span className={`${styles.comment_span} ${styles.bold} `}>{data.userName}</span> 
+        <span className={`${styles.comment_span}`}> {data.comment}</span>
+        </li>)
     
 
     return (
@@ -123,14 +129,15 @@ const Feed = (inherit_token) => {
         {/* 피드 본문 */}
         <div className={styles.context}>
         <span className={styles.span}>{context}</span>
-        <button className={styles.moreViewBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
-        <li> className</li>
+        <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
         </div>
         {/* 댓글 */}
-        <div>
-            
-
+        <div className={styles.context}>
+        <button className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
+        <ul className={styles.comment_ul}>{commentHandler}</ul> 
+        <button className={styles.tpBtn}>댓글 쓰기</button>       
         </div>
+        
     </div>
     )
 
