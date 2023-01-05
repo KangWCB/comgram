@@ -24,16 +24,12 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true)
     private String email; // 이메일
     private String password; // 비밀번호
-
     // 개인 정보
     private String name; // 이름
     private String nickName; // 닉네임
     private Long photoProfileId; // 프로필 생성
-
-    //프로필 사진
     @Enumerated(EnumType.STRING)
     private Role role; // 역할
-
     @Builder
     public Member(String email, String password, String name, String nickname, Role role, Long photoProfileId) {
         this.email = email;
@@ -61,7 +57,6 @@ public class Member extends BaseTimeEntity {
         this.nickName = memberUpdateForm.getNickname();
         this.name = memberUpdateForm.getName();
     }
-
     public void updatePhoto(Long savedImgId) {
         this.photoProfileId = savedImgId;
     }

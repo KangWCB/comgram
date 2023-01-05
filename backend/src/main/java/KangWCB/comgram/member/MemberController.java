@@ -2,6 +2,7 @@ package KangWCB.comgram.member;
 
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
 import KangWCB.comgram.config.jwt.SecurityUser;
+import KangWCB.comgram.error.ErrorResult;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberLoginDto;
@@ -16,10 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -52,7 +54,6 @@ public class MemberController {
         Result<String> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
         return result;
     }
-
     // 회원 정보 출력
     @GetMapping("/info")
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){

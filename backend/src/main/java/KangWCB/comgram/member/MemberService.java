@@ -28,6 +28,7 @@ public class MemberService {
                 Long savedImgId = photoService.saveFile(file.orElseThrow());
                 findMember.updatePhoto(savedImgId);
             }
+            // GET으로 줘야함. 나머지 정보들 현재 null 들어옴
             findMember.updateMember(memberUpdateForm);
         } catch (Exception e){
             log.info("file_update_error={}",e.getMessage());

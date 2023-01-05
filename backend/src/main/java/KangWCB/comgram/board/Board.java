@@ -1,13 +1,13 @@
 package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.boardLike.BoardLike;
+import KangWCB.comgram.board.comment.Comment;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -33,6 +33,10 @@ public class Board extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     Set<BoardLike> likes = new HashSet<>(); // 좋아요 누른 항목
+
+    @OneToMany(mappedBy = "boards", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("id asc") // 댓글 정렬
+    private List<Comment> comments = new ArrayList<>() ;
 
 
     @Builder
