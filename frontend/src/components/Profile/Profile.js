@@ -42,7 +42,6 @@ const Profile = () => {
         <div className={styles.container}>
             <div className={styles.container_form}>
                 <div className={styles.box}>
-                    <img className={styles.profileImg} src="/img/hi2.png"></img>
                 </div>
                 <input onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
                 <button onClick={() => modifyProfile(acctoken, profileImg)}>업로드</button>

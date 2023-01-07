@@ -73,7 +73,7 @@ const Mainpage = () => {
         <button onClick={() => logoutHandler()}>Logout</button>
         <br/>nick : {nickname}
         <br/>tk : {acctoken}
-        <Profile inherit_token={acctoken}/> {/*토큰 상속*/}
+        {/*<Profile inherit_token={acctoken}/> {/*토큰 상속*/}
         <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
         
 

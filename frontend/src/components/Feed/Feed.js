@@ -3,6 +3,7 @@ import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
 import styles from './Feed.module.css'
 import axios from 'axios';
+import Getfeedobj from './Getfeedobj';
 
 const Feed = (inherit_token) => {
     const [like, setLike] = useState(false);
@@ -25,7 +26,7 @@ const Feed = (inherit_token) => {
     let commentList = [
         {
             userName: "sibal",
-            comment: "죽여주세요 제발" 
+            comment: "죽여주세요 제발n" 
         },
         {
             userName: "sibal2",
@@ -105,6 +106,7 @@ const Feed = (inherit_token) => {
 
     return (
         <div className={styles.content}>
+            <button style={{float:'left'}} onClick={Getfeedobj}>test</button>
             {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
