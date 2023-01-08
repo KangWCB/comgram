@@ -2,9 +2,9 @@ import {useState, React, useEffect} from 'react';
 import {Link, useNavigate, useLocation, useParams} from 'react-router-dom'
 import axios from 'axios';
 import styles from './Login.module.css';
+import OAuthLogin from './OAuthLogin';
 
 const LoginPage = () => {
-    const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
     const [email, setEmail] = useState(""); 
     const [password, setPassword] = useState(""); 
     const [name, setName] = useState(""); 
@@ -12,18 +12,22 @@ const LoginPage = () => {
     const [status, setStatus] = useState("");
     const [text, setText] = useState("");
     const navigate = useNavigate();
-    
+    const location = useLocation();
     const params = useParams();
+    const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
+
     useEffect(() => {
-      console.log({params});
-    },[params]);
+      console.log(location);
+      console.log(params);
+    },[location])
     useEffect(() => {
+      
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
       if(acctoken && islogin) // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
         navigate("/");
-        console.log(`token: ${acctoken}`);
+        console.log(`to1ken: ${acctoken}`);
       }
     },[]);
 
@@ -77,6 +81,10 @@ const LoginPage = () => {
         });
     };
 
+    const OAuth2LoginHandler = (url) => {
+        window.location.href = url;
+    };
+
 
     const formChange = (e) => {
         const container = document.getElementById('container');
@@ -88,9 +96,7 @@ const LoginPage = () => {
     };
 
 
-    const kakaoLogin = () => {
-      localStorage.setItem("kakaoToken",)
-    };
+
 
 
     return (
@@ -127,7 +133,7 @@ const LoginPage = () => {
             {/*test*/}
             <h1>Sign in</h1>
             <div className={styles.social_container}>
-              <a href={kakaoLoginUrl}><img className={styles.kakao} src="/img/kakao_login_small.png"></img></a>
+              <img onClick={() => OAuth2LoginHandler(kakaoLoginUrl)} src="/img/kakao_login_small.png"></img>
             </div>
             <span>or use your account</span>
             <input className={styles.input} type="email" placeholder="Email"

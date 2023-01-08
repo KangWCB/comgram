@@ -44,9 +44,8 @@ const Post = (postobj) => {
     useEffect(() => {
         console.log(postobj);
         let postInfo = postobj['postobj'];
-        /*
-        console.log(postInfo['boardMainLikeInfo']['likeUserNickName'])
-
+        
+    /*
         console.log(postInfo['content']);
         setWriterName(postInfo['nickName']);
         setContent(postInfo['content']);
@@ -57,8 +56,8 @@ const Post = (postobj) => {
         setRegTime(postInfo['RegTime']);
         if(postInfo['boardMainLikeInfo'])
             setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
-        
-*/
+        */
+
     },[postobj]);
 
     const likeHandler = () => {

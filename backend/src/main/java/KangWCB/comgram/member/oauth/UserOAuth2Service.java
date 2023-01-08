@@ -34,7 +34,7 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         String nickname = (String) properties.get("nickname");
 
         if (memberRepository.existsByEmail(email)){
-            throw new OAuth2AuthenticationException("가입한적이 있음");
+
         } else {
             Member member = Member.builder().nickname(nickname).email(email).build();
             memberRepository.save(member);
