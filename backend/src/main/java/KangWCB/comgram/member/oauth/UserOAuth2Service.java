@@ -2,6 +2,8 @@ package KangWCB.comgram.member.oauth;
 
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
+import KangWCB.comgram.member.Role;
+import KangWCB.comgram.member.dto.MemberFormDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,12 +13,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpSession;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,10 +35,10 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
 //            Member member = memberRepository.findByEmail(email).get();
             log.info("Oauth로 로그인 한 적있는 유저");
         } else {
-            Member member = Member.builder().nickname(nickname).email(email).build();
+//            MemberFormDto.builder().email(email).password(String.valueOf(UUID.randomUUID())).role(Role.USER).nickname(nickname);
+            Member member = Member.builder().nickname(nickname).email(email).password(String.valueOf(UUID.randomUUID())).build();
             memberRepository.save(member);
         }
-
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),attributes,"id");
     }
 }

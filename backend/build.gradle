@@ -46,8 +46,6 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-	testCompileOnly 'org.projectlombok:lombok' // test에서 로그사용 
-
 	// kakao 로그인
 	implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
 }
