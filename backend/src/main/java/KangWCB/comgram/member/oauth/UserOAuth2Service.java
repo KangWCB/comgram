@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +35,8 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         String nickname = (String) properties.get("nickname");
 
         if (memberRepository.existsByEmail(email)){
-            throw new OAuth2AuthenticationException("가입한적이 있음");
+//            Member member = memberRepository.findByEmail(email).get();
+            log.info("Oauth로 로그인 한 적있는 유저");
         } else {
             Member member = Member.builder().nickname(nickname).email(email).build();
             memberRepository.save(member);
