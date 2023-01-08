@@ -65,14 +65,17 @@ const Mainpage = () => {
 
     return (
         <div className={styles.container}>
+            
         <Link to="/login">
             <button>Login</button>
         </Link>
+        
         <button onClick={() => logoutHandler()}>Logout</button>
         <br/>nick : {nickname}
         <br/>tk : {acctoken}
+        {/*<Profile inherit_token={acctoken}/> {/*토큰 상속*/}
         <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
-        <Profile inherit_token={acctoken}/> {/*토큰 상속*/}
+        
 
             
         </div>

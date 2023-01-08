@@ -79,11 +79,6 @@ public class MemberController {
         Long updateMemberId = memberService.update(memberUpdateForm, memberId,file);
         return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
     }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> backend
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
     public void memberDelete(@PathVariable(name = "id") Long memberId){

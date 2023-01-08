@@ -229,16 +229,7 @@ button:focus {
   margin: 20px 0;
 }
 
-.social_container a {
-  border: 1px solid #DDDDDD;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 5px;
-  height: 40px;
-  width: 40px;
-}
+
 
 footer {
     background-color: #222;
@@ -263,4 +254,10 @@ footer i {
 footer a {
     color: #3c97bf;
     text-decoration: none;
+}
+
+kakao { 
+  height: 5px;
+  width: 5px;
+ z-index:5;
 }
