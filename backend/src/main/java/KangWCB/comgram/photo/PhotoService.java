@@ -1,5 +1,6 @@
 package KangWCB.comgram.photo;
 
+import KangWCB.comgram.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -19,6 +21,9 @@ public class PhotoService {
 
     @Value("${file.dir}")
     private String fileDir;
+
+    @Value("${default.profile}")
+    private String defaultProfile;
 
     private final PhotoRepository fileRepository;
 
@@ -62,8 +67,11 @@ public class PhotoService {
     }
 
     public String findSavePath(Long imgId){
-        Photo photo = fileRepository.findById(imgId).orElseThrow();
-        return photo.getSavedPath();
+        Optional<Photo> photo = fileRepository.findById(imgId);
+        if(!photo.isEmpty()){
+            return photo.orElseThrow().getSavedPath();
+        }
+        return defaultProfile;
     }
 
 //    /**

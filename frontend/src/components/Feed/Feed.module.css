@@ -14,7 +14,7 @@
     z-index: 2;
 }
 
-.content {
+.contents {
     position: relative;
     text-align: center;
     margin-left: 15%;
@@ -95,7 +95,7 @@
     margin-top: 20px;
 }
 
-.context{
+.content{
     margin-top: 5px;
     margin-bottom: 5px;
     text-align: left;

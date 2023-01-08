@@ -15,16 +15,15 @@ public class MemberFormDto {
     @NotEmpty(message = "칸을 채워주세요.")
     private String email;
 
-    @NotEmpty(message = "칸을 채워주세요.")
+    @NotEmpty(message = "비밀번호 칸을 채워주세요.")
     @Min(value = 4)
     private String password;
 
-    @NotEmpty(message = "칸을 채워주세요.")
+    @NotEmpty(message = "이름 칸을 채워주세요.")
     private String name;
 
-    @NotEmpty(message = "칸을 채워주세요.")
+    @NotEmpty(message = "닉네임 칸을 채워주세요.")
     private String nickname;
-
     private Role role;
 
     @Builder

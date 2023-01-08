@@ -1,6 +1,7 @@
-package KangWCB.comgram.board.boardLike;
+package KangWCB.comgram.board.boardLike.repository;
 
 import KangWCB.comgram.board.Board;
+import KangWCB.comgram.board.boardLike.BoardLike;
 import KangWCB.comgram.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
