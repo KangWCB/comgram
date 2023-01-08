@@ -6,13 +6,24 @@ import axios from 'axios';
 import Post from './Post';
 
 const Feed = (inherit_token) => {
-
+    let obj_table = {
+        boardMainCommentInfo : [],
+        boardMainLikeInfo : [],
+        id: 'id',
+        content: 'content',
+        contentImgPath: 'contentImgPath',
+        commentCount: 'commentCount',
+        likeCount: 'commentCount',
+        regTime: 'regTime',
+        profileImgPath : 'profileImgPath',
+    };
     let rd = '';
-    const [postobj, setPostobj] = useState([]);
+    const [postobj, setPostobj] = useState(obj_table);
 
     async function GetPostobj() {
         let acctoken = await localStorage.getItem('accessToken');
-        
+        console.log(acctoken);
+
         await axios.get('/api/boards/list', {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
@@ -20,22 +31,24 @@ const Feed = (inherit_token) => {
             rd = res.data['data'];
             console.log(rd[0]);
             let rd_len = rd['length'];
-            /*
-            let tmp_postobj = [{
-                id: rd[i]['id'],
-                content: rd[i]['content'],
-                contentImgPath: rd[i]['contentImgPath'],
-                commentCount: rd[i]['commentCount'],
-                likeCount: rd[i]['commentCount'],
-                regTime: rd[i]['regTime'],
-                profileImgPath : rd[i]['profileImgPath'],
-            }]
+            
             for(var i=0;i<rd_len;i++)
             {
-                setPostobj(rd[i], ...postobj);
+                obj_table = {
+                    boardMainCommentInfo : rd[i]['boardMainCommentInfo'],
+                    boardMainLikeInfo : rd[i]['boardMainCommentInfo'],
+                    id: rd[i]['id'],
+                    content: rd[i]['content'],
+                    contentImgPath: rd[i]['contentImgPath'],
+                    commentCount: rd[i]['commentCount'],
+                    likeCount: rd[i]['commentCount'],
+                    regTime: rd[i]['regTime'],
+                    profileImgPath : rd[i]['profileImgPath'],
+                }
+                
+                setPostobj(obj_table);
             }
-            */
-            setPostobj(rd[0]);
+            
             console.log(postobj);
             
 

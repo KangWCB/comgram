@@ -39,7 +39,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, url);
     }
     private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/"+token)
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/?token="+token)
                 .build().toUriString();
     }
 }
