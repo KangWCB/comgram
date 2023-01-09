@@ -69,7 +69,7 @@ public class PhotoService {
     public String findSavePath(Long imgId){
         Optional<Photo> photo = fileRepository.findById(imgId);
         if(!photo.isEmpty()){
-            return photo.orElseThrow().getSavedPath();
+            return photo.get().getSavedPath();
         }
         return defaultProfile;
     }
