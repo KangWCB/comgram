@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +17,7 @@ public class MemberFormDto {
     private String email;
 
     @NotEmpty(message = "비밀번호 칸을 채워주세요.")
-    @Min(value = 4)
+    @Size(max = 10, min = 4 , message = "비밀번호 길이가 4 이상 10 이하여야 합니다")
     private String password;
 
     @NotEmpty(message = "이름 칸을 채워주세요.")

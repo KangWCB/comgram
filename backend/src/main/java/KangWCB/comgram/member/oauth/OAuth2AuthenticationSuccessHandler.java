@@ -19,10 +19,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
-
     private final JwtTokenProvider jwtTokenProvider;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
@@ -31,7 +28,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
         String nickname = (String) properties.get("nickname");
 
-        String jwt = jwtTokenProvider.createToken("kakao",email, Role.USER);
+        String jwt = jwtTokenProvider.createToken("kakao",email,Role.USER);
 
         String url = makeRedirectUrl(jwt);
         System.out.println("url: " + url);

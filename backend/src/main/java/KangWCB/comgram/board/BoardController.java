@@ -27,8 +27,8 @@ public class BoardController {
     private final PhotoService photoService;
 
     @PostMapping("/write")
-    public ResponseEntity write(@RequestParam(value = "content") String content,
-                                  @RequestParam(value="photo", required=false) MultipartFile file,
+    public ResponseEntity write(@RequestParam(value = "content", required = true) String content,
+                                  @RequestParam(value="photo", required=true) MultipartFile file,
                                   @AuthenticationPrincipal SecurityUser member) {
         BoardFormDto boardFormDto = BoardFormDto.builder()
                 .content(content)
