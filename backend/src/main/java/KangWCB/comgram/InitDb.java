@@ -45,12 +45,12 @@ public class InitDb {
         private final PasswordEncoder passwordEncoder;
 
         public void dbInit1() {
-            makeMember("갱킹맨","test@naver.com");
+            makeMember("정우진","test@naver.com","갱킹맨");
         }
 
-        private Member makeMember(String nickName, String email) {
-            MemberFormDto memberFormDto = MemberFormDto.builder().name(nickName).email(email).password("1234")
-                    .nickname("갱킹맨").role(Role.USER).build();
+        private Member makeMember(String name, String email,String nickName) {
+            MemberFormDto memberFormDto = MemberFormDto.builder().name(name).email(email).password("1234")
+                    .nickname(nickName).role(Role.USER).build();
             Member member = Member.createMember(memberFormDto, passwordEncoder);
             em.persist(member);
             return member;
@@ -60,7 +60,7 @@ public class InitDb {
          * 게시물 , 좋아요 누르기 , 댓글 테스트데이터
          */
         public void dbInit2(){
-            Member member = makeMember("나이트메어","test2@naver.com");
+            Member member = makeMember("신봉규","test2@naver.com","나이트메어");
             for (int i = 0; i < 5; i++) {
                 Photo testPhoto = Photo.builder().orgNm("testImg").savedNm("testImgSave").savedPath(testImgPath).build();
                 em.persist(testPhoto);
