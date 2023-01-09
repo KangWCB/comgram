@@ -18,9 +18,6 @@ const Profile = () => {
         const formData = new FormData();
         formData.append('photo', img);
         let tmp2 = `api/members/${userid}/update`
-        console.log(img);
-        console.log(formData);
-        console.log(tmp2);
         axios({
             url: tmp2,
             method: 'POST',

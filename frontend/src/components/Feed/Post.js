@@ -3,6 +3,8 @@ import {useState, React, useEffect} from 'react';
 import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
+import moment from "moment";
+import reactMoment from "react-moment";
 
 const Post = (postobj) => {
     const acctoken = localStorage.getItem('accessToken');
@@ -13,17 +15,20 @@ const Post = (postobj) => {
     // postobj
     const [writerName, setWriterName] = useState("");
     const [content, setContent] = useState('')
-    const [contentImgPath, setContentImgPath] = useState('');
+    const [contentImgPath, setContentImgPath] = useState(null);
+    const [imgHash, setimgHash] = useState('');
     const [postid, setPostId] = useState(0);
     const [likeUserNickName, setLikeUserNickName] = useState('hi');
     const [commentCount, setCommentCount] = useState(0);
     const [pushLike, setPushLike] = useState(false);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
-
+    const [commentContext,setCommentContext] = useState("");
+    const [commentUserNickname, setCommentUserNickname] = useState("");
+    const [profileImgPath,setProfileImgPath] = useState('');
     let rd = '';
     let likeName = "newbie";
-    let writeTime = "2시간 전";
+    let writeTime = "시간 전";
     let origin_content = "";
     let cut_content = "";
     let commentList = [
@@ -31,40 +36,57 @@ const Post = (postobj) => {
             userName: "sibal",
             comment: "죽여주세요 제발n" 
         },
-        {
-            userName: "sibal2",
-            comment: "죽여주세요 제발2" 
-        },
-        {
-            userName: "sibal3",
-            comment: "죽여주세요 제발3" 
-        },
-    ];
 
+    ];
+    
     useEffect(() => {
         console.log(postobj);
         let postInfo = postobj['postobj'];
         
-    /*
-        console.log(postInfo['content']);
+
+
+        console.log(postInfo['contentImgPath']);
+        //console.log(postInfo['profileImgPath'].replace(/\"/gi,""));
+        let tmp_path = postInfo['contentImgPath'];
+        let tmp_idx = tmp_path.indexOf("img");
+        tmp_path = tmp_path.substring(tmp_idx);
+        setContentImgPath(tmp_path);        
         setWriterName(postInfo['nickName']);
+        
         setContent(postInfo['content']);
-        setContentImgPath(postInfo['contentImgPath']);
         setPostId(postInfo['PostId']);
         setCommentCount(postInfo['CommentCount']);
         setPushLike(postInfo['PushLike']);
-        setRegTime(postInfo['RegTime']);
+        setRegTime(postInfo['regTime']);
+        setLikeCount(postInfo['likeCount']);
+        setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
+        if(postInfo['boardMainCommentInfo'])
+        {
+            setCommentContext(postInfo['boardMainCommentInfo']['commentContext']);
+            setCommentUserNickname(postInfo['boardMainCommentInfo']['commentUserNickname']);
+        }
         if(postInfo['boardMainLikeInfo'])
+        {
             setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
-        */
+        }
+            console.log(`pi: ${profileImgPath}`);
+        writetimeHandler(regTime);
+        setimgHash(Date.now());
+        console.log(imgHash);
+        console.log(profileImgPath);
+        },[postobj]);
 
-    },[postobj]);
 
     const likeHandler = () => {
         setLike(!like);
     };
 
-    
+    const writetimeHandler = (regTime) => {
+        const nowTime = moment()
+        writeTime = regTime;
+        console.log(regTime);
+        console.log(nowTime);
+    }
 
     useEffect(() => {
         contentHandler(content);
@@ -105,23 +127,29 @@ const Post = (postobj) => {
         }
     };
 
-    const commentHandler = commentList.map((data,idx) => <li key={idx}>
+    const imgHandler = () => {
+        console.log("img");
+        document.getElementById("ci").src = contentImgPath;
+    }
+
+    /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
     <span className={`${styles.comment_span} ${styles.bold} `}>{data.userName}</span> 
     <span className={`${styles.comment_span}`}> {data.comment}</span>
-    </li>)
+    </li>)*/
 
     return(
         <div>
             {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
-                    <img className={styles.profileImg} src="/img/hi2.png"></img>
+                    <img className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
+                <reactMoment className={`${styles.span} ${styles.gray} `}>{writeTime}</reactMoment>
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
-
-        <img className={styles.photo} src={contentImgPath}></img>
+        {/* 본문 */}
+        <img id="ci" className={styles.photo} src={contentImgPath}></img>
         <div className={styles.icon_form}>
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
@@ -135,13 +163,16 @@ const Post = (postobj) => {
         </div>
    
         <div className={styles.content}>
-        <span className={styles.span}>{content}</span>
-        <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
+            <span className={styles.span}>{content}</span>
+            <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
         </div>
 
         <div className={styles.content}>
         <button className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
-        <ul className={styles.comment_ul}>{commentHandler}</ul> 
+        <ul className={styles.comment_ul}>
+            <span className={`${styles.comment_span} ${styles.bold} `}>{commentUserNickname}</span> 
+            <span className={`${styles.comment_span}`}>{commentContext}</span>
+        </ul> 
         <button className={styles.tpBtn}>댓글 쓰기</button>       
         </div>
         

@@ -61,7 +61,7 @@ public class BoardService {
             }
             if(!board.getLikes().isEmpty()){
                 Member likeMember = boardLikeQueryRepository.findLikeMember(board);
-                boardMainDto.setBoardMainLikeInfo(new BoardMainLikeInfo(likeMember.getName(), getSavePath(likeMember)));
+                boardMainDto.setBoardMainLikeInfo(new BoardMainLikeInfo(likeMember.getNickName(), getSavePath(likeMember)));
             }
             boardMainDtos.add(boardMainDto);
         }
