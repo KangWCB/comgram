@@ -15,6 +15,7 @@ import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
 import KangWCB.comgram.photo.PhotoService;
+import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,9 @@ public class BoardService {
     private String defaultProfile;
 
     private final BoardRepository boardRepository;
+    private final BoardQueryRepository boardQueryRepository;
     private final BoardLikeQueryRepository boardLikeQueryRepository;
     private final PhotoRepository photoRepository;
-    private final BoardLikeRepository boardLikeRepository;
     private final MemberRepository memberRepository;
     private final PhotoService photoService;
     /**
@@ -48,9 +49,13 @@ public class BoardService {
 
     public List<BoardMainDto> allList(Long memberId) {
         List<Board> allBoard = boardRepository.findAll();
-        List<BoardMainDto> boardMainDtos = new ArrayList<>();
         Member member = memberRepository.findById(memberId).orElseThrow();
 
+        return getBoardMainDtos(allBoard, member);
+    }
+
+    private List<BoardMainDto> getBoardMainDtos(List<Board> allBoard, Member member) {
+        List<BoardMainDto> boardMainDtos = new ArrayList<>();
         for (Board board : allBoard) {
             Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
             String saveImgPath = getSavePath(board.getMember());
@@ -77,5 +82,12 @@ public class BoardService {
 
     private boolean isPushLike(Member member, Board board) {
         return board.likes.contains(member);
+    }
+
+    public List<BoardMainDto> allMyList(Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        QueryResults<Board> followingBoard = boardQueryRepository.findFollowingBoard(memberId);
+        List<Board> boards = followingBoard.getResults();
+        return getBoardMainDtos(boards,member);
     }
 }

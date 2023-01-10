@@ -31,6 +31,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath password = createString("password");
 
+    public final NumberPath<Long> photoProfileId = createNumber("photoProfileId", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 

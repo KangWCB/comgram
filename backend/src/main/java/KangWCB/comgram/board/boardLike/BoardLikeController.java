@@ -26,6 +26,7 @@ public class BoardLikeController {
         if (securityUser != null){
             result = boardLikeService.addLike(securityUser.getMember().getId(),boardId);
         }
+
         return result ?
                 new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);

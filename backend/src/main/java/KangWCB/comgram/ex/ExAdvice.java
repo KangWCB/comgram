@@ -6,6 +6,7 @@ import KangWCB.comgram.ex.member.MemberRegisterEx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,6 +61,13 @@ public class ExAdvice {
     public ErrorResult exHandle(Exception e) {
         log.error("[exceptionHandle] ex", e);
         return new ErrorResult("EX", "내부 오류");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ErrorResult notFoundUser(UsernameNotFoundException e){
+        log.error("UserNotFoundExpection", e);
+        return new ErrorResult("NOT FOUND USER", "사용자 없음");
     }
 
 }

@@ -28,8 +28,12 @@ public class Member extends BaseTimeEntity {
     private String name; // 이름
     private String nickName; // 닉네임
     private Long photoProfileId; // 프로필 생성
+
+    private String refreshToken; // 리프레쉬 토큰 저장
     @Enumerated(EnumType.STRING)
     private Role role; // 역할
+
+
     @Builder
     public Member(String email, String password, String name, String nickname, Role role, Long photoProfileId) {
         this.email = email;
@@ -59,5 +63,9 @@ public class Member extends BaseTimeEntity {
     }
     public void updatePhoto(Long savedImgId) {
         this.photoProfileId = savedImgId;
+    }
+
+    public void registerRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
     }
 }

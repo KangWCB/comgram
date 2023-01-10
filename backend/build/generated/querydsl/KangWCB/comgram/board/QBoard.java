@@ -24,6 +24,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final KangWCB.comgram.config.audit.QBaseTimeEntity _super = new KangWCB.comgram.config.audit.QBaseTimeEntity(this);
 
+    public final ListPath<KangWCB.comgram.board.comment.Comment, KangWCB.comgram.board.comment.QComment> comments = this.<KangWCB.comgram.board.comment.Comment, KangWCB.comgram.board.comment.QComment>createList("comments", KangWCB.comgram.board.comment.Comment.class, KangWCB.comgram.board.comment.QComment.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

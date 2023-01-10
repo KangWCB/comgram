@@ -53,6 +53,16 @@ public class BoardController {
         return new Result<>(boardMainDtos);
     }
 
+    /**
+     * 팔로우가 있으면 팔로우한 사람 게시물
+     * 없으면 전체 게시물
+     */
+    @GetMapping("/myList")
+    public Result<List> myList(@AuthenticationPrincipal SecurityUser user){
+        List<BoardMainDto> boardMainDtos = boardService.allMyList(user.getMember().getId());
+        return new Result<>(boardMainDtos);
+    }
+
     @Data
     @AllArgsConstructor
     static class Result<T> {
