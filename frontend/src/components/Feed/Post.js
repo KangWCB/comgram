@@ -4,6 +4,7 @@ import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
+
 import reactMoment from "react-moment";
 
 const Post = (postobj) => {
@@ -17,7 +18,7 @@ const Post = (postobj) => {
     const [content, setContent] = useState('')
     const [contentImgPath, setContentImgPath] = useState(null);
     const [imgHash, setimgHash] = useState('');
-    const [postid, setPostId] = useState(0);
+    const [PostId, setPostId] = useState(0);
     const [likeUserNickName, setLikeUserNickName] = useState('hi');
     const [commentCount, setCommentCount] = useState(0);
     const [pushLike, setPushLike] = useState(false);
@@ -26,9 +27,16 @@ const Post = (postobj) => {
     const [commentContext,setCommentContext] = useState("");
     const [commentUserNickname, setCommentUserNickname] = useState("");
     const [profileImgPath,setProfileImgPath] = useState('');
+    const [writeTime,setWriteTime] = useState('');
+    let diffTime = {         
+        day:'',
+        hour:'',
+        min:'',
+        sec:'',
+    };
+    
     let rd = '';
     let likeName = "newbie";
-    let writeTime = "시간 전";
     let origin_content = "";
     let cut_content = "";
     let commentList = [
@@ -38,24 +46,31 @@ const Post = (postobj) => {
         },
 
     ];
-    
     useEffect(() => {
+        writetimeHandler(regTime);
+    },[regTime]);
+    useEffect(() => {
+        console.log('post 렌더링')
         console.log(postobj);
+        
         let postInfo = postobj['postobj'];
         
 
 
-        console.log(postInfo['contentImgPath']);
-        //console.log(postInfo['profileImgPath'].replace(/\"/gi,""));
-        let tmp_path = postInfo['contentImgPath'];
-        let tmp_idx = tmp_path.indexOf("img");
-        tmp_path = tmp_path.substring(tmp_idx);
-        setContentImgPath(tmp_path);        
+        
+        if(postInfo['contentImgPath']){
+            let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("img");
+            tmp_path = tmp_path.substring(tmp_idx);
+            console.log(tmp_path);
+            setContentImgPath(tmp_path);   
+        }
+             
         setWriterName(postInfo['nickName']);
         
         setContent(postInfo['content']);
-        setPostId(postInfo['PostId']);
-        setCommentCount(postInfo['CommentCount']);
+        setPostId(postInfo['id']);
+        setCommentCount(postInfo['commentCount']);
         setPushLike(postInfo['PushLike']);
         setRegTime(postInfo['regTime']);
         setLikeCount(postInfo['likeCount']);
@@ -70,22 +85,53 @@ const Post = (postobj) => {
             setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
         }
             console.log(`pi: ${profileImgPath}`);
-        writetimeHandler(regTime);
-        setimgHash(Date.now());
-        console.log(imgHash);
-        console.log(profileImgPath);
+ 
         },[postobj]);
 
 
     const likeHandler = () => {
+        let tmp = `localhost:8080/api/boards/${PostId}/like`;
+        console.log(tmp);
+        let acctoken = localStorage.getItem('accessToken');
+        console.log(acctoken);
+
+        axios.post('/api/boards/20/like', {headers : 
+            {'Authorization': acctoken}})
+        .then((res) => {
+            console.log(res.data);
+        });
         setLike(!like);
     };
 
     const writetimeHandler = (regTime) => {
-        const nowTime = moment()
-        writeTime = regTime;
-        console.log(regTime);
-        console.log(nowTime);
+
+        let rgTime = moment(regTime).format();
+        let ntMoment = moment();
+        let rgMoment = moment(rgTime);
+
+        diffTime = {
+            day: Math.floor(moment.duration(ntMoment.diff(rgMoment)).asDays()),
+            hour: Math.floor(moment.duration(ntMoment.diff(rgMoment)).asHours()),
+            min: Math.floor(moment.duration(ntMoment.diff(rgMoment)).asMinutes()),
+            sec: Math.floor(moment.duration(ntMoment.diff(rgMoment)).asMilliseconds()/1000)
+        };
+
+        for (const key in diffTime){
+            let tmpTime = diffTime[key];
+            if(tmpTime)
+            {
+                if(key == 'day')
+                    setWriteTime(`${tmpTime}일 전`)
+                else if(key == 'hour')
+                    setWriteTime(`${tmpTime}시간 전`)
+                else if(key == 'min')
+                    setWriteTime(`${tmpTime}분 전`)
+                else if(key == 'sec')
+                    setWriteTime(`${tmpTime}초 전`)
+                break;
+            }
+        }
+
     }
 
     useEffect(() => {
@@ -145,7 +191,6 @@ const Post = (postobj) => {
                     <img className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
-                <reactMoment className={`${styles.span} ${styles.gray} `}>{writeTime}</reactMoment>
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
@@ -159,7 +204,7 @@ const Post = (postobj) => {
             <SlSpeech className={styles.icon}/>
         </div>
         <div className={styles.comment_form}>
-            <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span><span className={styles.span}>님 </span><span className={`${styles.span} ${styles.bold}`}>외 {likeCount}명</span><span className={styles.span}>이 좋아합니다</span>
+            <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span><span className={styles.span}>님 </span><span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span><span className={styles.span}>이 좋아합니다</span>
         </div>
    
         <div className={styles.content}>

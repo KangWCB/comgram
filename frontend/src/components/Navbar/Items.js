@@ -1,15 +1,11 @@
 import {
     FaTh,
-    FaBars,
     FaUserAlt,
-    FaRegChartBar,
-    FaCommentAlt,
-    FaShoppingBag,
     FaThList
   } from "react-icons/fa";
   // https://react-icons.github.io/react-icons
   // 여기서 아이콘 검색
-
+import { BsPencilSquare } from "react-icons/bs"
 
 export const Items = [
     {
@@ -26,8 +22,8 @@ export const Items = [
     },
     {
         title: 'Logout',
-        url: '#',
+        url: '/write',
         className: 'nav-links',
-        icon: <FaThList/>
+        icon: <BsPencilSquare/>
     }
 ]
