@@ -22,11 +22,19 @@ public class QBoardLike extends EntityPathBase<BoardLike> {
 
     public static final QBoardLike boardLike = new QBoardLike("boardLike");
 
+    public final KangWCB.comgram.config.audit.QBaseTimeEntity _super = new KangWCB.comgram.config.audit.QBaseTimeEntity(this);
+
     public final KangWCB.comgram.board.QBoard board;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final KangWCB.comgram.member.QMember member;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
     public QBoardLike(String variable) {
         this(BoardLike.class, forVariable(variable), INITS);
