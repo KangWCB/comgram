@@ -101,10 +101,7 @@ public class JwtTokenProvider {
     // Request의 Header에서 token 값을 가져옵니다. "Authorization": "TOKEN 값"
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
-        }
-        return null;
+        return bearerToken;
     }
 
     // 토큰의 유효성 + 만료일자 확인
@@ -131,7 +128,6 @@ public class JwtTokenProvider {
         // === Refresh Token 유효성 검사 === //
         String refreshToken = request.getHeader("RefreshToken");
         Claims refreshClaim = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken).getBody();
-
 
         // === Access Token 재발급 === //
         long now = System.currentTimeMillis();

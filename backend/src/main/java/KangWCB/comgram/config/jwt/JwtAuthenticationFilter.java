@@ -31,9 +31,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             // SecurityContext에 Authentication 객체를 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        if (token != null && getJwtCode(token) == JwtCode.EXPIRED){
-            log.info("accessToken 토큰 재발급 필요함");
-        }
+//        if (token != null && getJwtCode(token) == JwtCode.EXPIRED){
+//            log.info("accessToken 토큰 재발급 필요함");
+//        }
         log.info("header에 jwt부재");
         chain.doFilter(request, response);
     }
