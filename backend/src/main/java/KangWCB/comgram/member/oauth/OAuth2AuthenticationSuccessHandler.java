@@ -1,6 +1,7 @@
 package KangWCB.comgram.member.oauth;
 
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
+import KangWCB.comgram.config.jwt.dto.TokenInfo;
 import KangWCB.comgram.member.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
         String nickname = (String) properties.get("nickname");
 
-        String jwt = jwtTokenProvider.createToken("kakao",email,Role.USER);
+        // 리프레쉬 토큰 적용
+        TokenInfo token = jwtTokenProvider.createToken("kakao", email, Role.USER);
+        String jwt = token.getAccessToken();
 
         String url = makeRedirectUrl(jwt);
         System.out.println("url: " + url);

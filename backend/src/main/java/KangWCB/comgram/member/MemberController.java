@@ -2,6 +2,7 @@ package KangWCB.comgram.member;
 
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
 import KangWCB.comgram.config.jwt.SecurityUser;
+import KangWCB.comgram.config.jwt.dto.TokenInfo;
 import KangWCB.comgram.error.ErrorResult;
 import KangWCB.comgram.ex.member.MemberLoginEx;
 import KangWCB.comgram.ex.member.MemberRegisterEx;
@@ -49,13 +50,13 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public Result<String> login(@RequestBody @Valid MemberLoginDto memberLoginDto, BindingResult bindingResult) {
+    public Result<TokenInfo> login(@RequestBody @Valid MemberLoginDto memberLoginDto, BindingResult bindingResult) {
         Member member = memberRepository.findByEmail(memberLoginDto.getEmail())
                 .orElseThrow(() -> new MemberLoginEx("가입 되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new MemberLoginEx("이메일 또는 비밀번호가 맞지 않습니다.");
         }
-        Result<String> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
+        Result<TokenInfo> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
         return result;
     }
     // 회원 정보 출력
