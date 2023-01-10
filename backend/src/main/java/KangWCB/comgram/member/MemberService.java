@@ -4,6 +4,7 @@ import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,5 +37,10 @@ public class MemberService {
         return findMember.getId();
     }
 
+    @Transactional
+    public void updateRefreshToken(String userPk, String refreshToken){
+        Member member = memberRepository.findByEmail(userPk).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+        member.registerRefreshToken(refreshToken);
+    }
 
 }
