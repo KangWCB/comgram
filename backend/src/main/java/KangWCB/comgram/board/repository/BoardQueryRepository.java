@@ -44,7 +44,7 @@ public class BoardQueryRepository {
     public QueryResults<Board>findFollowingBoard(Long memberId){
         List<Member> following = queryFactory.select(qFollow.following)
                 .from(qFollow)
-                .where(qFollow.following.id.eq(memberId))
+                .where(qFollow.follower.id.eq(memberId))
                 .fetch();
 
         QueryResults<Board> boardQueryResults = queryFactory.select(qBoard)
@@ -55,7 +55,6 @@ public class BoardQueryRepository {
 
         return boardQueryResults;
     }
-
 
     private BooleanExpression eqFollowing(List<Member> following) {
         if (following.isEmpty()) {

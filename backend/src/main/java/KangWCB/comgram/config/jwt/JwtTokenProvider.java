@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
@@ -43,6 +44,7 @@ public class JwtTokenProvider {
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
+
 
     // JWT 토큰 생성
     public TokenInfo createToken(String platform, String userPK, Role roles) {
@@ -120,6 +122,7 @@ public class JwtTokenProvider {
      * @param request
      * @return
      */
+    @Transactional
     public TokenInfo refresh(HttpServletRequest request) {
 
         // === Refresh Token 유효성 검사 === //

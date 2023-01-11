@@ -43,7 +43,7 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         Map<String,Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
         String email = (String) kakao_account.get("email");
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-        String nickname = (String) properties.get("nickname");
+        String name = (String) properties.get("nickname");
         log.info("profile_img: {}", (String) properties.get("profile_image"));
         log.info("properties: {}", properties);
         String profileURL = (String) properties.get("profile_image");
@@ -54,9 +54,18 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         } else {
 //            MemberFormDto.builder().email(email).password(String.valueOf(UUID.randomUUID())).role(Role.USER).nickname(nickname);
             String uuid = UUID.randomUUID().toString().substring(0, 6); // 임시 비밀번호 하나 만들어주기 로딩시에 필요함
-            String uuid2 = UUID.randomUUID().toString().substring(0, 6); // 임시 비밀번호 하나 만들어주기 로딩시에 필요함
+            String uuid2 = UUID.randomUUID().toString().substring(0, 6); // 저장이름 하나 생성, 비밀번호랑 차별화
             Long savedPhotoId = savedKakaoPhoto(email, profileURL, uuid2);
-            Member member = Member.builder().nickname(nickname).email(email).password(passwordEncoder.encode(uuid)).photoProfileId(savedPhotoId).role(Role.USER).build();
+
+            String nickname =  "new_user_"+uuid2;
+            Member member = Member.builder()
+                    .name(nickname)
+                    .nickname(nickname)
+                    .email(email)
+                    .password(passwordEncoder.encode(uuid))
+                    .photoProfileId(savedPhotoId)
+                    .role(Role.USER).build();
+
             memberRepository.save(member);
         }
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),attributes,"id");

@@ -33,6 +33,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> photoProfileId = createNumber("photoProfileId", Long.class);
 
+    public final StringPath refreshToken = createString("refreshToken");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
