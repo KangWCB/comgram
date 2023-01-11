@@ -60,9 +60,13 @@ const LoginPage = () => {
         const config = {"Content-Type" : 'application/json'};
         axios.post('/api/members/login', userObject, config)
         .then((res) => {
-            localStorage.setItem('accessToken', res.data[`token`]);
+          console.log(res.data);
+          console.log(res.data['accessToken']);
+            localStorage.setItem('grantType', res.data['token']['grantType']);
+            localStorage.setItem('refreshToken', res.data['token']['refreshToken']);
+            localStorage.setItem('accessToken', res.data['token']['accessToken']);
             axios.defaults.headers.common['x-access-token'] = res.data[`token`];
-            console.log(res.data);
+            
             localStorage.setItem('userId', res.data[`id`]);
             
             setStatus("로그인 성공");

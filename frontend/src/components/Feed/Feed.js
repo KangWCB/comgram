@@ -6,6 +6,7 @@ import axios from 'axios';
 import Post from './Post';
 
 const Feed = (inherit_token) => {
+    const [postobj, setPostobj] = useState([]);
     let obj_table = {
         boardMainCommentInfo : [],
         boardMainLikeInfo : [],
@@ -18,19 +19,18 @@ const Feed = (inherit_token) => {
         profileImgPath : 'profileImgPath',
         nickName : 'nickname',
     };
-    let rd = '';
-    const [postobj, setPostobj] = useState(obj_table);
+
 
     async function GetPostobj() {
         let acctoken = await localStorage.getItem('accessToken');
+        let obj_arr = [];
         console.log(acctoken);
         const config = {"21wContent-Type" : 'application/json'};
         await axios.get('/api/boards/list', {headers : 
             {'Authorization': acctoken}},config)
         .then((res) => {
             
-            rd = res.data['data'];
-            console.log(rd[0]);
+            let rd = res.data['data'];
             let rd_len = rd['length'];
             
             for(var i=0;i<rd_len;i++)
@@ -47,12 +47,14 @@ const Feed = (inherit_token) => {
                     profileImgPath : rd[i]['profileImgPath'],
                     nickName: rd[i]['nickName'],
                 }
-
+                obj_arr = obj_arr.concat(obj_table);
+                
             }
-            setPostobj(obj_table);
-            
+            console.log(obj_arr);
+            setPostobj(obj_arr);
             console.log(postobj);
-            console.log(postobj[0]);
+            
+
 
             
 
@@ -65,7 +67,7 @@ const Feed = (inherit_token) => {
 
     useEffect(() => {
         GetPostobj();    
-
+        
     },[]);
 
 
@@ -75,7 +77,10 @@ const Feed = (inherit_token) => {
 
     return (
         <div className={styles.contents}>
-            <Post postobj={postobj}/>
+
+                {postobj.map((obj) => 
+                <Post postobj={obj}/>)}
+
         
         </div>
     )

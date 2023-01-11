@@ -42,24 +42,24 @@ public class BoardQueryRepository {
      * 없으면 전체 사람보여준다.
      */
     public QueryResults<Board>findFollowingBoard(Long memberId){
-        List<Member> following = queryFactory.select(qFollow.following)
+        List<Long> followingId = queryFactory.select(qFollow.following.id)
                 .from(qFollow)
                 .where(qFollow.follower.id.eq(memberId))
                 .fetch();
 
         QueryResults<Board> boardQueryResults = queryFactory.select(qBoard)
                 .from(qBoard)
-                .where(eqFollowing(following))
+                .where(eqFollowing(followingId))
                 .orderBy(qBoard.regTime.desc())
                 .fetchResults();
 
         return boardQueryResults;
     }
 
-    private BooleanExpression eqFollowing(List<Member> following) {
-        if (following.isEmpty()) {
+    private BooleanExpression eqFollowing(List<Long> followingId) {
+        if (followingId.isEmpty()) {
             return null;
         }
-        return qBoard.member.eq((Member) following.stream().collect(Collectors.toList()));
+        return qBoard.member.eq((Member) followingId.stream().collect(Collectors.toList()));
     }
 }
