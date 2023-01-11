@@ -22,8 +22,17 @@ const Mainpage = () => {
             Islogin = true; 
             getUserinfo(acctoken);
             localStorage.setItem('nickName', nickname);
+                 
         }
+
     },[]);
+
+    useEffect(() => {
+        if(currentPath === location.pathname) 
+            //window.location.reload();
+        currentPath = location.pathname;
+
+    },[location]);
 
 
     useEffect(() => { // 주소 변경시 
@@ -43,7 +52,7 @@ const Mainpage = () => {
         axios.get('/api/members/info', {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
-            setNickname(res.data['nickname'])
+            setNickname(res.data['nickname']);
         })
         .catch((err) => {
             console.log(err);

@@ -51,41 +51,39 @@ const Post = (postobj) => {
     },[regTime]);
     useEffect(() => {
         console.log('post 렌더링')
-        console.log(postobj);
         
-        let postInfo = postobj['postobj'];
-        
-
-
-        
-        if(postInfo['contentImgPath']){
-            let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("img");
-            tmp_path = tmp_path.substring(tmp_idx);
-            console.log(tmp_path);
-            setContentImgPath(tmp_path);   
-        }
-             
-        setWriterName(postInfo['nickName']);
-        
-        setContent(postInfo['content']);
-        setPostId(postInfo['id']);
-        setCommentCount(postInfo['commentCount']);
-        setPushLike(postInfo['PushLike']);
-        setRegTime(postInfo['regTime']);
-        setLikeCount(postInfo['likeCount']);
-        setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
-        if(postInfo['boardMainCommentInfo'])
+        console.log(postobj['postobj'].length);
+        if(postobj['postobj'].length!= 0)
         {
-            setCommentContext(postInfo['boardMainCommentInfo']['commentContext']);
-            setCommentUserNickname(postInfo['boardMainCommentInfo']['commentUserNickname']);
+            let postInfo = postobj['postobj'];
+            if(postInfo['contentImgPath']){
+                let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
+                let tmp_idx = tmp_path.indexOf("img");
+                tmp_path = tmp_path.substring(tmp_idx);
+                console.log(tmp_path);
+                setContentImgPath(tmp_path);   
+            }
+                
+            setWriterName(postInfo['nickName']);
+            setContent(postInfo['content']);
+            setPostId(postInfo['id']);
+            setCommentCount(postInfo['commentCount']);
+            setPushLike(postInfo['PushLike']);
+            setRegTime(postInfo['regTime']);
+            setLikeCount(postInfo['likeCount']);
+            setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
+            if(postInfo['boardMainCommentInfo'])
+            {
+                setCommentContext(postInfo['boardMainCommentInfo']['commentContext']);
+                setCommentUserNickname(postInfo['boardMainCommentInfo']['commentUserNickname']);
+            }
+            if(postInfo['boardMainLikeInfo'])
+            {
+                setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
+            }
         }
-        if(postInfo['boardMainLikeInfo'])
-        {
-            setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
-        }
-            console.log(`pi: ${profileImgPath}`);
- 
+        else
+            console.log("obj없음");
         },[postobj]);
 
 
@@ -212,7 +210,7 @@ const Post = (postobj) => {
             <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
         </div>
 
-        <div className={styles.content}>
+        <div className={styles.content_comment}>
         <button className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
         <ul className={styles.comment_ul}>
             <span className={`${styles.comment_span} ${styles.bold} `}>{commentUserNickname}</span> 
