@@ -13,9 +13,10 @@ const Feed = (inherit_token) => {
         content: 'content',
         contentImgPath: 'contentImgPath',
         commentCount: 'commentCount',
-        likeCount: 'commentCount',
-        regTime: 'regTime',
+        likeCount: 'likeCount',
+        regTime: 'null',
         profileImgPath : 'profileImgPath',
+        nickName : 'nickname',
     };
     let rd = '';
     const [postobj, setPostobj] = useState(obj_table);
@@ -23,9 +24,9 @@ const Feed = (inherit_token) => {
     async function GetPostobj() {
         let acctoken = await localStorage.getItem('accessToken');
         console.log(acctoken);
-
+        const config = {"21wContent-Type" : 'application/json'};
         await axios.get('/api/boards/list', {headers : 
-            {'Authorization': acctoken}})
+            {'Authorization': acctoken}},config)
         .then((res) => {
             
             rd = res.data['data'];
@@ -36,21 +37,22 @@ const Feed = (inherit_token) => {
             {
                 obj_table = {
                     boardMainCommentInfo : rd[i]['boardMainCommentInfo'],
-                    boardMainLikeInfo : rd[i]['boardMainCommentInfo'],
+                    boardMainLikeInfo : rd[i]['boardMainLikeInfo'],
                     id: rd[i]['id'],
                     content: rd[i]['content'],
                     contentImgPath: rd[i]['contentImgPath'],
                     commentCount: rd[i]['commentCount'],
-                    likeCount: rd[i]['commentCount'],
+                    likeCount: rd[i]['likeCount'],
                     regTime: rd[i]['regTime'],
                     profileImgPath : rd[i]['profileImgPath'],
+                    nickName: rd[i]['nickName'],
                 }
-                
-                setPostobj(obj_table);
+
             }
+            setPostobj(obj_table);
             
             console.log(postobj);
-            
+            console.log(postobj[0]);
 
             
 
@@ -73,7 +75,6 @@ const Feed = (inherit_token) => {
 
     return (
         <div className={styles.contents}>
-            <button style={{float:'left'}} onClick = {() => GetPostobj()}>test</button>
             <Post postobj={postobj}/>
         
         </div>
