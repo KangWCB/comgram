@@ -21,7 +21,6 @@ const Post = (postobj) => {
     const [PostId, setPostId] = useState(0);
     const [likeUserNickName, setLikeUserNickName] = useState('hi');
     const [commentCount, setCommentCount] = useState(0);
-    const [pushLike, setPushLike] = useState(false);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
     const [commentContext,setCommentContext] = useState("");
@@ -58,7 +57,7 @@ const Post = (postobj) => {
             let postInfo = postobj['postobj'];
             if(postInfo['contentImgPath']){
                 let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
-                let tmp_idx = tmp_path.indexOf("img");
+                let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
                 console.log(tmp_path);
                 setContentImgPath(tmp_path);   
@@ -68,7 +67,7 @@ const Post = (postobj) => {
             setContent(postInfo['content']);
             setPostId(postInfo['id']);
             setCommentCount(postInfo['commentCount']);
-            setPushLike(postInfo['PushLike']);
+            setLike(postInfo['pushLike']);
             setRegTime(postInfo['regTime']);
             setLikeCount(postInfo['likeCount']);
             setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
@@ -88,13 +87,15 @@ const Post = (postobj) => {
 
 
     const likeHandler = () => {
-        let tmp = `localhost:8080/api/boards/${PostId}/like`;
-        console.log(tmp);
+        let likeAPI = `/api/boards/${PostId}/like`;
+
         let acctoken = localStorage.getItem('accessToken');
         console.log(acctoken);
 
-        axios.post('/api/boards/20/like', {headers : 
-            {'Authorization': acctoken}})
+        axios.post(likeAPI, {}, {
+            headers : 
+                {'Authorization': acctoken}
+        })
         .then((res) => {
             console.log(res.data);
         });
@@ -196,7 +197,7 @@ const Post = (postobj) => {
         <div className={styles.icon_form}>
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
-                like ? (<BsHeart className={styles.likeIcon}/>) : (<BsHeartFill className={styles.likeIcon}/>)
+                like ? (<BsHeartFill className={styles.likeIcon}/>) : (<BsHeart className={styles.likeIcon}/>)
             }
             </div>
             <SlSpeech className={styles.icon}/>

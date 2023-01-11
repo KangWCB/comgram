@@ -18,6 +18,7 @@ const Feed = (inherit_token) => {
         regTime: 'null',
         profileImgPath : 'profileImgPath',
         nickName : 'nickname',
+        
     };
 
 
@@ -32,7 +33,7 @@ const Feed = (inherit_token) => {
             
             let rd = res.data['data'];
             let rd_len = rd['length'];
-            
+            console.log(rd[0]);
             for(var i=0;i<rd_len;i++)
             {
                 obj_table = {
@@ -46,6 +47,7 @@ const Feed = (inherit_token) => {
                     regTime: rd[i]['regTime'],
                     profileImgPath : rd[i]['profileImgPath'],
                     nickName: rd[i]['nickName'],
+                    pushLike: rd[i]['pushLike'],
                 }
                 obj_arr = obj_arr.concat(obj_table);
                 
