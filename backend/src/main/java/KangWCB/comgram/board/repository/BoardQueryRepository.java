@@ -39,6 +39,7 @@ public class BoardQueryRepository {
 
     /**
      * 내가 팔로우 한 사람의 글만 보여준다.
+     * 없으면 전체 사람보여준다.
      */
     public QueryResults<Board>findFollowingBoard(Long memberId){
         List<Member> following = queryFactory.select(qFollow.following)
