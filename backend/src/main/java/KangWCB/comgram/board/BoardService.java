@@ -1,8 +1,6 @@
 package KangWCB.comgram.board;
 
-import KangWCB.comgram.board.boardLike.BoardLike;
 import KangWCB.comgram.board.boardLike.repository.BoardLikeQueryRepository;
-import KangWCB.comgram.board.boardLike.repository.BoardLikeRepository;
 import KangWCB.comgram.board.comment.Comment;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.dto.maindto.BoardMainCommentInfo;
@@ -15,7 +13,6 @@ import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
 import KangWCB.comgram.photo.PhotoService;
-import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -86,8 +83,7 @@ public class BoardService {
 
     public List<BoardMainDto> allMyList(Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow();
-        QueryResults<Board> followingBoard = boardQueryRepository.findFollowingBoard(memberId);
-        List<Board> boards = followingBoard.getResults();
+        List<Board> boards = boardQueryRepository.findFollowingBoard(memberId);
         return getBoardMainDtos(boards,member);
     }
 }
