@@ -193,7 +193,7 @@ const Post = (postobj) => {
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
-        <img id="ci" className={styles.photo} src={contentImgPath}></img>
+        <img id="ci" /*onError={imgHandler}*/ className={styles.photo} src={contentImgPath}></img>
         <div className={styles.icon_form}>
             <div className={styles.likeIcon} onClick={likeHandler}>
             {

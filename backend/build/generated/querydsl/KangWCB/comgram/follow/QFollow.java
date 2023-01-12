@@ -24,9 +24,9 @@ public class QFollow extends EntityPathBase<Follow> {
 
     public final KangWCB.comgram.config.audit.QBaseTimeEntity _super = new KangWCB.comgram.config.audit.QBaseTimeEntity(this);
 
-    public final KangWCB.comgram.member.QMember following;
+    public final KangWCB.comgram.member.QMember follower;
 
-    public final KangWCB.comgram.member.QMember follwer;
+    public final KangWCB.comgram.member.QMember following;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -54,8 +54,8 @@ public class QFollow extends EntityPathBase<Follow> {
 
     public QFollow(Class<? extends Follow> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.follower = inits.isInitialized("follower") ? new KangWCB.comgram.member.QMember(forProperty("follower")) : null;
         this.following = inits.isInitialized("following") ? new KangWCB.comgram.member.QMember(forProperty("following")) : null;
-        this.follwer = inits.isInitialized("follwer") ? new KangWCB.comgram.member.QMember(forProperty("follwer")) : null;
     }
 
 }

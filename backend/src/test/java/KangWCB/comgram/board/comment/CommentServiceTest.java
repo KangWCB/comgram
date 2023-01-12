@@ -5,7 +5,6 @@ import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.member.Role;
 import KangWCB.comgram.member.dto.MemberFormDto;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 @Transactional
-@Slf4j
 class CommentServiceTest {
 
     @Autowired

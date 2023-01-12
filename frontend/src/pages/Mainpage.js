@@ -8,7 +8,7 @@ import Profile from '../components/Profile/Profile';
 
 const Mainpage = () => {
     const [nickname, setNickname] = useState("");
-    
+
     let Islogin = false;
     let acctoken = localStorage.getItem('accessToken');
     let location = useLocation(); // 현재 주소
@@ -27,20 +27,19 @@ const Mainpage = () => {
 
     },[]);
 
+
+
     useEffect(() => {
-        if(currentPath === location.pathname) 
-            //window.location.reload();
-        currentPath = location.pathname;
-
+        console.log("loc 변화")
+        console.log(nickname);
+        if(Islogin == true)
+        {
+            setNickname(localStorage.getItem('nickName'));
+        }
     },[location]);
 
 
-    useEffect(() => { // 주소 변경시 
-        
-        if(currentPath === location.pathname)
-            window.location.reload();
-        currentPath = location.pathname;
-    },[location]);
+
 
     const logoutHandler = () => {
         localStorage.removeItem("accessToken");

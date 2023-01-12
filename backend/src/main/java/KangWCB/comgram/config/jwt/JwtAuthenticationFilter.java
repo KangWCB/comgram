@@ -1,5 +1,6 @@
 package KangWCB.comgram.config.jwt;
 
+import KangWCB.comgram.config.jwt.dto.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -31,9 +32,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             // SecurityContext에 Authentication 객체를 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-//        if (token != null && getJwtCode(token) == JwtCode.EXPIRED){
-//            log.info("accessToken 토큰 재발급 필요함");
-//        }
+        else if (token != null && getJwtCode(token) == JwtCode.EXPIRED){
+            log.info("accessToken 토큰 재발급 필요함");
+            TokenInfo refresh = jwtTokenProvider.refresh((HttpServletRequest) request);
+        }
         log.info("header에 jwt부재");
         chain.doFilter(request, response);
     }

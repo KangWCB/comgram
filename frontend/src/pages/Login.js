@@ -26,7 +26,11 @@ const LoginPage = () => {
       let islogin = localStorage.getItem('isLogin');
       if(acctoken && islogin) // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
-        navigate("/");
+        navigate("/",{state:
+          {
+            islogin : true,
+          }
+        });
         console.log(`to1ken: ${acctoken}`);
       }
     },[]);

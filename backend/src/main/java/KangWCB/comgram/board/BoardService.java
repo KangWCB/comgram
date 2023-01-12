@@ -81,7 +81,7 @@ public class BoardService {
     }
 
     private boolean isPushLike(Member member, Board board) {
-        return board.likes.contains(member);
+        return boardLikeQueryRepository.isPush(member,board);
     }
 
     public List<BoardMainDto> allMyList(Long memberId){
