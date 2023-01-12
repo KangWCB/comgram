@@ -6,7 +6,6 @@ import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.member.MemberService;
 import KangWCB.comgram.member.Role;
-import com.nimbusds.jwt.JWT;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component

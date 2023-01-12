@@ -90,7 +90,6 @@ public class BoardQueryRepository {
 
         return result;
     }
-
     private BooleanExpression likeWord(String word){
         if(StringUtils.isEmpty(word)){
             return null;

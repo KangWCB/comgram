@@ -1,10 +1,8 @@
 package KangWCB.comgram.follow;
 
 import KangWCB.comgram.follow.repository.FollowJpaRepository;
-import KangWCB.comgram.follow.repository.FollowQueryRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
-import com.querydsl.core.QueryResults;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
