@@ -1,16 +1,22 @@
-package KangWCB.comgram.board.dto.maindto;
+package KangWCB.comgram.board.dto;
 
 import KangWCB.comgram.board.Board;
+import KangWCB.comgram.board.dto.maindto.BoardMainCommentInfo;
+import KangWCB.comgram.board.dto.maindto.BoardMainDto;
+import KangWCB.comgram.board.dto.maindto.BoardMainLikeInfo;
 import KangWCB.comgram.photo.Photo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class BoardMainDto {
+public class BoardDetailDto {
 
     private Long id; // 게시물 id
     private String  content; // 본문
@@ -25,11 +31,11 @@ public class BoardMainDto {
     private LocalDateTime regTime; // 글 작성 시간
     private Long commentCount= 0L; // 댓글 갯수
 
-    private BoardMainLikeInfo boardMainLikeInfo;
-    private BoardMainCommentInfo boardMainCommentInfo;
+    private List<BoardMainLikeInfo> boardMainLikeInfo;
+    private List<BoardMainCommentInfo> boardMainCommentInfo;
 
     @Builder
-    public BoardMainDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
+    public BoardDetailDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
         this.id = id;
         this.content = content;
         this.contentImgPath = contentImgPath;
@@ -41,8 +47,8 @@ public class BoardMainDto {
         this.commentCount = commentCount;
     }
 
-    public static BoardMainDto toDto(boolean pushLike, Photo photo, Board board,String savedImgPath){
-        BoardMainDto boardMainDto = BoardMainDto.builder()
+    public static BoardDetailDto toDto(boolean pushLike, Photo photo, Board board, String savedImgPath){
+        BoardDetailDto boardDetailDto = BoardDetailDto.builder()
                 .id(board.getId())
                 .content(board.getContent())
                 .contentImgPath(photo.getSavedPath())
@@ -53,7 +59,7 @@ public class BoardMainDto {
                 .pushLike(pushLike)
                 .regTime(board.getRegTime())
                 .build();
-        return boardMainDto;
+        return boardDetailDto;
     }
 
 }

@@ -1,5 +1,6 @@
 package KangWCB.comgram.board;
 
+import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.dto.maindto.BoardMainDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
@@ -47,20 +48,19 @@ public class BoardController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * 팔로우가 있으면 팔로우한 사람 게시물
+     * 없으면 전체 게시물
+     */
     @GetMapping("/list")
     public Result<List> list(@AuthenticationPrincipal SecurityUser user){
         List<BoardMainDto> boardMainDtos = boardService.allMyList(user.getMember().getId());
         return new Result<>(boardMainDtos);
     }
-
-    /**
-     * 팔로우가 있으면 팔로우한 사람 게시물
-     * 없으면 전체 게시물
-     */
-    @GetMapping("/myList")
-    public Result<List> myList(@AuthenticationPrincipal SecurityUser user){
-        List<BoardMainDto> boardMainDtos = boardService.allMyList(user.getMember().getId());
-        return new Result<>(boardMainDtos);
+    @GetMapping("{boardId}")
+    public BoardDetailDto boardDetail(@PathVariable(name="boardId") Long boardId){
+        BoardDetailDto boardDetail = boardService.findBoardDetail(boardId);
+        return boardDetail;
     }
 
     @Data

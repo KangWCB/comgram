@@ -21,11 +21,11 @@ public class BoardLikeQueryRepository {
     private final JPAQueryFactory queryFactory;
     QBoardLike boardLike = QBoardLike.boardLike;
 
-    public Member findLikeMember(Board board) {
-        Member member = queryFactory.select(boardLike.member)
+    public List<Member> findLikeMember(Board board) {
+        List<Member> member = queryFactory.select(boardLike.member)
                 .from(boardLike)
                 .where(boardLike.board.eq(board))
-                .fetchFirst();
+                .fetch();
 
         return member;
     }

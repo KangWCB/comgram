@@ -9,6 +9,7 @@ import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.QMember;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -98,6 +99,16 @@ public class BoardQueryRepository {
     }
 
 
-
-
+    /**
+     * 보드 게시물 하나 찾아주기
+     */
+    public Board findBoard(Long boardId) {
+        Board board = queryFactory.select(qBoard)
+                .from(qBoard)
+                .leftJoin(qBoard.member, qMember)
+                .fetchJoin()
+                .where(qBoard.id.eq(boardId))
+                .fetchOne();
+        return board;
+    }
 }
