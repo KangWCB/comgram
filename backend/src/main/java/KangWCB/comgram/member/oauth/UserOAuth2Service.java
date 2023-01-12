@@ -5,7 +5,6 @@ import KangWCB.comgram.member.MemberRepository;
 import KangWCB.comgram.member.Role;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
-import KangWCB.comgram.photo.PhotoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -18,7 +17,6 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.*;
 
 @Slf4j
