@@ -81,6 +81,7 @@ const LoginPage = () => {
             console.log(`test: ${asd}`);
 
             localStorage.setItem('IsLogin', true);
+            navigate("/");    // 리다이렉트
         })
         .catch((err) => {
             console.log(err);

@@ -4,6 +4,9 @@
     "moment": "^2.29.4",
     "react-icons": "^4.7.1",
     "react-moment": "^1.1.2",
-    "react-router-dom": "^6.6.1"
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.6.1",
+    "redux": "^4.2.0",
+    "redux-persist": "^6.0.0"
   }
 }

@@ -4,11 +4,13 @@ import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
+import { addPostobj, updatePostobj } from '../../redux/action';
+import { useSelector, useDispatch } from 'react-redux';
+import getPostobj from './GetPostobj';
 
-import reactMoment from "react-moment";
-
-const Post = (postobj) => {
+const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
+    
     const [like, setLike] = useState(false);
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
@@ -17,7 +19,7 @@ const Post = (postobj) => {
     const [writerName, setWriterName] = useState("");
     const [content, setContent] = useState('')
     const [contentImgPath, setContentImgPath] = useState(null);
-    const [imgHash, setimgHash] = useState('');
+
     const [PostId, setPostId] = useState(0);
     const [likeUserNickName, setLikeUserNickName] = useState('hi');
     const [commentCount, setCommentCount] = useState(0);
@@ -32,53 +34,58 @@ const Post = (postobj) => {
         hour:'',
         min:'',
         sec:'',
-    };
-    
-    let rd = '';
-    let likeName = "newbie";
+    };    
     let origin_content = "";
     let cut_content = "";
-    let commentList = [
-        {
-            userName: "sibal",
-            comment: "죽여주세요 제발n" 
-        },
+    
+    const selectorData = useSelector(state => state.postobjReducer);
+    const [data, setData] = useState(selectorData);
+    let postobj = null;
+    
+    useEffect(() => {
+      setData(selectorData);
+      if(data)
+      {
+        let objidx = data['postobj'].findIndex(obj => obj.id === id['id'])
+        postobj = data['postobj'][objidx];
+    }
 
-    ];
+    }, [selectorData])
+    
     useEffect(() => {
         writetimeHandler(regTime);
     },[regTime]);
+
     useEffect(() => {
-        console.log('post 렌더링')
+        console.log('postobj 변경')
+        console.log(postobj);
         
-        console.log(postobj['postobj'].length);
-        if(postobj['postobj'].length!= 0)
+        if(postobj.length!= 0)
         {
-            let postInfo = postobj['postobj'];
-            if(postInfo['contentImgPath']){
-                let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
+            if(postobj['contentImgPath']){
+                let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
                 let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
                 console.log(tmp_path);
                 setContentImgPath(tmp_path);   
             }
                 
-            setWriterName(postInfo['nickName']);
-            setContent(postInfo['content']);
-            setPostId(postInfo['id']);
-            setCommentCount(postInfo['commentCount']);
-            setLike(postInfo['pushLike']);
-            setRegTime(postInfo['regTime']);
-            setLikeCount(postInfo['likeCount']);
-            setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
-            if(postInfo['boardMainCommentInfo'])
+            setWriterName(postobj['nickName']);
+            setContent(postobj['content']);
+            setCommentCount(postobj['commentCount']);
+            setLike(postobj['pushLike']);
+            setRegTime(postobj['regTime']);
+            setPostId(postobj['id']);
+            setLikeCount(postobj['likeCount']);
+            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
+            if(postobj['boardMainCommentInfo'])
             {
-                setCommentContext(postInfo['boardMainCommentInfo']['commentContext']);
-                setCommentUserNickname(postInfo['boardMainCommentInfo']['commentUserNickname']);
+                setCommentContext(postobj['boardMainCommentInfo']['commentContext']);
+                setCommentUserNickname(postobj['boardMainCommentInfo']['commentUserNickname']);
             }
-            if(postInfo['boardMainLikeInfo'])
+            if(postobj['boardMainLikeInfo'])
             {
-                setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
+                setLikeUserNickName(postobj['boardMainLikeInfo']['likeUserNickName']);
             }
         }
         else
@@ -87,6 +94,7 @@ const Post = (postobj) => {
 
 
     const likeHandler = () => {
+        console.log("like 호출");
         let likeAPI = `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');
@@ -99,7 +107,7 @@ const Post = (postobj) => {
         .then((res) => {
             console.log(res.data);
         });
-        setLike(!like);
+        getPostobj('update');
     };
 
     const writetimeHandler = (regTime) => {

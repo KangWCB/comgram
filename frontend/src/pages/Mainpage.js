@@ -1,4 +1,4 @@
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState, React, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
@@ -8,7 +8,8 @@ import Profile from '../components/Profile/Profile';
 
 const Mainpage = () => {
     const [nickname, setNickname] = useState("");
-
+    const navigate = useNavigate();
+    
     let Islogin = false;
     let acctoken = localStorage.getItem('accessToken');
     let location = useLocation(); // 현재 주소
@@ -24,18 +25,15 @@ const Mainpage = () => {
             localStorage.setItem('nickName', nickname);
                  
         }
-
+        else {
+            navigate("/login");
+        }
     },[]);
 
-
-
-    useEffect(() => {
-        console.log("loc 변화")
-        console.log(nickname);
-        if(Islogin == true)
-        {
-            setNickname(localStorage.getItem('nickName'));
-        }
+    useEffect(() => { // 주소 변경시
+        if(currentPath === location.pathname)
+            window.location.reload();
+        currentPath = location.pathname;
     },[location]);
 
 
@@ -73,19 +71,14 @@ const Mainpage = () => {
 
     return (
         <div className={styles.container}>
-            
-        <Link to="/login">
-            <button>Login</button>
-        </Link>
-        
-        <button onClick={() => logoutHandler()}>Logout</button>
-        <br/>nick : {nickname}
-        <br/>tk : {acctoken}
-        {/*<Profile inherit_token={acctoken}/> {/*토큰 상속*/}
-        <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
-        
-
-            
+            <Link to="/login">
+                <button>Login</button>
+            </Link>
+            <button onClick={() => logoutHandler()}>Logout</button>
+            <br/>nick : {nickname}
+            <br/>tk : {acctoken}
+            <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
+            <Profile inherit_token={acctoken}/> {/*토큰 상속*/}
         </div>
         
     )
