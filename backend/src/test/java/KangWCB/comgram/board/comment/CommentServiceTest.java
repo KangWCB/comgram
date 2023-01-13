@@ -42,12 +42,6 @@ class CommentServiceTest {
         Comment comment = Comment.builder().comment("저도요").createdDate(String.valueOf(LocalDateTime.now())).boards(board).member(member).build();
         em.persist(comment);
 
-
-
     }
-
-
-
-
 
 }
