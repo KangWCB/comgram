@@ -24,7 +24,6 @@ public class MemberQueryRepository {
                 .where(likeMember(word))
                 .limit(10)
                 .fetch();
-
         return result;
     }
 

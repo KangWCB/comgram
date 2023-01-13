@@ -2,23 +2,17 @@ package KangWCB.comgram.board.repository;
 
 import KangWCB.comgram.board.Board;
 import KangWCB.comgram.board.QBoard;
-import KangWCB.comgram.board.boardLike.QBoardLike;
+import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.follow.QFollow;
-import KangWCB.comgram.follow.repository.FollowQueryRepository;
-import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.QMember;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,14 +21,16 @@ public class BoardQueryRepository {
     QBoard qBoard = QBoard.board;
     QFollow qFollow = QFollow.follow;
     QMember qMember = QMember.member;
-    QBoardLike qBoardLike = QBoardLike.boardLike;
 
     /**
      * 내 게시물 올린 갯수 조회
+     * fetch join 최적화
      */
     public Long countMyBoard(Long memberId){
         Long count = queryFactory.select(qBoard)
                 .from(qBoard)
+                .leftJoin(qBoard.member,qMember)
+                .fetchJoin()
                 .where(qBoard.member.id.eq(memberId))
                 .fetchCount();
         return count;
@@ -48,7 +44,6 @@ public class BoardQueryRepository {
      */
     public List<Board> findFollowingBoard(Long memberId){
         BooleanBuilder builder = new BooleanBuilder(); // where문 작성을 위해
-
         // 팔로우한 사람을 찾아서 where절에 or로 전부 넣어주기
         List<Long> followingId = queryFactory.select(qFollow.following.id)
                 .from(qFollow)
@@ -61,13 +56,14 @@ public class BoardQueryRepository {
         // 팔로우한 사람 게시물 찾기
         List<Board> result = queryFactory.select(qBoard)
                 .from(qBoard)
+                .leftJoin(qBoard.member,qMember)
+                .fetchJoin()
                 .where(builder)
                 .orderBy(qBoard.regTime.desc())
                 .fetch();
-
         return result;
     }
-
+    
     /**
      * 좋아요 많이한 게시물 순서로 6개 보여주기
      */
@@ -88,7 +84,6 @@ public class BoardQueryRepository {
                 .orderBy(qBoard.likes.size().desc())
                 .limit(6)
                 .fetch();
-
         return result;
     }
     private BooleanExpression likeWord(String word){
