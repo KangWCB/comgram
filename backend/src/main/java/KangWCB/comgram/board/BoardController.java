@@ -2,7 +2,7 @@ package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainDto;
+import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.AllArgsConstructor;

@@ -4,9 +4,9 @@ import KangWCB.comgram.board.boardLike.repository.BoardLikeQueryRepository;
 import KangWCB.comgram.board.comment.Comment;
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainCommentInfo;
-import KangWCB.comgram.board.dto.maindto.BoardMainDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainLikeInfo;
+import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
+import KangWCB.comgram.board.dto.BoardMainDto;
+import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
 import KangWCB.comgram.board.repository.BoardQueryRepository;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,21 +68,19 @@ public class BoardService {
         String saveImgPath = getSavePath(board.getMember());
         BoardDetailDto boardDetailDto = BoardDetailDto.toDto(isPushLike(board.getMember(), board), photo, board, saveImgPath);
         List<Comment> comments = board.getComments();
-        List<BoardMainCommentInfo> boardMainCommentInfos = new ArrayList<>();
-        List<BoardMainLikeInfo> boardMainLikeInfos = new ArrayList<>();
+        List<BoardCommentInfo> boardCommentInfos;
+        List<BoardLikeInfo> boardLikeInfos = new ArrayList<>();
 
         if(!comments.isEmpty()){
-            for (Comment comment : comments) {
-                boardMainCommentInfos.add(new BoardMainCommentInfo(comment.getMember().getNickName(), comment.getComment()));
-            }
-            boardDetailDto.setBoardMainCommentInfo(boardMainCommentInfos);
+            boardCommentInfos = comments.stream().map(comment -> new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment())).collect(Collectors.toList());
+            boardDetailDto.setBoardCommentInfo(boardCommentInfos);
         }
         List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
         if(!likeMember.isEmpty()){
             for (Member member : likeMember) {
-                boardMainLikeInfos.add(new BoardMainLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
+                boardLikeInfos.add(new BoardLikeInfo(member.getNickName(), getSavePath(member)));
             }
-            boardDetailDto.setBoardMainLikeInfo(boardMainLikeInfos);
+            boardDetailDto.setBoardLikeInfo(boardLikeInfos);
         }
         return boardDetailDto;
     }
@@ -98,11 +97,11 @@ public class BoardService {
             BoardMainDto boardMainDto = BoardMainDto.toDto(isPushLike(member, board), photo, board, saveImgPath);
             if(!board.getComments().isEmpty()){
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardMainCommentInfo(new BoardMainCommentInfo(comment.getMember().getNickName(), comment.getComment()));
+                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment()));
             }
             if(!board.getLikes().isEmpty()){
                 List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
-                boardMainDto.setBoardMainLikeInfo(new BoardMainLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
+                boardMainDto.setBoardLikeInfo(new BoardLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
             }
             boardMainDtos.add(boardMainDto);
         }

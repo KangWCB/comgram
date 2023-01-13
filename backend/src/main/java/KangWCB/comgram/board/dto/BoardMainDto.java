@@ -1,6 +1,8 @@
-package KangWCB.comgram.board.dto.maindto;
+package KangWCB.comgram.board.dto;
 
 import KangWCB.comgram.board.Board;
+import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
+import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.photo.Photo;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +27,8 @@ public class BoardMainDto {
     private LocalDateTime regTime; // 글 작성 시간
     private Long commentCount= 0L; // 댓글 갯수
 
-    private BoardMainLikeInfo boardMainLikeInfo;
-    private BoardMainCommentInfo boardMainCommentInfo;
+    private BoardLikeInfo boardLikeInfo;
+    private BoardCommentInfo boardCommentInfo;
 
     @Builder
     public BoardMainDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
