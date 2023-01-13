@@ -2,6 +2,7 @@ package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.boardLike.repository.BoardLikeQueryRepository;
 import KangWCB.comgram.board.comment.Comment;
+import KangWCB.comgram.board.comment.repository.CommentQueryRepository;
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
@@ -34,6 +35,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final BoardQueryRepository boardQueryRepository;
     private final BoardLikeQueryRepository boardLikeQueryRepository;
+    private final CommentQueryRepository commentQueryRepository;
     private final PhotoRepository photoRepository;
     private final MemberRepository memberRepository;
     private final PhotoService photoService;
@@ -67,19 +69,13 @@ public class BoardService {
         Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
         String saveImgPath = getSavePath(board.getMember());
         BoardDetailDto boardDetailDto = BoardDetailDto.toDto(isPushLike(board.getMember(), board), photo, board, saveImgPath);
-        List<Comment> comments = board.getComments();
-        List<BoardCommentInfo> boardCommentInfos;
         List<BoardLikeInfo> boardLikeInfos = new ArrayList<>();
 
-        if(!comments.isEmpty()){
-            boardCommentInfos = comments.stream().map(comment -> new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment())).collect(Collectors.toList());
-            boardDetailDto.setBoardCommentInfo(boardCommentInfos);
-        }
+       boardDetailDto.setBoardCommentInfo(commentQueryRepository.findBoardComment(boardId));
+
         List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
         if(!likeMember.isEmpty()){
-            for (Member member : likeMember) {
-                boardLikeInfos.add(new BoardLikeInfo(member.getNickName(), getSavePath(member)));
-            }
+            boardLikeInfos = likeMember.stream().map(member -> new BoardLikeInfo(member.getNickName(), getSavePath(member))).collect(Collectors.toList());
             boardDetailDto.setBoardLikeInfo(boardLikeInfos);
         }
         return boardDetailDto;
