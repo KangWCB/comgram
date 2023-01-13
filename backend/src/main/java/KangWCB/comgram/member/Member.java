@@ -22,24 +22,26 @@ public class Member extends BaseTimeEntity {
 
     // 로그인 시 필요
     @Column(unique = true)
-    private String email;
-    private String password;
-
+    private String email; // 이메일
+    private String password; // 비밀번호
     // 개인 정보
-    private String name;
-    private String nickName;
+    private String name; // 이름
+    private String nickName; // 닉네임
+    private Long photoProfileId; // 프로필 생성
 
-    //프로필 사진
+    private String refreshToken; // 리프레쉬 토큰 저장
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role; // 역할
+
 
     @Builder
-    public Member(String email, String password, String name, String nickname, Role role) {
+    public Member(String email, String password, String name, String nickname, Role role, Long photoProfileId) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickName = nickname;
         this.role = role;
+        this.photoProfileId = photoProfileId;
     }
 
     //== 생성 메소드
@@ -49,6 +51,7 @@ public class Member extends BaseTimeEntity {
                 .email(memberFormDto.getEmail())
                 .password(passwordEncoder.encode(memberFormDto.getPassword())) // 암호화
                 .nickname(memberFormDto.getNickname())
+                .photoProfileId(1L)
                 .role(Role.USER)
                 .build();
         return member;
@@ -58,5 +61,11 @@ public class Member extends BaseTimeEntity {
         this.nickName = memberUpdateForm.getNickname();
         this.name = memberUpdateForm.getName();
     }
+    public void updatePhoto(Long savedImgId) {
+        this.photoProfileId = savedImgId;
+    }
 
+    public void registerRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
 }
