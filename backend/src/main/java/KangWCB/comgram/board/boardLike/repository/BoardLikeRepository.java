@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Repository
-public interface BoardLikeRepository extends JpaRepository<BoardLike,Long> {
+public interface BoardLikeRepository extends JpaRepository<BoardLike,Long>,BoardLikeRepositoryCustom {
     Optional <BoardLike> findByMemberAndBoard(Member member, Board board);
 
 

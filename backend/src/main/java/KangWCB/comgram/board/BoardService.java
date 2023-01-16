@@ -1,14 +1,14 @@
 package KangWCB.comgram.board;
 
-import KangWCB.comgram.board.boardLike.repository.BoardLikeQueryRepository;
+import KangWCB.comgram.board.boardLike.repository.BoardLikeRepositoryImpl;
 import KangWCB.comgram.board.comment.Comment;
-import KangWCB.comgram.board.comment.repository.CommentQueryRepository;
+import KangWCB.comgram.board.comment.CommentRepository;
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
-import KangWCB.comgram.board.repository.BoardQueryRepository;
+import KangWCB.comgram.board.repository.BoardRepositoryImpl;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
@@ -33,9 +33,8 @@ public class BoardService {
     private String defaultProfile;
 
     private final BoardRepository boardRepository;
-    private final BoardQueryRepository boardQueryRepository;
-    private final BoardLikeQueryRepository boardLikeQueryRepository;
-    private final CommentQueryRepository commentQueryRepository;
+    private final BoardLikeRepositoryImpl boardLikeRepositoryImpl;
+    private final CommentRepository commentRepository;
     private final PhotoRepository photoRepository;
     private final MemberRepository memberRepository;
     private final PhotoService photoService;
@@ -57,7 +56,7 @@ public class BoardService {
 
     public List<BoardMainDto> allMyList(Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow();
-        List<Board> boards = boardQueryRepository.findFollowingBoard(memberId);
+        List<Board> boards = boardRepository.findFollowingBoard(memberId);
         return getBoardMainDtos(boards,member);
     }
 
@@ -65,15 +64,15 @@ public class BoardService {
      * 게시물 하나 정보 보내주기
      */
     public BoardDetailDto findBoardDetail(Long boardId) {
-        Board board = boardQueryRepository.findBoard(boardId);
+        Board board = boardRepository.findBoard(boardId);
         Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
         String saveImgPath = getSavePath(board.getMember());
         BoardDetailDto boardDetailDto = BoardDetailDto.toDto(isPushLike(board.getMember(), board), photo, board, saveImgPath);
         List<BoardLikeInfo> boardLikeInfos = new ArrayList<>();
 
-       boardDetailDto.setBoardCommentInfo(commentQueryRepository.findBoardComment(boardId));
+       boardDetailDto.setBoardCommentInfo(commentRepository.findBoardComment(boardId));
 
-        List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
+        List<Member> likeMember = boardLikeRepositoryImpl.findLikeMember(board);
         if(!likeMember.isEmpty()){
             boardLikeInfos = likeMember.stream().map(member -> new BoardLikeInfo(member.getNickName(), getSavePath(member))).collect(Collectors.toList());
             boardDetailDto.setBoardLikeInfo(boardLikeInfos);
@@ -82,7 +81,7 @@ public class BoardService {
     }
 
     private boolean isPushLike(Member member, Board board) {
-        return boardLikeQueryRepository.isPush(member,board);
+        return boardLikeRepositoryImpl.isPush(member,board);
     }
 
     private List<BoardMainDto> getBoardMainDtos(List<Board> allBoard, Member member) {
@@ -96,7 +95,7 @@ public class BoardService {
                 boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment()));
             }
             if(!board.getLikes().isEmpty()){
-                List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
+                List<Member> likeMember = boardLikeRepositoryImpl.findLikeMember(board);
                 boardMainDto.setBoardLikeInfo(new BoardLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
             }
             boardMainDtos.add(boardMainDto);
