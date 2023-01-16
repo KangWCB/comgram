@@ -58,7 +58,7 @@ const Post = (postobj) => {
             let postInfo = postobj['postobj'];
             if(postInfo['contentImgPath']){
                 let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
-                let tmp_idx = tmp_path.indexOf("img");
+                let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
                 console.log(tmp_path);
                 setContentImgPath(tmp_path);   
