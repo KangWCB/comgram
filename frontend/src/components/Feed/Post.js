@@ -107,7 +107,8 @@ const Post = (id) => {
         .then((res) => {
             console.log(res.data);
         });
-        getPostobj('update');
+        
+        getPostobj('update',PostId);
     };
 
     const writetimeHandler = (regTime) => {

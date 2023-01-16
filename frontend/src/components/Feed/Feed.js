@@ -19,13 +19,13 @@ const Feed = (inherit_token) => {
       setData(selectorData)
       console.log("redux 갱신")
       setPostobj(data.postobj);
+      console.log(postobj)
     }, [selectorData])
 
 
 
     useEffect(() => {
-        getPostobj('add');    
-        
+        dispatch(getPostobj('add'));    
     },[]);
 
 

@@ -1,28 +1,31 @@
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { addPostobj, updatePostobj, resetPostobj } from '../../redux/action';
-
-async function GetPostobj(action) {
+[]
+async function GetPostobj () {
     let act = '';
+    let api = '';
     if(action = 'add')
     {
         console.log(`getpostobj add`)
         act = addPostobj;
+        api = '/api/boards/list';
     }
     else if (action = 'update')
     {
         console.log(`getpostobj update`)
         act = updatePostobj;
+        api = `api/boards/${id}`
     }
-    const dispatch = useDispatch();
-    let acctoken = await localStorage.getItem('accessToken');
+    let acctoken = localStorage.getItem('accessToken');
+    console.log(acctoken);
     const config = {"Content-Type" : 'application/json'};
-    await axios.get('/api/boards/list', {headers : 
+    await axios.get(api, {headers : 
         {'Authorization': acctoken}},config)
     .then((res) => {
         
         let rd = res.data['data'];
         let rd_len = rd['length'];
+        console.log(rd[0]);
         for(var i=0;i<rd_len;i++)
         {
             let obj_table = {

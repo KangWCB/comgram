@@ -1,6 +1,7 @@
 import {} from "./postobjReducer";
 
 export const addPostobj = (obj) => ({
+    
     type: "OBJECT_ADD",
     payload: obj,
 });
