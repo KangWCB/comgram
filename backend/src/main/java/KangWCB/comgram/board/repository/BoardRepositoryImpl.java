@@ -4,6 +4,7 @@ import KangWCB.comgram.board.Board;
 import KangWCB.comgram.board.QBoard;
 import KangWCB.comgram.follow.QFollow;
 import KangWCB.comgram.member.QMember;
+import KangWCB.comgram.photo.QPhoto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,6 +21,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     QBoard qBoard = QBoard.board;
     QFollow qFollow = QFollow.follow;
     QMember qMember = QMember.member;
+    QPhoto qPhoto =QPhoto.photo;
 
     /**
      * 내 게시물 올린 갯수 조회
@@ -50,6 +52,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .from(qFollow)
                 .where(qFollow.follower.id.eq(memberId))
                 .fetch();
+
         for (Long following : followingId) {
             builder.or(qBoard.member.id.eq(following));
         }
@@ -62,6 +65,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(builder)
                 .orderBy(qBoard.regTime.desc())
                 .fetch();
+
         return result;
     }
     

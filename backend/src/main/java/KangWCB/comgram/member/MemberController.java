@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,18 +69,11 @@ public class MemberController {
         return MemberInfoDto.builder()
                 .email(member.getMember().getEmail())
                 .nickname(member.getMember().getNickName())
-                .profilePhotoUrl(getSavePath(member))
+                .profilePhotoUrl(photoService.noPhotoFinder(member.getMember()))
                 .build();
     }
-    /**
-     * 프로필 사진 주소
-     */
-    private String getSavePath(SecurityUser member) {
-        Long photoProfileId = member.getMember().getPhotoProfileId();
-        return photoProfileId!= null ?  photoService.findSavePath(photoProfileId): defaultProfile;
-    }
-
     // 회원수정
+
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
@@ -93,8 +87,8 @@ public class MemberController {
         memberRepository.deleteById(memberId);
     }
 
-
     // 테스트용 follow
+
     @GetMapping("/{id}/followCount")
     public Long followCount(@PathVariable(name = "id") Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
@@ -102,13 +96,13 @@ public class MemberController {
         return countFollow;
     }
 
-
     /**
      * Login 토큰
      */
     @Data
     @AllArgsConstructor
     static class Result<T> {
+
         private T token;
         private Long id;
     }

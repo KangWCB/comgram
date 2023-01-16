@@ -5,6 +5,7 @@ import KangWCB.comgram.board.comment.Comment;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.Member;
+import KangWCB.comgram.photo.Photo;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,8 +26,6 @@ public class Board extends BaseTimeEntity {
     private String content; // 본문
     private int viewCount; // 조회수
 
-    private Long imgId; // 저장된 이미지 id
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 작성자
@@ -38,13 +37,17 @@ public class Board extends BaseTimeEntity {
     @OrderBy("id asc") // 댓글 정렬
     private List<Comment> comments = new ArrayList<>() ;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "photo_id")
+    private Photo photo;
+
 
     @Builder
-    public Board(String content, int viewCount, Member member, Long imgId) {
+    public Board(String content, int viewCount, Member member,Photo photo) {
         this.content = content;
         this.viewCount = viewCount;
         this.member = member;
-        this.imgId = imgId;
+        this.photo = photo;
     }
 
     // 생성 메소드
@@ -52,8 +55,8 @@ public class Board extends BaseTimeEntity {
         Board writeBoard = Board.builder()
                 .content(boardFormDto.getContent())
                 .viewCount(0)
-                .imgId(boardFormDto.getImgId())
                 .member(boardFormDto.getMember())
+                .photo(boardFormDto.getPhoto()) // 포토넣기
                 .build();
 
         return writeBoard;

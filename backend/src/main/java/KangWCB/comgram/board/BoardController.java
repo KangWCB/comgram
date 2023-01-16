@@ -3,6 +3,7 @@ package KangWCB.comgram.board;
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
+import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,9 +36,9 @@ public class BoardController {
                 .member(member.getMember())
                 .build();
         try{
-            Long savedImgId = photoService.saveFile(file);
-            if(savedImgId!=null){
-                boardFormDto.setImgId(savedImgId);
+            Photo photo = photoService.savedBoardPhoto(file);
+            if(photo!=null){
+                boardFormDto.setPhoto(photo);
             }
             boardService.write(boardFormDto);
         } catch (UsernameNotFoundException e){

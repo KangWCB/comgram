@@ -30,11 +30,11 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> imgId = createNumber("imgId", Long.class);
-
     public final SetPath<KangWCB.comgram.board.boardLike.BoardLike, KangWCB.comgram.board.boardLike.QBoardLike> likes = this.<KangWCB.comgram.board.boardLike.BoardLike, KangWCB.comgram.board.boardLike.QBoardLike>createSet("likes", KangWCB.comgram.board.boardLike.BoardLike.class, KangWCB.comgram.board.boardLike.QBoardLike.class, PathInits.DIRECT2);
 
     public final KangWCB.comgram.member.QMember member;
+
+    public final KangWCB.comgram.photo.QPhoto photo;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
@@ -62,7 +62,8 @@ public class QBoard extends EntityPathBase<Board> {
 
     public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new KangWCB.comgram.member.QMember(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new KangWCB.comgram.member.QMember(forProperty("member"), inits.get("member")) : null;
+        this.photo = inits.isInitialized("photo") ? new KangWCB.comgram.photo.QPhoto(forProperty("photo")) : null;
     }
 
 }

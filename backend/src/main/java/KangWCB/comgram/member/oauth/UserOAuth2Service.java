@@ -16,11 +16,13 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@Transactional
 public class UserOAuth2Service extends DefaultOAuth2UserService {
 
     @Autowired
@@ -47,13 +49,11 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         String profileURL = (String) properties.get("profile_image");
 
         if (memberRepository.existsByEmail(email)){
-//            Member member = memberRepository.findByEmail(email).get();
             log.info("Oauth로 로그인 한 적있는 유저");
         } else {
-//            MemberFormDto.builder().email(email).password(String.valueOf(UUID.randomUUID())).role(Role.USER).nickname(nickname);
             String uuid = UUID.randomUUID().toString().substring(0, 6); // 임시 비밀번호 하나 만들어주기 로딩시에 필요함
             String uuid2 = UUID.randomUUID().toString().substring(0, 6); // 저장이름 하나 생성, 비밀번호랑 차별화
-            Long savedPhotoId = savedKakaoPhoto(email, profileURL, uuid2);
+            Photo savedKakaoPhoto = savedKakaoPhoto(email, profileURL, uuid2);
 
             String nickname =  "new_user_"+uuid2;
             Member member = Member.builder()
@@ -61,7 +61,7 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
                     .nickname(nickname)
                     .email(email)
                     .password(passwordEncoder.encode(uuid))
-                    .photoProfileId(savedPhotoId)
+                    .photo(savedKakaoPhoto)
                     .role(Role.USER).build();
 
             memberRepository.save(member);
@@ -69,10 +69,10 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),attributes,"id");
     }
 
-    private Long savedKakaoPhoto(String email, String profileURL, String uuid2) {
+    private Photo savedKakaoPhoto(String email, String profileURL, String uuid2) {
         Photo photo = Photo.builder().savedPath(profileURL).savedNm(uuid2 + "." + email).build();
         Photo savedPhoto = photoRepository.save(photo);
-        return savedPhoto.getId();
+        return savedPhoto;
 
     }
 

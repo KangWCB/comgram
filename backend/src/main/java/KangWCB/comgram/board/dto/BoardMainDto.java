@@ -43,15 +43,15 @@ public class BoardMainDto {
         this.commentCount = commentCount;
     }
 
-    public static BoardMainDto toDto(boolean pushLike, Photo photo, Board board,String savedImgPath){
+    public static BoardMainDto toDto(boolean pushLike, String contextImgPath, Board board,String wirterImgPath){
         BoardMainDto boardMainDto = BoardMainDto.builder()
                 .id(board.getId())
                 .content(board.getContent())
-                .contentImgPath(photo.getSavedPath())
+                .contentImgPath(contextImgPath)
                 .likeCount(board.getLikes().stream().count())
                 .nickName(board.getMember().getNickName())
                 .commentCount(board.getComments().stream().count())
-                .profileImgPath(savedImgPath)
+                .profileImgPath(wirterImgPath)
                 .pushLike(pushLike)
                 .regTime(board.getRegTime())
                 .build();

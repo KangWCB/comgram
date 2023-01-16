@@ -1,6 +1,8 @@
 package KangWCB.comgram.board.dto;
 
 import KangWCB.comgram.member.Member;
+import KangWCB.comgram.photo.Photo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,10 @@ public class BoardFormDto {
 
     @NotNull
     private Long imgId;
+
+    @JsonIgnore
+    @NotNull
+    private Photo photo;
 
     @Builder
     public BoardFormDto(String content, Member member) {

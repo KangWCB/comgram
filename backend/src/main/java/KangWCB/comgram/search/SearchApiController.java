@@ -36,14 +36,14 @@ public class SearchApiController {
             List<Board> wordContent = boardRepositoryImpl.findWordContent(word);
             List<SearchBoardDto> result = new ArrayList<>();
             for (Board board : wordContent) {
-                String savePath = photoService.findSavePath(board.getImgId());
+                String savePath = board.getPhoto().getSavedPath();
                 result.add(new SearchBoardDto(board.getId(), savePath));
             }
             return new SearchResponseDto("Board", wordContent.size(), result);
         }else {
             List<SearchMemberDto> result = new ArrayList<>();
             for (Member member : memberRepositoryCustomInmpl.findMember(word)) {
-                String savePath = photoService.findSavePath(member.getPhotoProfileId());
+                String savePath = member.getPhoto().getSavedPath();
                 result.add(new SearchMemberDto(member.getId(), member.getNickName(),savePath));
             }
             return new SearchResponseDto("Member", memberRepositoryCustomInmpl.findMember(word).size(), result);

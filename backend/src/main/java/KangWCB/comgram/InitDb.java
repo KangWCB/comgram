@@ -61,8 +61,7 @@ public class InitDb {
             for (int i = 0; i < 5; i++) {
                 Photo testPhoto = Photo.builder().orgNm("testImg").savedNm("testImgSave").savedPath(testImgPath).build();
                 em.persist(testPhoto);
-                Long testPhotoId = testPhoto.getId();
-                Board board = Board.builder().viewCount(0).member(member).imgId(testPhotoId).content("안녕하세요!" + i).build();
+                Board board = Board.builder().viewCount(0).member(member).photo(testPhoto).content("안녕하세요!" + i).build();
                 em.persist(board);
                 Comment comment = Comment.builder().comment("재밌네요 친추할게요!" + i)
                         .createdDate(String.valueOf(LocalDateTime.now()))
