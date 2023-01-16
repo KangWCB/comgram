@@ -25,7 +25,7 @@ public class PhotoService {
     @Value("${default.profile}")
     private String defaultProfile;
 
-    private final PhotoRepository fileRepository;
+    private final PhotoRepository photoRepository;
 
     public Long saveFile(MultipartFile files){
         if (files.isEmpty()) {
@@ -62,12 +62,11 @@ public class PhotoService {
 
         }
         // 데이터베이스에 파일 정보 저장
-        Photo savedFile = fileRepository.save(file);
-        return savedFile.getId();
+        return photoRepository.save(file).getId();
     }
 
     public String findSavePath(Long imgId){
-        Optional<Photo> photo = fileRepository.findById(imgId);
+        Optional<Photo> photo = photoRepository.findById(imgId);
         if(!photo.isEmpty()){
             return photo.get().getSavedPath();
         }

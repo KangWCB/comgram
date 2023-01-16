@@ -28,7 +28,7 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
     @Autowired
     private PhotoRepository photoRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserOAuth2Service(@Lazy PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
@@ -41,8 +41,8 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         Map<String,Object> kakao_account = (Map<String, Object>) attributes.get("kakao_account");
         String email = (String) kakao_account.get("email");
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-        String name = (String) properties.get("nickname");
-        log.info("profile_img: {}", (String) properties.get("profile_image"));
+//        String name = (String) properties.get("nickname");
+        log.info("profile_img: {}", properties.get("profile_image"));
         log.info("properties: {}", properties);
         String profileURL = (String) properties.get("profile_image");
 

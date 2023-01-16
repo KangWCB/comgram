@@ -44,8 +44,8 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 안함
                 .and()
                 .authorizeRequests() // 요청에 대한 사용 권한 체크
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/api/members/info", "/api/board/**").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")// admin
+                .antMatchers("/api/members/info", "/api/board/**","/api/search").authenticated()// 로그인을 제외한 모든 기능은 인증을 거쳐야함.
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣음;

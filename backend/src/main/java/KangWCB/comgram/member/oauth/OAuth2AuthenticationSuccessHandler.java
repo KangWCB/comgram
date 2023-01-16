@@ -27,7 +27,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> kakao_account = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
         String email = (String) kakao_account.get("email");
         Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttributes().get("properties");
-        String nickname = (String) properties.get("nickname");
+//        String nickname = (String) properties.get("nickname");
 
         // 리프레쉬 토큰 적용
         TokenInfo token = jwtTokenProvider.createToken("kakao", email, Role.USER);

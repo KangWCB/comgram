@@ -2,7 +2,6 @@ package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
-import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.AllArgsConstructor;
@@ -54,13 +53,11 @@ public class BoardController {
      */
     @GetMapping("/list")
     public Result<List> list(@AuthenticationPrincipal SecurityUser user){
-        List<BoardMainDto> boardMainDtos = boardService.allMyList(user.getMember().getId());
-        return new Result<>(boardMainDtos);
+        return new Result<>(boardService.allMyList(user.getMember().getId()));
     }
     @GetMapping("{boardId}")
     public BoardDetailDto boardDetail(@PathVariable(name="boardId") Long boardId){
-        BoardDetailDto boardDetail = boardService.findBoardDetail(boardId);
-        return boardDetail;
+        return boardService.findBoardDetail(boardId);
     }
 
     @Data

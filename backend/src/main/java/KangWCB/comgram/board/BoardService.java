@@ -50,7 +50,6 @@ public class BoardService {
 //    public List<BoardMainDto> allList(Long memberId) {
 //        List<Board> allBoard = boardRepository.findAll();
 //        Member member = memberRepository.findById(memberId).orElseThrow();
-//
 //        return getBoardMainDtos(allBoard, member);
 //    }
 
