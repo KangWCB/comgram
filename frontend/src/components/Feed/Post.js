@@ -62,7 +62,7 @@ const Post = (id) => {
 
     useEffect(() => {
         postobjHandler()
-    },[]);
+    },[postobj]);
 
     const postobjHandler = () => {
         if(postobj != undefined && postobj != null)

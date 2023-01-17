@@ -68,8 +68,8 @@ const Mainpage = () => {
             <button onClick={() => logoutHandler()}>Logout</button>
             <br/>nick : {nickname}
             <br/>tk : {acctoken}
-            {islogin && <Feed/> }
-            {islogin && <Profile/> }
+            {<Feed/> }
+            {<Profile/> }
         </div>
         
     )

@@ -4,6 +4,7 @@ import { SlSpeech } from "react-icons/sl";
 import styles from './Feed.module.css'
 import axios from 'axios';
 import Post from './Post';
+import Detail from './Detail';
 
 import { addPostobj, resetPostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,6 +37,7 @@ const Feed = () => {
     return (
         <div className={styles.contents}>
             <button onClick={resetobj}>RESET POSTOBJ</button>
+            <Detail/>
                 {postobj && postobj.map((obj) => 
                 <Post id={obj.id}/>)}
 
