@@ -1,9 +1,8 @@
 package KangWCB.comgram.board.dto;
 
 import KangWCB.comgram.board.Board;
-import KangWCB.comgram.board.dto.maindto.BoardMainCommentInfo;
-import KangWCB.comgram.board.dto.maindto.BoardMainDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainLikeInfo;
+import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
+import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
 import KangWCB.comgram.photo.Photo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +30,8 @@ public class BoardDetailDto {
     private LocalDateTime regTime; // 글 작성 시간
     private Long commentCount= 0L; // 댓글 갯수
 
-    private List<BoardMainLikeInfo> boardMainLikeInfo;
-    private List<BoardMainCommentInfo> boardMainCommentInfo;
+    private List<BoardLikeInfo> boardLikeInfo;
+    private List<BoardCommentInfo> boardCommentInfo;
 
     @Builder
     public BoardDetailDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
@@ -47,11 +46,11 @@ public class BoardDetailDto {
         this.commentCount = commentCount;
     }
 
-    public static BoardDetailDto toDto(boolean pushLike, Photo photo, Board board, String savedImgPath){
+    public static BoardDetailDto toDto(boolean pushLike, String contextImgPath, Board board, String savedImgPath){
         BoardDetailDto boardDetailDto = BoardDetailDto.builder()
                 .id(board.getId())
                 .content(board.getContent())
-                .contentImgPath(photo.getSavedPath())
+                .contentImgPath(contextImgPath)
                 .likeCount(board.getLikes().stream().count())
                 .nickName(board.getMember().getNickName())
                 .commentCount(board.getComments().stream().count())

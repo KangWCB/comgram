@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
 public class SecurityUser extends User {
-    private Member member;
+    private final Member member;
 
     public SecurityUser(Member member) {
         super(member.getId().toString(), member.getPassword(),

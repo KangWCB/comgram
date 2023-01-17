@@ -1,13 +1,14 @@
 package KangWCB.comgram.board;
 
-import KangWCB.comgram.board.boardLike.repository.BoardLikeQueryRepository;
+import KangWCB.comgram.board.boardLike.repository.BoardLikeRepositoryImpl;
 import KangWCB.comgram.board.comment.Comment;
+import KangWCB.comgram.board.comment.CommentRepository;
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainCommentInfo;
-import KangWCB.comgram.board.dto.maindto.BoardMainDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainLikeInfo;
-import KangWCB.comgram.board.repository.BoardQueryRepository;
+import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
+import KangWCB.comgram.board.dto.BoardMainDto;
+import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
+import KangWCB.comgram.board.repository.BoardRepositoryImpl;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
@@ -22,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,16 +34,16 @@ public class BoardService {
     private String defaultProfile;
 
     private final BoardRepository boardRepository;
-    private final BoardQueryRepository boardQueryRepository;
-    private final BoardLikeQueryRepository boardLikeQueryRepository;
-    private final PhotoRepository photoRepository;
+    private final BoardLikeRepositoryImpl boardLikeRepositoryImpl;
+    private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PhotoService photoService;
+
     /**
      * 글 작성
      */
     @Transactional
-    public Long write(BoardFormDto boardFormDto){
+    public Long write(BoardFormDto boardFormDto) {
         Board saveBoards = boardRepository.save(Board.createBoard(boardFormDto));
         return saveBoards.getId();
     }
@@ -48,71 +51,61 @@ public class BoardService {
 //    public List<BoardMainDto> allList(Long memberId) {
 //        List<Board> allBoard = boardRepository.findAll();
 //        Member member = memberRepository.findById(memberId).orElseThrow();
-//
 //        return getBoardMainDtos(allBoard, member);
 //    }
 
-    public List<BoardMainDto> allMyList(Long memberId){
+    public List<BoardMainDto> allMyList(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
-        List<Board> boards = boardQueryRepository.findFollowingBoard(memberId);
-        return getBoardMainDtos(boards,member);
+        List<Board> boards = boardRepository.findFollowingBoard(memberId);
+        return getBoardMainDtos(boards, member);
     }
 
     /**
      * 게시물 하나 정보 보내주기
      */
     public BoardDetailDto findBoardDetail(Long boardId) {
-        Board board = boardQueryRepository.findBoard(boardId);
-        Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
-        String saveImgPath = getSavePath(board.getMember());
-        BoardDetailDto boardDetailDto = BoardDetailDto.toDto(isPushLike(board.getMember(), board), photo, board, saveImgPath);
-        List<Comment> comments = board.getComments();
-        List<BoardMainCommentInfo> boardMainCommentInfos = new ArrayList<>();
-        List<BoardMainLikeInfo> boardMainLikeInfos = new ArrayList<>();
+        Board board = boardRepository.findBoard(boardId);
+        String contextImgPath = board.getPhoto().getSavedPath();
+        BoardDetailDto boardDetailDto = BoardDetailDto.toDto(isPushLike(board.getMember(), board), contextImgPath, board, photoService.noPhotoFinder(board.getMember()));
+        List<BoardLikeInfo> boardLikeInfos = new ArrayList<>();
 
-        if(!comments.isEmpty()){
-            for (Comment comment : comments) {
-                boardMainCommentInfos.add(new BoardMainCommentInfo(comment.getMember().getNickName(), comment.getComment()));
-            }
-            boardDetailDto.setBoardMainCommentInfo(boardMainCommentInfos);
-        }
-        List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
-        if(!likeMember.isEmpty()){
-            for (Member member : likeMember) {
-                boardMainLikeInfos.add(new BoardMainLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
-            }
-            boardDetailDto.setBoardMainLikeInfo(boardMainLikeInfos);
+        boardDetailDto.setBoardCommentInfo(commentRepository.findBoardComment(boardId));
+
+        List<Member> likeMember = boardLikeRepositoryImpl.findLikeMember(board);
+        if (!likeMember.isEmpty()) {
+            boardLikeInfos = likeMember.stream()
+                    .map(member -> new BoardLikeInfo(member.getNickName(), photoService.noPhotoFinder(member)))
+                    .collect(Collectors.toList());
+
+            boardDetailDto.setBoardLikeInfo(boardLikeInfos);
         }
         return boardDetailDto;
     }
 
     private boolean isPushLike(Member member, Board board) {
-        return boardLikeQueryRepository.isPush(member,board);
+        return boardLikeRepositoryImpl.isPush(member, board);
     }
 
     private List<BoardMainDto> getBoardMainDtos(List<Board> allBoard, Member member) {
         List<BoardMainDto> boardMainDtos = new ArrayList<>();
         for (Board board : allBoard) {
-            Photo photo = photoRepository.findById(board.getImgId()).orElseThrow(() -> new NoSuchElementException());
-            String saveImgPath = getSavePath(board.getMember());
-            BoardMainDto boardMainDto = BoardMainDto.toDto(isPushLike(member, board), photo, board, saveImgPath);
-            if(!board.getComments().isEmpty()){
+            String saveImgPath = board.getPhoto().getSavedPath(); // 게시물 이미지
+            BoardMainDto boardMainDto = BoardMainDto.toDto(
+                    isPushLike(member, board),
+                    saveImgPath, board,
+                    photoService.noPhotoFinder(board.getMember()));
+
+            if (!board.getComments().isEmpty()) {
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardMainCommentInfo(new BoardMainCommentInfo(comment.getMember().getNickName(), comment.getComment()));
+                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment()));
             }
-            if(!board.getLikes().isEmpty()){
-                List<Member> likeMember = boardLikeQueryRepository.findLikeMember(board);
-                boardMainDto.setBoardMainLikeInfo(new BoardMainLikeInfo(likeMember.get(0).getNickName(), getSavePath(likeMember.get(0))));
+            if (!board.getLikes().isEmpty()) {
+                Member likeMember = boardLikeRepositoryImpl.findLikeMember(board).get(0);
+                boardMainDto.setBoardLikeInfo(new BoardLikeInfo(likeMember.getNickName(), photoService.noPhotoFinder(likeMember)));
             }
             boardMainDtos.add(boardMainDto);
         }
         return boardMainDtos;
     }
 
-    private String getSavePath(Member member) {
-        if (member.getPhotoProfileId() != null){
-            return photoService.findSavePath(member.getPhotoProfileId());
-        }
-        return defaultProfile;
-    }
 }

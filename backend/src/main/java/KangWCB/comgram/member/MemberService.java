@@ -1,6 +1,7 @@
 package KangWCB.comgram.member;
 
 import KangWCB.comgram.member.dto.MemberUpdateForm;
+import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,8 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalStateException("회원이 없습니다."));
         try{
             if(file.isPresent()){
-                Long savedImgId = photoService.saveFile(file.orElseThrow());
-                findMember.updatePhoto(savedImgId);
+                Photo photo = photoService.saveMemberPhoto(file.orElseThrow(), memberId);
+                findMember.updatePhoto(photo);
             }
             // GET으로 줘야함. 나머지 정보들 현재 null 들어옴
             findMember.updateMember(memberUpdateForm);

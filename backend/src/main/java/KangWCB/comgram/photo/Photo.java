@@ -22,7 +22,6 @@ public class Photo extends BaseTimeEntity {
     private String savedNm;
 
     private String savedPath;
-
     @Builder
     public Photo(Long id, String orgNm, String savedNm, String savedPath) {
         this.id = id;

@@ -1,4 +1,4 @@
-package KangWCB.comgram.board.dto.maindto;
+package KangWCB.comgram.board.comment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardMainCommentInfo {
+public class BoardCommentInfo {
 
     private String commentUserNickname;
     private String commentContext;
-
 
 }

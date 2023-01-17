@@ -2,8 +2,8 @@ package KangWCB.comgram.board;
 
 import KangWCB.comgram.board.dto.BoardDetailDto;
 import KangWCB.comgram.board.dto.BoardFormDto;
-import KangWCB.comgram.board.dto.maindto.BoardMainDto;
 import KangWCB.comgram.config.jwt.SecurityUser;
+import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,9 +36,9 @@ public class BoardController {
                 .member(member.getMember())
                 .build();
         try{
-            Long savedImgId = photoService.saveFile(file);
-            if(savedImgId!=null){
-                boardFormDto.setImgId(savedImgId);
+            Photo photo = photoService.savedBoardPhoto(file);
+            if(photo!=null){
+                boardFormDto.setPhoto(photo);
             }
             boardService.write(boardFormDto);
         } catch (UsernameNotFoundException e){
@@ -54,13 +54,11 @@ public class BoardController {
      */
     @GetMapping("/list")
     public Result<List> list(@AuthenticationPrincipal SecurityUser user){
-        List<BoardMainDto> boardMainDtos = boardService.allMyList(user.getMember().getId());
-        return new Result<>(boardMainDtos);
+        return new Result<>(boardService.allMyList(user.getMember().getId()));
     }
     @GetMapping("{boardId}")
     public BoardDetailDto boardDetail(@PathVariable(name="boardId") Long boardId){
-        BoardDetailDto boardDetail = boardService.findBoardDetail(boardId);
-        return boardDetail;
+        return boardService.findBoardDetail(boardId);
     }
 
     @Data
