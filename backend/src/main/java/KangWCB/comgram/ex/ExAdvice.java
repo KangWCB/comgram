@@ -60,7 +60,7 @@ public class ExAdvice {
     @ExceptionHandler
     public ErrorResult exHandle(Exception e) {
         log.error("[exceptionHandle] ex", e);
-        return new ErrorResult("EX", "내부 오류");
+        return new ErrorResult("EX", "내부 오류 /"+ e.getMessage() );
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

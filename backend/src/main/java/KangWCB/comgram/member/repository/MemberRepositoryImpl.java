@@ -13,12 +13,13 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberQueryRepository {
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     QMember qMember = QMember.member;
     /**
      * 닉네임 찾기
      */
+    @Override
     public List<Member> findMember(String word) {
         List<Member> result = queryFactory.selectFrom(qMember)
                 .where(likeMember(word))
@@ -27,7 +28,8 @@ public class MemberQueryRepository {
         return result;
     }
 
-    private BooleanExpression likeMember(String word){
+    @Override
+    public BooleanExpression likeMember(String word){
         if(StringUtils.isEmpty(word)){
             return null;
         }

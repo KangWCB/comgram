@@ -9,13 +9,13 @@ import java.time.format.DateTimeFormatter;
 @Getter
 public class CommentResponseDto {
 
-    private Long id;
-    private String comment;
+    private final Long id;
+    private final String comment;
     private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
     private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
-    private String writerName;
-    private String  writerEmail;
-    private Long boardId;
+    private final String writerName;
+    private final String  writerEmail;
+    private final Long boardId;
 
     /* Entity -> Dto */
     public CommentResponseDto(Comment comment){

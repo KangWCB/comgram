@@ -54,8 +54,8 @@ public class QFollow extends EntityPathBase<Follow> {
 
     public QFollow(Class<? extends Follow> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.follower = inits.isInitialized("follower") ? new KangWCB.comgram.member.QMember(forProperty("follower")) : null;
-        this.following = inits.isInitialized("following") ? new KangWCB.comgram.member.QMember(forProperty("following")) : null;
+        this.follower = inits.isInitialized("follower") ? new KangWCB.comgram.member.QMember(forProperty("follower"), inits.get("follower")) : null;
+        this.following = inits.isInitialized("following") ? new KangWCB.comgram.member.QMember(forProperty("following"), inits.get("following")) : null;
     }
 
 }

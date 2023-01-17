@@ -46,11 +46,11 @@ public class BoardDetailDto {
         this.commentCount = commentCount;
     }
 
-    public static BoardDetailDto toDto(boolean pushLike, Photo photo, Board board, String savedImgPath){
+    public static BoardDetailDto toDto(boolean pushLike, String contextImgPath, Board board, String savedImgPath){
         BoardDetailDto boardDetailDto = BoardDetailDto.builder()
                 .id(board.getId())
                 .content(board.getContent())
-                .contentImgPath(photo.getSavedPath())
+                .contentImgPath(contextImgPath)
                 .likeCount(board.getLikes().stream().count())
                 .nickName(board.getMember().getNickName())
                 .commentCount(board.getComments().stream().count())

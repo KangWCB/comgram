@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class CommentQueryRepository {
+public class CommentRepositoryImpl implements CommentRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
@@ -23,6 +23,7 @@ public class CommentQueryRepository {
     QComment qComment = QComment.comment1;
     QMember qMember = QMember.member;
 
+    @Override
     public List<BoardCommentInfo> findBoardComment(Long boardId){
         List<BoardCommentInfo> result = queryFactory.select(Projections.constructor(BoardCommentInfo.class,
                         qComment.member.nickName,

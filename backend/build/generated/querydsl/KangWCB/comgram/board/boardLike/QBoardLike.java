@@ -55,7 +55,7 @@ public class QBoardLike extends EntityPathBase<BoardLike> {
     public QBoardLike(Class<? extends BoardLike> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.board = inits.isInitialized("board") ? new KangWCB.comgram.board.QBoard(forProperty("board"), inits.get("board")) : null;
-        this.member = inits.isInitialized("member") ? new KangWCB.comgram.member.QMember(forProperty("member")) : null;
+        this.member = inits.isInitialized("member") ? new KangWCB.comgram.member.QMember(forProperty("member"), inits.get("member")) : null;
     }
 
 }

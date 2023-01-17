@@ -3,6 +3,7 @@ package KangWCB.comgram.member;
 import KangWCB.comgram.config.audit.BaseTimeEntity;
 import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
+import KangWCB.comgram.photo.Photo;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -27,7 +28,11 @@ public class Member extends BaseTimeEntity {
     // 개인 정보
     private String name; // 이름
     private String nickName; // 닉네임
-    private Long photoProfileId; // 프로필 생성
+
+    // 새롭게 도전하는 포토 리팩토링
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="photo_id")
+    private Photo photo;
 
     private String refreshToken; // 리프레쉬 토큰 저장
     @Enumerated(EnumType.STRING)
@@ -35,13 +40,13 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String email, String password, String name, String nickname, Role role, Long photoProfileId) {
+    public Member(String email, String password, String name, String nickname, Role role , Photo photo) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickName = nickname;
         this.role = role;
-        this.photoProfileId = photoProfileId;
+        this.photo = photo;
     }
 
     //== 생성 메소드
@@ -51,21 +56,24 @@ public class Member extends BaseTimeEntity {
                 .email(memberFormDto.getEmail())
                 .password(passwordEncoder.encode(memberFormDto.getPassword())) // 암호화
                 .nickname(memberFormDto.getNickname())
-                .photoProfileId(1L)
                 .role(Role.USER)
                 .build();
         return member;
     }
-
     public void updateMember(MemberUpdateForm memberUpdateForm){
         this.nickName = memberUpdateForm.getNickname();
         this.name = memberUpdateForm.getName();
     }
-    public void updatePhoto(Long savedImgId) {
-        this.photoProfileId = savedImgId;
+    public void updatePhoto(Photo photo) {
+        this.photo = photo;
     }
 
     public void registerRefreshToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
+
+    public void addProfilePhoto(Photo photo){
+        this.photo = photo;
+    }
 }
+
