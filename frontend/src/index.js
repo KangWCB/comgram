@@ -6,12 +6,13 @@ import { BrowserRouter } from "react-router-dom";
 import reportWebVitals from './reportWebVitals';
 // redux
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware} from 'redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
+import thunk from 'redux-thunk';
 import rootReducer from "./redux/index";
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer,applyMiddleware(thunk));
 const persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

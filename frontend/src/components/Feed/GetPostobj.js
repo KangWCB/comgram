@@ -1,9 +1,12 @@
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { addPostobj, updatePostobj, resetPostobj } from '../../redux/action';
-[]
-async function GetPostobj () {
+
+function GetPostobj()  {
+    let action = 'add';
     let act = '';
     let api = '';
+    const dispatch = useDispatch();
     if(action = 'add')
     {
         console.log(`getpostobj add`)
@@ -14,12 +17,12 @@ async function GetPostobj () {
     {
         console.log(`getpostobj update`)
         act = updatePostobj;
-        api = `api/boards/${id}`
+        //api = `api/boards/${id}`
     }
     let acctoken = localStorage.getItem('accessToken');
     console.log(acctoken);
     const config = {"Content-Type" : 'application/json'};
-    await axios.get(api, {headers : 
+    axios.get(api, {headers : 
         {'Authorization': acctoken}},config)
     .then((res) => {
         

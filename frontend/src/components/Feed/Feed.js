@@ -5,10 +5,10 @@ import styles from './Feed.module.css'
 import axios from 'axios';
 import Post from './Post';
 
-import { resetPostobj } from '../../redux/action';
+import { addPostobj, resetPostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
 import getPostobj from './GetPostobj';
-const Feed = (inherit_token) => {
+const Feed = () => {
 
     const [postobj, setPostobj] = useState([]);
     const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const Feed = (inherit_token) => {
 
 
     useEffect(() => {
-        dispatch(getPostobj('add'));    
+        dispatch(addPostobj());    
     },[]);
 
 

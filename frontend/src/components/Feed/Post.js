@@ -6,11 +6,11 @@ import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
 import { addPostobj, updatePostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
-import getPostobj from './GetPostobj';
+
 
 const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
-    
+    const dispatch = useDispatch();
     const [like, setLike] = useState(false);
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
@@ -40,15 +40,16 @@ const Post = (id) => {
     
     const selectorData = useSelector(state => state.postobjReducer);
     const [data, setData] = useState(selectorData);
-    let postobj = null;
+    const [postobj, setPostobj] = useState(null);
     
     useEffect(() => {
-      setData(selectorData);
-      if(data)
-      {
-        let objidx = data['postobj'].findIndex(obj => obj.id === id['id'])
-        postobj = data['postobj'][objidx];
-    }
+        setData(selectorData);
+        console.log("select")
+        if(data)
+        {
+            let objidx = data['postobj'].findIndex(obj => obj.id === id['id'])
+            setPostobj(data['postobj'][objidx]);
+        }
 
     }, [selectorData])
     
@@ -59,8 +60,8 @@ const Post = (id) => {
     useEffect(() => {
         console.log('postobj 변경')
         console.log(postobj);
-        
-        if(postobj.length!= 0)
+        console.log(postobj?.length);
+        if(postobj != undefined && postobj?.length != 0)
         {
             if(postobj['contentImgPath']){
                 let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
@@ -95,6 +96,7 @@ const Post = (id) => {
 
     const likeHandler = () => {
         console.log("like 호출");
+        console.log(PostId);
         let likeAPI = `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');
@@ -108,7 +110,7 @@ const Post = (id) => {
             console.log(res.data);
         });
         
-        getPostobj('update',PostId);
+        dispatch(updatePostobj(postobj));
     };
 
     const writetimeHandler = (regTime) => {

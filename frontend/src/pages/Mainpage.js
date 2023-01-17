@@ -7,7 +7,7 @@ import Feed from '../components/Feed/Feed';
 import Profile from '../components/Profile/Profile';
 
 const Mainpage = () => {
-    const [nickname, setNickname] = useState("");
+    const [nickname, setNickname] = useState('');
     const navigate = useNavigate();
     
     let Islogin = false;
@@ -18,12 +18,17 @@ const Mainpage = () => {
 
     useEffect(() => { // 로그인 여부 검사
         let acctoken = localStorage.getItem('accessToken');
+        console.log(acctoken)
         if(acctoken)
         {
             Islogin = true; 
             getUserinfo(acctoken);
             localStorage.setItem('nickName', nickname);
-                 
+            console.log(nickname)
+            if(nickname == '') // 토큰 유효성 x일시
+            {
+                //window.location.reload();
+            }
         }
         else {
             navigate("/login");
@@ -45,8 +50,8 @@ const Mainpage = () => {
         window.location.reload();
     };
 
-    const getUserinfo = (acctoken) => {
-        axios.get('/api/members/info', {headers : 
+    const getUserinfo = async (acctoken) => {
+        await axios.get('/api/members/info', {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
             setNickname(res.data['nickname']);
@@ -56,17 +61,6 @@ const Mainpage = () => {
         });
     };
 
-    const getListinfo = (acctoken) => {
-        axios.get('/api/boards/list', {headers : 
-            {'Authorization': acctoken}})
-        .then((res) => {
-            //res.data['data']; // 본문
-            //res.data['data']; // 사진 가져오기
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
 
 
     return (
@@ -77,8 +71,8 @@ const Mainpage = () => {
             <button onClick={() => logoutHandler()}>Logout</button>
             <br/>nick : {nickname}
             <br/>tk : {acctoken}
-            <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
-            <Profile inherit_token={acctoken}/> {/*토큰 상속*/}
+            <Feed/> 
+            <Profile/> 
         </div>
         
     )
