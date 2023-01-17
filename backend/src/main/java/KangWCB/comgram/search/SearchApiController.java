@@ -20,7 +20,6 @@ import java.util.List;
 public class SearchApiController {
     private final MemberRepositoryImpl memberRepositoryCustomInmpl;
     private final BoardRepositoryImpl boardRepositoryImpl;
-    private final PhotoService photoService;
     /**
      * 찾아주기
      */
@@ -28,24 +27,24 @@ public class SearchApiController {
     public SearchResponseDto find(@RequestBody SearchRequestDto requestDto){
         String word = requestDto.getWord();
         // 빈칸이라면
-        if (word.isBlank()){
-            throw new IllegalArgumentException("검색할 내용이 없습니다.");
-        }
+        assert !word.isBlank() : "검색할 내용이 없습니다.";
         if (word.startsWith("#")){
             word = word.substring(1);
             List<Board> wordContent = boardRepositoryImpl.findWordContent(word);
             List<SearchBoardDto> result = new ArrayList<>();
-            for (Board board : wordContent) {
+
+            wordContent.forEach(board -> {
                 String savePath = board.getPhoto().getSavedPath();
                 result.add(new SearchBoardDto(board.getId(), savePath));
-            }
+            });
             return new SearchResponseDto("Board", wordContent.size(), result);
-        }else {
+        } else {
             List<SearchMemberDto> result = new ArrayList<>();
-            for (Member member : memberRepositoryCustomInmpl.findMember(word)) {
+
+            memberRepositoryCustomInmpl.findMember(word).forEach(member -> {
                 String savePath = member.getPhoto().getSavedPath();
-                result.add(new SearchMemberDto(member.getId(), member.getNickName(),savePath));
-            }
+                result.add(new SearchMemberDto(member.getId(), member.getNickName(), savePath));
+            });
             return new SearchResponseDto("Member", memberRepositoryCustomInmpl.findMember(word).size(), result);
         }
     }

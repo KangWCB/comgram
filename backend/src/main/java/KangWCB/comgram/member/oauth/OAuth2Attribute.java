@@ -30,7 +30,6 @@ public class OAuth2Attribute {
                 throw new RuntimeException();
         }
     }
-
     private static OAuth2Attribute ofGoogle(String attributeKey,
                                             Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
@@ -41,12 +40,10 @@ public class OAuth2Attribute {
                 .attributeKey(attributeKey)
                 .build();
     }
-
     private static OAuth2Attribute ofKakao(String attributeKey,
                                            Map<String, Object> attributes) {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-
         return OAuth2Attribute.builder()
                 .name((String) kakaoProfile.get("nickname"))
                 .email((String) kakaoAccount.get("email"))

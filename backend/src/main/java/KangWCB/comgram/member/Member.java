@@ -5,7 +5,6 @@ import KangWCB.comgram.member.dto.MemberFormDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.Photo;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;

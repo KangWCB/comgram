@@ -12,10 +12,8 @@ public class PhotoRepositoryImpl implements PhotoRepositoryCustom{
     @Value("${default.profile}")
     private String defaultProfile;
     private final JPAQueryFactory queryFactory;
-
     QMember qMember = QMember.member;
     QPhoto qPhoto = QPhoto.photo;
-
     @Override
     public String findProfileSavedPath(Member member) {
         String path = queryFactory.select(qMember.photo.savedPath.coalesce(defaultProfile))
