@@ -21,15 +21,10 @@ import java.util.UUID;
 @Slf4j
 @Transactional(readOnly = true)
 public class PhotoService {
-
     @Value("${file.dir}")
     private String fileDir;
-
-
-
     private final PhotoRepository photoRepository;
     private final MemberRepository memberRepository;
-
     /**
      * 수정 시에 포토를 바꾸는거니깐
      * 멤버ID를 조회해서 변경
@@ -53,7 +48,7 @@ public class PhotoService {
         String extension = origName.substring(origName.lastIndexOf("."));
 
         // uuid와 확장자 결합
-        String savedName = uuid + extension;
+        String savedName = "/"+ uuid + extension;
 
         // 파일을 불러올 때 사용할 파일 경로
         String savedPath = savedFolder + savedName;
@@ -64,7 +59,6 @@ public class PhotoService {
                 .savedNm(savedName)
                 .savedPath(savedPath)
                 .build();
-
         // 실제로 로컬에 uuid를 파일명으로 저장
         try {
             files.transferTo(new File(savedPath));
@@ -73,12 +67,10 @@ public class PhotoService {
         } catch (IOException e) {
             log.info("error: {}",e.getMessage());
             throw new IllegalStateException("파일저장 실패");
-
         }
         // 데이터베이스에 파일 정보 저장
         return photoRepository.save(file);
     }
-
     /**
      * 저장시에 일어남 + 이후 여러건 넣어줄 예정
      */
@@ -96,7 +88,7 @@ public class PhotoService {
         String origName = files.getOriginalFilename();
         String uuid = UUID.randomUUID().toString();
         String extension = origName.substring(origName.lastIndexOf("."));
-        String savedName = uuid + extension;
+        String savedName = "/" +uuid + extension;
         String savedPath = savedFolder + savedName;
         Photo file = Photo.builder()
                 .orgNm(origName)
@@ -132,7 +124,6 @@ public class PhotoService {
 //        } else {
 //            System.out.println("파일이 존재하지 않습니다.");
 //        }
-//
 //        fileRepository.deleteById(fileId);
 //    }
 }
