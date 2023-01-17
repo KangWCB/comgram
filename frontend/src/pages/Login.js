@@ -24,7 +24,7 @@ const LoginPage = () => {
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
       console.log(islogin)
-      if(acctoken && islogin != false) // 토큰 있고 로그인 성공하면 메인페이지 이동
+      if(acctoken && islogin != 'false') // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
         console.log("islogin")
         console.log(islogin)

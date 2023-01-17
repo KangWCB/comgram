@@ -7,7 +7,7 @@ import Post from './Post';
 
 import { addPostobj, resetPostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
-import getPostobj from './GetPostobj';
+
 const Feed = () => {
 
     const [postobj, setPostobj] = useState([]);
@@ -17,9 +17,7 @@ const Feed = () => {
     
     useEffect(() => {
       setData(selectorData)
-      console.log("redux 갱신")
       setPostobj(data.postobj);
-      console.log(postobj)
     }, [selectorData])
 
 
@@ -38,7 +36,7 @@ const Feed = () => {
     return (
         <div className={styles.contents}>
             <button onClick={resetobj}>RESET POSTOBJ</button>
-                {postobj.map((obj) => 
+                {postobj && postobj.map((obj) => 
                 <Post id={obj.id}/>)}
 
         

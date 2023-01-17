@@ -10,7 +10,7 @@ const Mainpage = () => {
     const [nickname, setNickname] = useState('');
     const navigate = useNavigate();
     
-    let Islogin = false;
+    let islogin = false;
     let acctoken = localStorage.getItem('accessToken');
     let location = useLocation(); // 현재 주소
     let currentPath = "";
@@ -18,17 +18,14 @@ const Mainpage = () => {
 
     useEffect(() => { // 로그인 여부 검사
         let acctoken = localStorage.getItem('accessToken');
+        localStorage.setItem('isLogin', false);
         console.log(acctoken)
         if(acctoken)
         {
-            Islogin = true; 
+            islogin = true; 
             getUserinfo(acctoken);
             localStorage.setItem('nickName', nickname);
             console.log(nickname)
-            if(nickname == '') // 토큰 유효성 x일시
-            {
-                //window.location.reload();
-            }
         }
         else {
             navigate("/login");
@@ -71,8 +68,8 @@ const Mainpage = () => {
             <button onClick={() => logoutHandler()}>Logout</button>
             <br/>nick : {nickname}
             <br/>tk : {acctoken}
-            <Feed/> 
-            <Profile/> 
+            {islogin && <Feed/> }
+            {islogin && <Profile/> }
         </div>
         
     )

@@ -21,7 +21,8 @@ const Post = (id) => {
     const [contentImgPath, setContentImgPath] = useState(null);
 
     const [PostId, setPostId] = useState(0);
-    const [likeUserNickName, setLikeUserNickName] = useState('hi');
+    const [likeUserNickName, setLikeUserNickName] = useState('');
+    const [likeUserProfilePath, setLikeUserProfilePath] = useState(null);
     const [commentCount, setCommentCount] = useState(0);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
@@ -38,17 +39,19 @@ const Post = (id) => {
     let origin_content = "";
     let cut_content = "";
     
-    const selectorData = useSelector(state => state.postobjReducer);
-    const [data, setData] = useState(selectorData);
+    const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
     
     useEffect(() => {
-        setData(selectorData);
-        console.log("select")
+        console.log("hi",id)
+        let data = selectorData;
+        console.log(data);
+        
         if(data)
         {
-            let objidx = data['postobj'].findIndex(obj => obj.id === id['id'])
-            setPostobj(data['postobj'][objidx]);
+            let objidx = data.findIndex(obj => obj.id === id['id'])
+            setPostobj(data[objidx]);
+            
         }
 
     }, [selectorData])
@@ -58,59 +61,73 @@ const Post = (id) => {
     },[regTime]);
 
     useEffect(() => {
-        console.log('postobj 변경')
-        console.log(postobj);
-        console.log(postobj?.length);
-        if(postobj != undefined && postobj?.length != 0)
+        postobjHandler()
+    },[]);
+
+    const postobjHandler = () => {
+        if(postobj != undefined && postobj != null)
         {
             if(postobj['contentImgPath']){
                 let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
                 let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
-                console.log(tmp_path);
                 setContentImgPath(tmp_path);   
             }
                 
             setWriterName(postobj['nickName']);
             setContent(postobj['content']);
             setCommentCount(postobj['commentCount']);
-            setLike(postobj['pushLike']);
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
             setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
-            if(postobj['boardMainCommentInfo'])
+            
+            let commentinfo = postobj['boardCommentInfo']
+            let infoctor = commentinfo.constructor; // 댓글 객체 타입
+            let likeinfo = postobj['boardLikeInfo']
+            let likector = commentinfo.constructor; // 좋아요 객체 타입
+            if(commentinfo)
             {
-                setCommentContext(postobj['boardMainCommentInfo']['commentContext']);
-                setCommentUserNickname(postobj['boardMainCommentInfo']['commentUserNickname']);
+                if (infoctor === Array)
+                {
+                    setCommentContext(postobj['boardCommentInfo'][0]['commentContext']);
+                    setCommentUserNickname(postobj['boardCommentInfo'][0]['commentUserNickname']);
+                }
+                else
+                {
+                    setCommentContext(postobj['boardCommentInfo']['commentContext']);
+                    setCommentUserNickname(postobj['boardCommentInfo']['commentUserNickname']);
+                }
             }
-            if(postobj['boardMainLikeInfo'])
+            if(likeinfo)
             {
-                setLikeUserNickName(postobj['boardMainLikeInfo']['likeUserNickName']);
+                if (likector === Array)
+                {
+                    setLikeUserNickName(postobj['boardLikeInfo'][0]['likeUserNickName']);
+                }
+                else
+                    setLikeUserNickName(postobj['boardLikeInfo']['likeUserNickName']);
             }
         }
+        /*
         else
-            console.log("obj없음");
-        },[postobj]);
-
-
+            dispatch(addPostobj());
+        */
+    };
     const likeHandler = () => {
         console.log("like 호출");
-        console.log(PostId);
         let likeAPI = `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');
-        console.log(acctoken);
 
         axios.post(likeAPI, {}, {
             headers : 
                 {'Authorization': acctoken}
         })
-        .then((res) => {
-            console.log(res.data);
-        });
-        
+        .then((res) => res.data);
         dispatch(updatePostobj(postobj));
+
+
     };
 
     const writetimeHandler = (regTime) => {
