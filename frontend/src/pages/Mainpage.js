@@ -54,7 +54,7 @@ const Mainpage = () => {
             setNickname(res.data['nickname']);
         })
         .catch((err) => {
-            console.log(err);
+            navigate("/login");
         });
     };
 

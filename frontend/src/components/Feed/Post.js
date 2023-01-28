@@ -6,7 +6,7 @@ import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
 import { addPostobj, updatePostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
-
+import Detail from './Detail';
 
 const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
@@ -15,11 +15,11 @@ const Post = (id) => {
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
     const [originContent,setOriginContent] = useState('');
+    const [modalOpen, setModalopen] = useState(false);
     // postobj
     const [writerName, setWriterName] = useState("");
     const [content, setContent] = useState('')
     const [contentImgPath, setContentImgPath] = useState(null);
-
     const [PostId, setPostId] = useState(0);
     const [likeUserNickName, setLikeUserNickName] = useState('');
     const [likeUserProfilePath, setLikeUserProfilePath] = useState(null);
@@ -30,6 +30,7 @@ const Post = (id) => {
     const [commentUserNickname, setCommentUserNickname] = useState("");
     const [profileImgPath,setProfileImgPath] = useState('');
     const [writeTime,setWriteTime] = useState('');
+
     let diffTime = {         
         day:'',
         hour:'',
@@ -38,12 +39,12 @@ const Post = (id) => {
     };    
     let origin_content = "";
     let cut_content = "";
+    let first_like = false;
     
     const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
     
     useEffect(() => {
-        console.log("hi",id)
         let data = selectorData;
         console.log(data);
         
@@ -51,8 +52,8 @@ const Post = (id) => {
         {
             let objidx = data.findIndex(obj => obj.id === id['id'])
             setPostobj(data[objidx]);
-            
         }
+        
 
     }, [selectorData])
     
@@ -81,7 +82,12 @@ const Post = (id) => {
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
             setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
-            
+            if(first_like)
+            {
+                first_like = true;
+                setLike(postobj['pushLike']);
+            }
+
             let commentinfo = postobj['boardCommentInfo']
             let infoctor = commentinfo.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
@@ -126,7 +132,7 @@ const Post = (id) => {
         })
         .then((res) => res.data);
         dispatch(updatePostobj(postobj));
-
+        setLike(!like);
 
     };
 
@@ -200,9 +206,9 @@ const Post = (id) => {
         }
     };
 
-    const imgHandler = () => {
-        console.log("img");
-        document.getElementById("ci").src = contentImgPath;
+
+    const imgonClick = () => {
+        setModalopen(true);
     }
 
     /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
@@ -212,7 +218,7 @@ const Post = (id) => {
 
     return(
         <div>
-            {/* 피드 */}
+        {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
                     <img className={styles.profileImg} src={`${profileImgPath}`}/>
@@ -221,8 +227,9 @@ const Post = (id) => {
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
-        <img id="ci" /*onError={imgHandler}*/ className={styles.photo} src={contentImgPath}></img>
+        <img onClick={imgonClick} id="contentImg"  className={styles.photo} src={contentImgPath}></img>
         <div className={styles.icon_form}>
+        {modalOpen && <Detail id= {id['id']}/>}
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
                 like ? (<BsHeartFill className={styles.likeIcon}/>) : (<BsHeart className={styles.likeIcon}/>)

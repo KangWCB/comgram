@@ -1,3 +1,69 @@
-.contents {
-    position: absolute;
+
+.modal_background {
+    top:0;
+    left:0;
+    bottom:0;
+    right: 0;
+    z-index: 5555;
+    position: fixed;
+    background : rgba(0, 0, 0, 0.2)
+}
+
+.photo_container {
+    float: left;
+    position: relative;
+    text-align: left;
+    width: 65%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.content{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    float:right;
+    width: 35%;
+    height: 100%;
+    text-align: left;
+    overflow: hidden;
+}
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.box{
+    width: 35px;
+    height: 35px; 
+    border-radius: 70%;
+    overflow: hidden;
+    border: 2pt groove #000000;
+    display: inline-block;
+    vertical-align: middle;
+}
+.profileImg{
+    
+    width: 100%;
+    height: 100%;
+}
+
+.span{
+    text-align: left;
+    font-size: 14px;
+}
+.bold{
+    font-weight: bold;
+}
+.gray{
+    padding-left: 5px;
+    color: gray;
+}
+.comment{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1pt groove white;
 }

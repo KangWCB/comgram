@@ -8,8 +8,10 @@ export const addPostobj = () => async dispatch => {
     const config = {"Content-Type" : 'application/json'};
     const resdata = await axios.get('/api/boards/list', {headers : 
         {'Authorization': acctoken}},config)
-    .then((res) => res.data);
-
+    .then((res) => res.data)
+    .catch((err) => err.status)
+    console.log("act");
+    console.log(resdata)
     dispatch ({
         type: "OBJECT_ADD",
         payload: resdata['data']

@@ -11,7 +11,6 @@
     user-select: none;
     position: relative;
     text-align: center;
-    z-index: 2;
 }
 
 .contents {
@@ -24,9 +23,10 @@
 
 
 .photo {
+    
     width: 400px;
     height: 500px;
-
+    object-fit: cover;
 
 }
 
