@@ -21,7 +21,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
 
@@ -63,13 +62,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .password(passwordEncoder.encode(uuid))
                     .photo(savedPhoto)
                     .role(Role.USER).build();
-
             memberRepository.save(member);
         }
         // 리프레쉬 토큰 적용
         TokenInfo token = jwtTokenProvider.createToken("oauth", oAuth2User.getName(), Role.USER);
         String jwt = token.getAccessToken();
-
         String url = makeRedirectUrl(jwt);
         System.out.println("url: " + url);
         if (response.isCommitted()) {
@@ -87,6 +84,5 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Photo photo = Photo.builder().savedPath(profileURL).savedNm(uuid2 + "." + email).build();
         Photo savedPhoto = photoRepository.save(photo);
         return savedPhoto;
-
     }
 }

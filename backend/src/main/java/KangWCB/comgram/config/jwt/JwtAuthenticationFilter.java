@@ -17,9 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends GenericFilterBean {
-
     private final JwtTokenProvider jwtTokenProvider;
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 헤더에서 JWT를 받아옴

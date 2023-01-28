@@ -37,7 +37,6 @@ public class MemberService {
         }
         return findMember.getId();
     }
-
     @Transactional
     public void updateRefreshToken(String userPk, String refreshToken){
         Member member = memberRepository.findByEmail(userPk).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
