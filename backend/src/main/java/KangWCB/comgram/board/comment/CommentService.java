@@ -6,12 +6,16 @@ import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @RequiredArgsConstructor
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class CommentService {
 
@@ -34,5 +38,16 @@ public class CommentService {
         Comment comment = requestDto.toEntity();
         commentRepository.save(comment);
         return requestDto.getId();
+    }
+
+    @Transactional
+    public String delete(Long commentId, String email) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("댓글이 없습니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("찾는 사람이 없습니다."));
+        if(comment.getMember() != member){
+            throw new RuntimeException("댓글 작성자와 삭제하려는 사람이 다릅니다.");
+        }
+        commentRepository.delete(comment);
+        return "성공적으로 제거 되었습니다.";
     }
 }

@@ -8,12 +8,9 @@ import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
-import KangWCB.comgram.board.repository.BoardRepositoryImpl;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
-import KangWCB.comgram.photo.Photo;
-import KangWCB.comgram.photo.PhotoRepository;
 import KangWCB.comgram.photo.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,7 +71,6 @@ public class BoardService {
             boardLikeInfos = likeMember.stream()
                     .map(member -> new BoardLikeInfo(member.getNickName(), photoService.noPhotoFinder(member)))
                     .collect(Collectors.toList());
-
             boardDetailDto.setBoardLikeInfo(boardLikeInfos);
         }
         return boardDetailDto;
@@ -97,7 +91,7 @@ public class BoardService {
 
             if (!board.getComments().isEmpty()) {
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getMember().getNickName(), comment.getComment()));
+                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getId(),comment.getMember().getNickName(), comment.getComment(), comment.getCreatedDate(), comment.getModifiedDate()));
             }
             if (!board.getLikes().isEmpty()) {
                 Member likeMember = boardLikeRepositoryImpl.findLikeMember(board).get(0);

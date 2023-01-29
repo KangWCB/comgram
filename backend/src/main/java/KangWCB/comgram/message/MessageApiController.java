@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageApiController {
 
 
-    // 모두 json 데이터로 담아서 보낸 사람 받는 사람 보낼 예정
-    // 메세지 보내기
-    @PostMapping("/send")
-
-
-    // 메세지 리스트 받기
-    @GetMapping("/read")
-
-    // 메세지 채팅방 읽기 => 읽음 표시 나오게, 그리고 읽은 날짜 저장
-    @GetMapping("/read/{chatroomId}")
+//    // 모두 json 데이터로 담아서 보낸 사람 받는 사람 보낼 예정
+//    // 메세지 보내기
+//    @PostMapping("/send")
+//
+//
+//    // 메세지 리스트 받기
+//    @GetMapping("/read")
+//
+//    // 메세지 채팅방 읽기 => 읽음 표시 나오게, 그리고 읽은 날짜 저장
+//    @GetMapping("/read/{chatroomId}")
 
 }
