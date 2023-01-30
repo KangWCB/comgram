@@ -1,11 +1,13 @@
 import styles from './Detail.module.css'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, ReactDOM, forwardRef, useImperativeHandle} from 'react'
 import Modal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { addPostobj, updatePostobj } from '../../redux/action';
 
 
-const Detail = (id, isopen) => {
+const Detail = forwardRef(({id}, detailRef) => {
+    const dispatch = useDispatch();
     const [ModalisOpen, setModalisOpen] = useState(false);
     const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
@@ -19,10 +21,11 @@ const Detail = (id, isopen) => {
     const [commentCount, setCommentCount] = useState(0);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
-    const [commentContext,setCommentContext] = useState("");
-    const [commentUserNickname, setCommentUserNickname] = useState("");
+
     const [profileImgPath,setProfileImgPath] = useState('');
     const [writeTime,setWriteTime] = useState('');
+    const [commentList, setCommentList] = useState(null);
+    const [commentText, setCommentText] = useState('');
     let diffTime = {         
         day:'',
         hour:'',
@@ -30,14 +33,45 @@ const Detail = (id, isopen) => {
         sec:'',
     };    
     
+    useImperativeHandle(detailRef, () => ({
+        modalHandler: (bool) => {
+            setModalisOpen(bool);
+        }
+    }))
+
     useEffect(() => {
-        setModalisOpen(isopen);
-    }, [])
+        if(postobj != null)
+            dispatch(updatePostobj(postobj));
+    },[])
+
+
+    
+    useEffect(() => {
+        let data = selectorData;
+        console.log(data);
+        
+        if(data)
+        {
+            let objidx = data.findIndex(obj => obj.id === id['id'])
+            setPostobj(data[objidx]);
+        }
+        
+
+    }, [selectorData])
+
+    useEffect(() => {
+        console.log(commentList);
+    },[ModalisOpen])
+
+    useEffect(() => {
+        console.log(commentList)
+    }, [commentList])
+
     useEffect(() => {
         let data = selectorData;
         if(data)
         {
-            let objidx = data.findIndex(obj => obj.id === id['id'])
+            let objidx = data.findIndex(obj => obj.id === id)
             setPostobj(data[objidx]);
         }
     },[selectorData])
@@ -65,20 +99,19 @@ const Detail = (id, isopen) => {
             setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
             
             let commentinfo = postobj['boardCommentInfo']
-            let infoctor = commentinfo.constructor; // 댓글 객체 타입
+            let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
-            let likector = commentinfo.constructor; // 좋아요 객체 타입
+            let likector = commentinfo?.constructor; // 좋아요 객체 타입
+            console.log(commentinfo)
             if(commentinfo)
             {
                 if (infoctor === Array)
                 {
-                    setCommentContext(postobj['boardCommentInfo'][0]['commentContext']);
-                    setCommentUserNickname(postobj['boardCommentInfo'][0]['commentUserNickname']);
+                    setCommentList(commentinfo)
                 }
                 else
                 {
-                    setCommentContext(postobj['boardCommentInfo']['commentContext']);
-                    setCommentUserNickname(postobj['boardCommentInfo']['commentUserNickname']);
+                    dispatch(updatePostobj(postobj));
                 }
             }
             if(likeinfo)
@@ -97,13 +130,6 @@ const Detail = (id, isopen) => {
         */
     };
 
-    useEffect(() => {
-        if(ModalisOpen)
-        {
-            
-        }
-    }, [ModalisOpen])
-
     const modalStyle = {
         overlay: {
             zIndex: 5,
@@ -112,15 +138,46 @@ const Detail = (id, isopen) => {
         content: {padding: '0px'},    
     }
 
-    const modalHandler = () => {
-        setModalisOpen(true);
+    const keyHandler = (e) => {
+        if(e.key === 'Enter') {
+            commentWriteHandler();
+        }
     }
+
+    const commentWriteHandler = () => {
+        console.log(commentText);
+        if(commentList != null)
+        {
+            let writeAPI = `/api/boards/${PostId}/comments`;
+            let acctoken = localStorage.getItem('accessToken');
+            const config = {"Content-Type" : 'application/json'};
+            const obj = {
+                "comment" : commentText
+            }
+            axios.post(writeAPI, obj, {
+                headers : 
+                    {
+                    'Authorization': acctoken,
+                    'Content-Type' : 'application/json'
+                    }
+            })
+            .then((res) => {
+                console.log(res.data)
+                setCommentText('');
+            });
+            dispatch(updatePostobj(postobj));
+        }
+    }
+
+    const commentListHandler = commentList?.map((data,idx) => <li className={styles.comment_li}key={idx}>
+    <span className={`${styles.comment_span} ${styles.bold} `}>{data.commentUserNickname}</span> 
+    <span className={`${styles.comment_span}`}> {data.commentContext}</span>
+    </li>)
+
 
     return(
         <div>
-            <button onClick={modalHandler}>open</button>
-            <button onClick={() => setModalisOpen(false)}>close</button>
-            <Modal style={modalStyle} isOpen={ModalisOpen} onRequestClose={() => setModalisOpen(false)}>  
+            <Modal closeTimeoutMS={500} style={modalStyle} isOpen={ModalisOpen} onRequestClose={() => setModalisOpen(false)} ariaHideApp={false}>  
 
                 <div className={styles.photo_container}>
                     <img className={styles.photo} src={contentImgPath}></img>
@@ -131,12 +188,22 @@ const Detail = (id, isopen) => {
                     </div>
                     <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
                     <div className={styles.comment}>
-                        hi
+                        <div className={styles.box}>
+                            <img className={styles.profileImg} src={`${profileImgPath}`}/>
+                        </div>
+                        <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
+                        <span className={styles.span}>{content}</span>
+                        {commentList && commentListHandler}
+                    </div>
+                    <div className={styles.comment_container}>
+                        <input className={styles.comment_input} onKeyPress={keyHandler} onChange={(e) => setCommentText(e.target.value)} value={commentText} placeholder='댓글 쓰기'></input>
+                        <button className={styles.comment_btn} onClick={commentWriteHandler}>게시</button>
                     </div>
                 </div>
+                
                 
             </Modal>
         </div>    
     )
-}
+})
 export default Detail;

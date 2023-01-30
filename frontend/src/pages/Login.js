@@ -93,6 +93,12 @@ const LoginPage = () => {
       }
     };
 
+    const keyHandler = (e) => {
+      if(e.key === 'Enter') {
+          loginHandler();
+      }
+  }
+
     const OAuth2LoginHandler = (url) => {
         window.location.href = url;
     };
@@ -150,7 +156,7 @@ const LoginPage = () => {
             <span>or use your account</span>
             <input className={styles.input} type="email" placeholder="Email"
             onChange={(e) => setEmail((e.target.value))}/>
-            <input className={styles.input} type="password" placeholder="Password"
+            <input className={styles.input} type="password" onKeyPress={keyHandler} placeholder="Password"
             onChange={(e) => setPassword((e.target.value))}/>
             <a href="#">Forgot your password?</a>
             <button type="button" className={styles.button} onClick={() => loginHandler()}>Sign In</button>

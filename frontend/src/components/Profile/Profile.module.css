@@ -1,14 +1,15 @@
 
 .container{
-    float: right;
-    position: relative;
+    position: fixed;
+    left: 85%;
+    bottom: 0;
     z-index: 3;
-    height: 1000px;
+    height: 100%;
     border: 2pt groove #000000;
 }
 
 
 .container_form{
-    height: 1000px;
+    height: 100%;
     background-color: white;
 }

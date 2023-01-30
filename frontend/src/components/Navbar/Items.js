@@ -21,7 +21,7 @@ export const Items = [
         icon: <FaUserAlt/>
     },
     {
-        title: 'Logout',
+        title: 'Write',
         url: '/write',
         className: 'nav-links',
         icon: <BsPencilSquare/>

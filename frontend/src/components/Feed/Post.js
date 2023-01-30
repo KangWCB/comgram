@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useState, React, useEffect} from 'react';
+import {useState, React, useEffect, forwardRef, useRef} from 'react';
 import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
@@ -15,7 +15,7 @@ const Post = (id) => {
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
     const [originContent,setOriginContent] = useState('');
-    const [modalOpen, setModalopen] = useState(false);
+    const [likecntVisible, setLikecntVisible] = useState(false);
     // postobj
     const [writerName, setWriterName] = useState("");
     const [content, setContent] = useState('')
@@ -43,6 +43,8 @@ const Post = (id) => {
     
     const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
+    //디테일 페이지 모달핸들링
+    const detailRef = useRef();
     
     useEffect(() => {
         let data = selectorData;
@@ -60,6 +62,13 @@ const Post = (id) => {
     useEffect(() => {
         writetimeHandler(regTime);
     },[regTime]);
+
+    useEffect(() => {
+        if(likeCount>0)
+            setLikecntVisible(true);
+        else
+            setLikecntVisible(false);
+    },[likeCount])
 
     useEffect(() => {
         postobjHandler()
@@ -89,12 +98,12 @@ const Post = (id) => {
             }
 
             let commentinfo = postobj['boardCommentInfo']
-            let infoctor = commentinfo.constructor; // 댓글 객체 타입
+            let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
-            let likector = commentinfo.constructor; // 좋아요 객체 타입
+            let likector = commentinfo?.constructor; // 좋아요 객체 타입
             if(commentinfo)
             {
-                if (infoctor === Array)
+                if (infoctor === Array && postobj['boardCommentInfo'].length != 0)
                 {
                     setCommentContext(postobj['boardCommentInfo'][0]['commentContext']);
                     setCommentUserNickname(postobj['boardCommentInfo'][0]['commentUserNickname']);
@@ -135,6 +144,7 @@ const Post = (id) => {
         setLike(!like);
 
     };
+
 
     const writetimeHandler = (regTime) => {
 
@@ -193,6 +203,7 @@ const Post = (id) => {
     }
 
     const viewMoreHandler = () => {
+
         if(ismoreView)
         {
             setIsmoreView(!ismoreView);
@@ -207,8 +218,8 @@ const Post = (id) => {
     };
 
 
-    const imgonClick = () => {
-        setModalopen(true);
+    const openModalHandler = () => {
+        detailRef.current?.modalHandler(true);
     }
 
     /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
@@ -227,9 +238,8 @@ const Post = (id) => {
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
-        <img onClick={imgonClick} id="contentImg"  className={styles.photo} src={contentImgPath}></img>
+        <img onClick={openModalHandler} id="contentImg" className={styles.photo} src={contentImgPath}></img>
         <div className={styles.icon_form}>
-        {modalOpen && <Detail id= {id['id']}/>}
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
                 like ? (<BsHeartFill className={styles.likeIcon}/>) : (<BsHeart className={styles.likeIcon}/>)
@@ -238,23 +248,26 @@ const Post = (id) => {
             <SlSpeech className={styles.icon}/>
         </div>
         <div className={styles.comment_form}>
-            <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span><span className={styles.span}>님 </span><span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span><span className={styles.span}>이 좋아합니다</span>
+            {likecntVisible && <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span>}
+            {likecntVisible && <span className={styles.span}>님 </span>}
+            {likecntVisible && <span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span>}
+            {likecntVisible && <span className={styles.span}>이 좋아합니다</span>}
         </div>
    
         <div className={styles.content}>
             <span className={styles.span}>{content}</span>
-            <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
+            {ismoreView && <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>}
         </div>
 
         <div className={styles.content_comment}>
-        <button className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
-        <ul className={styles.comment_ul}>
+        <button onClick={openModalHandler} className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
+        {(commentUserNickname && commentContext) ? <ul className={styles.comment_ul}>
             <span className={`${styles.comment_span} ${styles.bold} `}>{commentUserNickname}</span> 
             <span className={`${styles.comment_span}`}>{commentContext}</span>
-        </ul> 
-        <button className={styles.tpBtn}>댓글 쓰기</button>       
+        </ul> : <br/>}
+        <button onClick={openModalHandler} className={styles.tpBtn}>댓글 쓰기</button>       
         </div>
-        
+            <Detail ref={detailRef} id= {id['id']}/>
         </div>
     )
 

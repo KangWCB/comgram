@@ -18,6 +18,8 @@
 .env.test.local
 .env.production.local
 application.properties
+application-photo.properties
+application-oauth.properties
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
