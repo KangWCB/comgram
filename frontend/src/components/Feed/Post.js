@@ -244,7 +244,7 @@ const Post = (id) => {
                 like ? (<BsHeartFill className={styles.likeIcon}/>) : (<BsHeart className={styles.likeIcon}/>)
             }
             </div>
-            <SlSpeech className={styles.icon}/>
+            <SlSpeech className={styles.icon} onClick={openModalHandler}/>
         </div>
         <div className={styles.comment_form}>
             {likecntVisible && <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span>}

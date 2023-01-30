@@ -1,3 +1,6 @@
+button:hover {
+    cursor: pointer;
+}
 .modal_background {
     top:0;
     left:0;
@@ -107,11 +110,15 @@
 }
 
 .comment_input{
-    width: 85%;
+    width: 75%;
     margin-top: 10px;
     margin-bottom: 10px;
     border:none;
     background: transparent; 
+}
+
+.comment_input:focus{
+    outline:none;
 }
 
 .deleteBtn{
@@ -122,4 +129,11 @@
     color: gray;
     padding-left: 5px;
     font-size: 11px;
+}
+
+.closeBtn{
+    float:right;
+}
+.closeBtn:hover {
+    cursor: pointer;
 }

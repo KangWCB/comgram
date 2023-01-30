@@ -223,7 +223,7 @@ const Detail = forwardRef(({id}, detailRef) => {
                         <img className={styles.profileImg} src={`${profileImgPath}`}/>
                     </div>
                     <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
-                    <IoMdClose style={{float: 'right'}}onClick={() => setModalisOpen(false)}/>
+                    <IoMdClose className={styles.closeBtn}onClick={() => setModalisOpen(false)}/>
                     <div className={styles.comment}>
                         <div className={styles.box}>
                             <img className={styles.profileImg} src={`${profileImgPath}`}/>

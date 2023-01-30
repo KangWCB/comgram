@@ -38,11 +38,16 @@
     white-space: nowrap;
     text-align: left;
     color: red;
-    
+}
+.likeIcon:hover {
+    cursor: pointer;
 }
 .icon {
     margin: 5px;
     font-size: 20px;
+}
+.icon:hover {
+    cursor: pointer;
 }
 
 .icon_form {
