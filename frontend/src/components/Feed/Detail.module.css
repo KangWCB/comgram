@@ -61,6 +61,7 @@
 .gray{
     padding-left: 5px;
     color: gray;
+    font-size: 11px;
 }
 .comment{
     margin-top: 10px;
@@ -99,10 +100,26 @@
     background: transparent; 
 }
 
+.comment_btn:disabled,
+.comment_btn[disabled]{
+    color: gray;
+    font-weight: lighter;
+}
+
 .comment_input{
     width: 85%;
     margin-top: 10px;
     margin-bottom: 10px;
     border:none;
     background: transparent; 
+}
+
+.deleteBtn{
+    background-color:transparent;
+    background-image: none !important;
+    border-color: transparent;
+    border: none;
+    color: gray;
+    padding-left: 5px;
+    font-size: 11px;
 }

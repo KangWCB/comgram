@@ -10,8 +10,6 @@ export const addPostobj = () => async dispatch => {
         {'Authorization': acctoken}},config)
     .then((res) => res.data)
     .catch((err) => err.status)
-    console.log("act");
-    console.log(resdata)
     dispatch ({
         type: "OBJECT_ADD",
         payload: resdata['data']
@@ -19,21 +17,17 @@ export const addPostobj = () => async dispatch => {
 };
 
 export const updatePostobj = (obj) => async dispatch => {
-    console.log("update_act")
     let boardId = obj['id'];
     let resdata = '';
 
     let api = `/api/boards/${boardId}`;
-    console.log(api);
     let acctoken = localStorage.getItem('accessToken');
     const config = {"Content-Type" : 'application/json'};
     await wait(500);
     await axios.get(api, {headers : 
         {'Authorization': acctoken}},config)
     .then((res) => {
-        console.log(res.data);
         resdata = res.data});
-    
     dispatch ({
         type: "OBJECT_UPDATE",
         payload: resdata

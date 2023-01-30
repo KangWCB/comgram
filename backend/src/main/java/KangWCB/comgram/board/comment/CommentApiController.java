@@ -22,6 +22,14 @@ public class CommentApiController {
     @PostMapping("/{id}/comments")
     public ResponseEntity commentSave(@PathVariable Long id, @RequestBody CommentRequestDto dto,
                                       @AuthenticationPrincipal SecurityUser user){
-        return ResponseEntity.ok(commentService.commentSave(user.getMember().getEmail(),id,dto));
+        Long savedId = commentService.commentSave(user.getMember().getEmail(), id, dto);
+        return ResponseEntity.ok(savedId);
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public ResponseEntity deleteComment(@PathVariable(name = "id") Long commentId,
+                                        @AuthenticationPrincipal SecurityUser user){
+        String message = commentService.delete(commentId, user.getMember().getEmail());
+        return ResponseEntity.ok(message);
     }
 }

@@ -228,6 +228,14 @@ button:focus {
   margin: 20px 0;
 }
 
+.social_login_img {
+  margin-right: 13px;
+  border-radius: 5px;
+  object-fit: cover;
+  width: 80px;
+  height: 31px;
+}
+
 
 
 footer {

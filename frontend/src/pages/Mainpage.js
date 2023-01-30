@@ -6,6 +6,7 @@ import styles from './Mainpage.module.css'
 import Feed from '../components/Feed/Feed';
 import Profile from '../components/Profile/Profile';
 
+
 const Mainpage = () => {
     const [nickname, setNickname] = useState('');
     const navigate = useNavigate();
@@ -67,7 +68,7 @@ const Mainpage = () => {
             </Link>
             <button onClick={() => logoutHandler()}>Logout</button>
             <br/>nick : {nickname}
-            <br/>tk : {acctoken}
+            <br/>tk : {acctoken ? '있음': '없음'}
             {<Feed/> }
             {<Profile/> }
         </div>

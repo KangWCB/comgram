@@ -48,7 +48,6 @@ const Post = (id) => {
     
     useEffect(() => {
         let data = selectorData;
-        console.log(data);
         
         if(data)
         {

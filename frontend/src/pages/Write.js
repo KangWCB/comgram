@@ -9,7 +9,6 @@ const Write = () => {
     const [boardImg,setBoardImg] = useState('');
     const [encodeImg,setEncodeImg] = useState('');
     const [content, setContent] = useState('');
-    const [btnActive, setBtnActive] = useState(false);
     const navigate = useNavigate();
 
     const imgHandler = (e) => {
@@ -65,10 +64,6 @@ const Write = () => {
 
     const contentHandler = (e) => {
         setContent(e.target.value)
-        if((!content) && (!boardImg))
-            setBtnActive(true);
-        else
-            setBtnActive(false);  
     }
     const modalStyle = {
         overlay: {

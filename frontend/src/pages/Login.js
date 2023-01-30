@@ -2,7 +2,6 @@ import {useState, React, useEffect} from 'react';
 import { useNavigate, useLocation, useParams} from 'react-router-dom'
 import axios from 'axios';
 import styles from './Login.module.css';
-import OAuthLogin from './OAuthLogin';
 
 const LoginPage = () => {
     const [email, setEmail] = useState(""); 
@@ -14,7 +13,8 @@ const LoginPage = () => {
     const location = useLocation();
     const params = useParams();
     const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
-
+    const naverLoginUrl = 'http://localhost:8080/oauth2/authorization/naver';
+    const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
     useEffect(() => {
       console.log(location);
       console.log(params);
@@ -151,7 +151,9 @@ const LoginPage = () => {
             {/*test*/}
             <h1>Sign in</h1>
             <div className={styles.social_container}>
-              <img onClick={() => OAuth2LoginHandler(kakaoLoginUrl)} src="/img/kakao_login_small.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(kakaoLoginUrl)} src="/img/kakao_login_small.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(naverLoginUrl)} src="/img/naver_login.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(googleLoginUrl)} src="/img/google_login.png"></img>
             </div>
             <span>or use your account</span>
             <input className={styles.input} type="email" placeholder="Email"

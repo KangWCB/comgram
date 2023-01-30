@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BoardCommentInfo {
 
+    private Long commentId;
     private String commentUserNickname;
     private String commentContext;
-
+    private String createdDate;
+    private String modifiedDate;
 }

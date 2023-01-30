@@ -20,11 +20,11 @@ public class Message {
     private Long roomNm; // 채팅방 번호
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 멤버 상태에 따라 변경되며 사라지면 사라짐
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "sender_id")
     private Member sender;// 보낸 사람
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name="receiver_id")
     private Member receiver; // 받는 사람
 
     private String content; // 메세지 내용
