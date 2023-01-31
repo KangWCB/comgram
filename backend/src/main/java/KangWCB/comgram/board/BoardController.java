@@ -61,6 +61,8 @@ public class BoardController {
         return boardService.findBoardDetail(boardId);
     }
 
+    @DeleteMapping
+
     @Data
     @AllArgsConstructor
     static class Result<T> {

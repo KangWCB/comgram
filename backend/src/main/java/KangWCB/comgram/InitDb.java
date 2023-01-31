@@ -70,7 +70,6 @@ public class InitDb {
                         .boards(board)
                         .build();
                 em.persist(comment);
-
                 BoardLike boardLike = BoardLike.builder().board(board).member(member).build();
                 em.persist(boardLike);
             }

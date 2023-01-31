@@ -88,11 +88,18 @@ public class MemberController {
 
     // 테스트용 follow
 
-    @GetMapping("/{id}/followCount")
-    public Long followCount(@PathVariable(name = "id") Long memberId){
+    @GetMapping("/{id}/followingCount")
+    public Count followingCount(@PathVariable(name = "id") Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
-        Long countFollow = followJpaRepository.countByFollower(member);
-        return countFollow;
+        Long countFollower = followJpaRepository.countByFollower(member);
+        return new Count(countFollower);
+    }
+
+    @GetMapping("/{id}/followerCount")
+    public Count followerCount(@PathVariable(name = "id") Long memberId){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
+        Long countFollowing = followJpaRepository.countByFollowing(member);
+        return new Count(countFollowing);
     }
 
     /**
@@ -101,8 +108,13 @@ public class MemberController {
     @Data
     @AllArgsConstructor
     static class Result<T> {
-
         private T token;
         private Long id;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Count{
+        private Long count;
     }
 }

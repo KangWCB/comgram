@@ -35,7 +35,7 @@ public class PhotoService {
             return null;
         }
         // 파일 경로 폴더 설정
-        String savedFolder = fileDir +"/member";
+        String savedFolder = fileDir +"member";
         File dir = new File(savedFolder);
         if(dir.exists() == false){
             dir.mkdirs();
@@ -80,7 +80,7 @@ public class PhotoService {
             return null;
         }
         // 파일 경로 폴더 설정
-        String savedFolder = fileDir +"/board";
+        String savedFolder = fileDir +"board";
         File dir = new File(savedFolder);
         if(dir.exists() == false){
             dir.mkdirs();
