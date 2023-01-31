@@ -2,10 +2,12 @@ package KangWCB.comgram.board.repository;
 
 import KangWCB.comgram.board.Board;
 import KangWCB.comgram.board.QBoard;
+import KangWCB.comgram.board.dto.BoardMyListDto;
 import KangWCB.comgram.follow.QFollow;
 import KangWCB.comgram.member.QMember;
 import KangWCB.comgram.photo.QPhoto;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -100,8 +102,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         }
         return qBoard.content.contains(word);
     }
-
-
     /**
      * 보드 게시물 하나 찾아주기
      */
@@ -113,5 +113,19 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(qBoard.id.eq(boardId))
                 .fetchOne();
         return board;
+    }
+    /**
+     * 내가 쓴 게시물 찾아주기
+     */
+    @Override
+    public List<BoardMyListDto> findMyList(Long memberId) {
+        List<BoardMyListDto> fetch = queryFactory.select(Projections.constructor(BoardMyListDto.class,
+                        qBoard.id,
+                        qBoard.photo.savedPath))
+                .from(qBoard)
+                .leftJoin(qBoard.photo, qPhoto)
+                .where(qBoard.member.id.eq(memberId))
+                .fetch();
+        return fetch;
     }
 }

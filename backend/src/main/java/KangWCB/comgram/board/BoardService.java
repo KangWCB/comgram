@@ -8,6 +8,7 @@ import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
+import KangWCB.comgram.board.dto.BoardMyListDto;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
@@ -102,4 +103,13 @@ public class BoardService {
         return boardMainDtos;
     }
 
+    public List<BoardMyListDto> findMyList(Long id) {
+        List<BoardMyListDto> myList = boardRepository.findMyList(id);
+        return myList;
+    }
+
+    public Long countMyList(Long id){
+        Long count = boardRepository.countMyBoard(id);
+        return count;
+    }
 }

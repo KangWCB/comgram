@@ -1,5 +1,7 @@
 package KangWCB.comgram.member;
 
+import KangWCB.comgram.board.BoardService;
+import KangWCB.comgram.board.dto.BoardMyListDto;
 import KangWCB.comgram.config.jwt.JwtTokenProvider;
 import KangWCB.comgram.config.jwt.SecurityUser;
 import KangWCB.comgram.config.jwt.dto.TokenInfo;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,6 +41,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final PhotoService photoService;
+    private final BoardService boardService;
 
     private final FollowJpaRepository followJpaRepository;
     @Value("${default.profile}")
@@ -72,7 +76,6 @@ public class MemberController {
                 .build();
     }
     // 회원수정
-
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
@@ -87,7 +90,6 @@ public class MemberController {
     }
 
     // 테스트용 follow
-
     @GetMapping("/{id}/followingCount")
     public Count followingCount(@PathVariable(name = "id") Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
@@ -103,6 +105,15 @@ public class MemberController {
     }
 
     /**
+     * 내가 작성한 글들 리스트
+     */
+    @GetMapping("/{memberId}/boards")
+    public MyList findMyList(@PathVariable(name = "memberId") Long id){
+        List<BoardMyListDto> myList = boardService.findMyList(id);
+        return new MyList(boardService.countMyList(id),boardService.findMyList(id));
+    }
+
+    /**
      * Login 토큰
      */
     @Data
@@ -112,9 +123,20 @@ public class MemberController {
         private Long id;
     }
 
+    /**
+     * 팔로우
+     */
     @Data
     @AllArgsConstructor
     static class Count{
         private Long count;
     }
+
+    @Data
+    @AllArgsConstructor
+    static class MyList<T> {
+        private Long count;
+        private T data;
+    }
+
 }
