@@ -65,7 +65,12 @@ public class BoardController {
         return boardService.findBoardDetail(boardId);
     }
 
-//    @DeleteMapping
+    @DeleteMapping("{boardId}")
+    public ResponseEntity boardDelete(@PathVariable(name="boardId") Long boardId){
+        boardService.delete(boardId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Data
     @AllArgsConstructor
     static class Result<T> {

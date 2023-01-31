@@ -112,4 +112,10 @@ public class BoardService {
         Long count = boardRepository.countMyBoard(id);
         return count;
     }
+
+    @Transactional
+    public void delete(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalStateException("없는 게시물"));
+        boardRepository.delete(board);
+    }
 }
