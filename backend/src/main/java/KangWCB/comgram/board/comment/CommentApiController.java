@@ -25,7 +25,6 @@ public class CommentApiController {
         Long savedId = commentService.commentSave(user.getMember().getEmail(), boardId, dto);
         return ResponseEntity.ok(savedId);
     }
-
     @DeleteMapping("/comments/{commentId}")
     public ResponseEntity deleteComment(@PathVariable(name = "commentId") Long commentId,
                                         @AuthenticationPrincipal SecurityUser user){

@@ -96,22 +96,38 @@ public class MemberController {
         Long countFollower = followJpaRepository.countByFollower(member);
         return new Count(countFollower);
     }
-
+    /**
+     * 팔로워
+     * @param memberId
+     * @return
+     */
     @GetMapping("/{id}/followerCount")
     public Count followerCount(@PathVariable(name = "id") Long memberId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new UsernameNotFoundException("사용자 없음"));
         Long countFollowing = followJpaRepository.countByFollowing(member);
         return new Count(countFollowing);
     }
-
     /**
-     * 내가 작성한 글들 리스트
+     * 각자 작성한 글들 리스트
+     *
      */
     @GetMapping("/{memberId}/boards")
     public MyList findMyList(@PathVariable(name = "memberId") Long id){
         List<BoardMyListDto> myList = boardService.findMyList(id);
         return new MyList(boardService.countMyList(id),boardService.findMyList(id));
     }
+
+    @GetMapping("/{memberId}/isFollow")
+    public isFollow findMyList(@PathVariable(name = "memberId") Long id,
+                                     @AuthenticationPrincipal SecurityUser user){
+        if(id == user.getMember().getId())
+            return new isFollow("mine"); // 내 게시물일때
+        if (followJpaRepository.isFollow(id,user.getMember().getId()).isEmpty()){
+            return new isFollow("notFollow"); // 팔로우가 안되어 있을때
+        }
+        return new isFollow("follow"); //팔로우가 되어있을 때
+    }
+
 
     /**
      * Login 토큰
@@ -132,11 +148,20 @@ public class MemberController {
         private Long count;
     }
 
+    /**
+     * 마이 리스트
+     */
     @Data
     @AllArgsConstructor
     static class MyList<T> {
         private Long count;
         private T data;
     }
+    @Data
+    @AllArgsConstructor
+    static class isFollow<T> {
+        private String isFollow;
+    }
+
 
 }
