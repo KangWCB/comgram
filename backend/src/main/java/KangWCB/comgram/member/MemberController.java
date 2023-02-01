@@ -73,15 +73,17 @@ public class MemberController {
                 .email(member.getMember().getEmail())
                 .nickname(member.getMember().getNickName())
                 .profilePhotoUrl(photoService.noPhotoFinder(member.getMember()))
+                .name(member.getMember().getName())
                 .build();
     }
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(MemberUpdateForm memberUpdateForm,
+    public ResponseEntity memberUpdate(@RequestBody(required = false) @Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
-                                       @PathVariable(name = "id") Long memberId){
-        Long updateMemberId = memberService.update(memberUpdateForm, memberId,file);
-        return new ResponseEntity<>(updateMemberId, HttpStatus.OK);
+                                       @PathVariable(name = "id") Long memberId,
+                                       @AuthenticationPrincipal SecurityUser member){
+        memberService.update(memberUpdateForm, memberId,file);
+        return new ResponseEntity<>(memberInfo(member), HttpStatus.OK);
     }
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
