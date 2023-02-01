@@ -118,7 +118,6 @@ public class MemberController {
         List<BoardMyListDto> myList = boardService.findMyList(id);
         return new MyList(boardService.countMyList(id),boardService.findMyList(id));
     }
-
     @GetMapping("/{memberId}/isFollow")
     public isFollow findMyList(@PathVariable(name = "memberId") Long id,
                                      @AuthenticationPrincipal SecurityUser user){
@@ -129,8 +128,6 @@ public class MemberController {
         }
         return new isFollow("follow"); //팔로우가 되어있을 때
     }
-
-
     /**
      * Login 토큰
      */

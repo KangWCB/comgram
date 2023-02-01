@@ -1,6 +1,5 @@
 package KangWCB.comgram.member;
 
-import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.repository.MemberRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
