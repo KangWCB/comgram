@@ -22,6 +22,7 @@ public class BoardMainDto {
     // 작성자
     private String nickName; // 작성자 별명
     private String profileImgPath; // 작성자 사진
+    private Long writerId; // 작성자 아이디
     private Boolean pushLike; // 좋아요 누른지 안누른지
 
     private LocalDateTime regTime; // 글 작성 시간
@@ -31,27 +32,29 @@ public class BoardMainDto {
     private BoardCommentInfo boardCommentInfo;
 
     @Builder
-    public BoardMainDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
+    public BoardMainDto(Long id, String content, String contentImgPath,Long writerId, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
         this.id = id;
         this.content = content;
         this.contentImgPath = contentImgPath;
         this.likeCount = likeCount;
         this.nickName = nickName;
+        this.writerId = writerId;
         this.profileImgPath = profileImgPath;
         this.pushLike = pushLike;
         this.regTime = regTime;
         this.commentCount = commentCount;
     }
 
-    public static BoardMainDto toDto(boolean pushLike, String contextImgPath, Board board,String wirterImgPath){
+    public static BoardMainDto toDto(boolean pushLike, String contextImgPath, Board board,String writerImgPath){
         BoardMainDto boardMainDto = BoardMainDto.builder()
                 .id(board.getId())
                 .content(board.getContent())
                 .contentImgPath(contextImgPath)
                 .likeCount(board.getLikes().stream().count())
+                .writerId(board.getMember().getId())
                 .nickName(board.getMember().getNickName())
                 .commentCount(board.getComments().stream().count())
-                .profileImgPath(wirterImgPath)
+                .profileImgPath(writerImgPath)
                 .pushLike(pushLike)
                 .regTime(board.getRegTime())
                 .build();

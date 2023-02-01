@@ -162,6 +162,4 @@ public class MemberController {
     static class isFollow<T> {
         private String isFollow;
     }
-
-
 }
