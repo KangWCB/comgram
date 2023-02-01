@@ -19,20 +19,24 @@ export const addPostobj = () => async dispatch => {
 export const updatePostobj = (obj) => async dispatch => {
     let boardId = obj['id'];
     let resdata = '';
-
+    
     let api = `/api/boards/${boardId}`;
     let acctoken = localStorage.getItem('accessToken');
     const config = {"Content-Type" : 'application/json'};
-    await wait(500);
-    await axios.get(api, {headers : 
-        {'Authorization': acctoken}},config)
-    .then((res) => {
-        resdata = res.data});
-    dispatch ({
-        type: "OBJECT_UPDATE",
-        payload: resdata
-    })
     
+    if(boardId != undefined)
+    {
+        console.log(boardId)
+        await wait(500);
+        await axios.get(api, {headers : 
+            {'Authorization': acctoken}},config)
+        .then((res) => {
+            resdata = res.data});
+        dispatch ({
+            type: "OBJECT_UPDATE",
+            payload: resdata
+        })
+    }    
 }
 
 export const resetPostobj = () => ({
