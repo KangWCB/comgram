@@ -1,4 +1,4 @@
-import {Link, useLocation} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState, React, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import axios from 'axios';
@@ -6,10 +6,12 @@ import styles from './Mainpage.module.css'
 import Feed from '../components/Feed/Feed';
 import Profile from '../components/Profile/Profile';
 
+
 const Mainpage = () => {
-    const [nickname, setNickname] = useState("");
+    const [nickname, setNickname] = useState('');
+    const navigate = useNavigate();
     
-    let Islogin = false;
+    let islogin = false;
     let acctoken = localStorage.getItem('accessToken');
     let location = useLocation(); // 현재 주소
     let currentPath = "";
@@ -17,30 +19,29 @@ const Mainpage = () => {
 
     useEffect(() => { // 로그인 여부 검사
         let acctoken = localStorage.getItem('accessToken');
+        localStorage.setItem('isLogin', false);
+        console.log(acctoken)
         if(acctoken)
         {
-            Islogin = true; 
+            islogin = true; 
             getUserinfo(acctoken);
             localStorage.setItem('nickName', nickname);
-                 
+            console.log(nickname)
         }
-
+        else {
+            localStorage.removeItem("accessToken");
+            navigate("/login");
+        }
     },[]);
 
-    useEffect(() => {
-        if(currentPath === location.pathname) 
-            //window.location.reload();
-        currentPath = location.pathname;
-
-    },[location]);
-
-
-    useEffect(() => { // 주소 변경시 
-        
+    useEffect(() => { // 주소 변경시
         if(currentPath === location.pathname)
             window.location.reload();
         currentPath = location.pathname;
     },[location]);
+
+
+
 
     const logoutHandler = () => {
         localStorage.removeItem("accessToken");
@@ -48,45 +49,30 @@ const Mainpage = () => {
         window.location.reload();
     };
 
-    const getUserinfo = (acctoken) => {
-        axios.get('/api/members/info', {headers : 
+    const getUserinfo = async (acctoken) => {
+        await axios.get('/api/members/info', {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
             setNickname(res.data['nickname']);
         })
         .catch((err) => {
-            console.log(err);
+            localStorage.removeItem("accessToken");
+            navigate("/login");
         });
     };
 
-    const getListinfo = (acctoken) => {
-        axios.get('/api/boards/list', {headers : 
-            {'Authorization': acctoken}})
-        .then((res) => {
-            //res.data['data']; // 본문
-            //res.data['data']; // 사진 가져오기
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
 
 
     return (
         <div className={styles.container}>
-            
-        <Link to="/login">
-            <button>Login</button>
-        </Link>
-        
-        <button onClick={() => logoutHandler()}>Logout</button>
-        <br/>nick : {nickname}
-        <br/>tk : {acctoken}
-        {/*<Profile inherit_token={acctoken}/> {/*토큰 상속*/}
-        <Feed inherit_token={acctoken}/> {/*토큰 상속*/}
-        
-
-            
+            <Link to="/login">
+                <button>Login</button>
+            </Link>
+            <button onClick={() => logoutHandler()}>Logout</button>
+            <br/>nick : {nickname}
+            <br/>tk : {acctoken ? '있음': '없음'}
+            {<Feed/> }
+            {<Profile/> }
         </div>
         
     )

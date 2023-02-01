@@ -1,26 +1,28 @@
 
 .container{
-    display:flex;
-    position: absolute;
+    position: fixed;
+    height: 100%; 
+    left: 0;
+    
+    float: left;
     z-index: 3;
-    height: 100%;
+   
     margin-right: 10%;
 }
 
 .Navbar{
     background: rgb(233, 225, 225);
     color: #fff;
-
     width: 200px;
+    height: 100vh;
     transition: all 0.5s;
-    
     
 }
 
-.navbar-logo{
-    color: rgb(0, 0, 0);
+.logo{
+    width: 70%;
+    height: 100%;
     justify-self: start;
-    margin-left: 10px;
     cursor: pointer;
 }
 
@@ -32,10 +34,9 @@
 }
 
 .bars{
-    display: flex;
+    position: relative;
     font-size: 25px;
     margin-left: 50px;
-    
 }
 .link{
     display: flex;

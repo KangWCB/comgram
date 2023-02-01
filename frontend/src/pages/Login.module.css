@@ -16,7 +16,6 @@
   flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   height: 100vh;
-  margin: -20px 0 50px;
 }
 
 h1 {
@@ -227,6 +226,14 @@ button:focus {
 
 .social_container {
   margin: 20px 0;
+}
+
+.social_login_img {
+  margin-right: 13px;
+  border-radius: 5px;
+  object-fit: cover;
+  width: 80px;
+  height: 31px;
 }
 
 

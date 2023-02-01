@@ -1,105 +1,153 @@
 import axios from "axios";
-import {useState, React, useEffect} from 'react';
+import {useState, React, useEffect, useRef} from 'react';
 import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
+import { addPostobj, updatePostobj } from '../../redux/action';
+import { useSelector, useDispatch } from 'react-redux';
+import Detail from './Detail';
 
-import reactMoment from "react-moment";
-
-const Post = (postobj) => {
+const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
+    const dispatch = useDispatch();
     const [like, setLike] = useState(false);
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
     const [originContent,setOriginContent] = useState('');
+    const [likecntVisible, setLikecntVisible] = useState(false);
     // postobj
     const [writerName, setWriterName] = useState("");
     const [content, setContent] = useState('')
     const [contentImgPath, setContentImgPath] = useState(null);
-    const [imgHash, setimgHash] = useState('');
     const [PostId, setPostId] = useState(0);
-    const [likeUserNickName, setLikeUserNickName] = useState('hi');
+    const [likeUserNickName, setLikeUserNickName] = useState('');
+    const [likeUserProfilePath, setLikeUserProfilePath] = useState(null);
     const [commentCount, setCommentCount] = useState(0);
-    const [pushLike, setPushLike] = useState(false);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
     const [commentContext,setCommentContext] = useState("");
     const [commentUserNickname, setCommentUserNickname] = useState("");
     const [profileImgPath,setProfileImgPath] = useState('');
     const [writeTime,setWriteTime] = useState('');
+
     let diffTime = {         
         day:'',
         hour:'',
         min:'',
         sec:'',
-    };
-    
-    let rd = '';
-    let likeName = "newbie";
+    };    
     let origin_content = "";
     let cut_content = "";
-    let commentList = [
+    let first_like = false;
+    
+    const selectorData = useSelector(state => state.postobjReducer.postobj);
+    const [postobj, setPostobj] = useState(null);
+    //디테일 페이지 모달핸들링
+    const detailRef = useRef();
+    
+    useEffect(() => {
+        let data = selectorData;
+        
+        if(data)
         {
-            userName: "sibal",
-            comment: "죽여주세요 제발n" 
-        },
+            let objidx = data.findIndex(obj => obj.id === id['id'])
+            setPostobj(data[objidx]);
+        }
+        
 
-    ];
+    }, [selectorData])
+    
     useEffect(() => {
         writetimeHandler(regTime);
     },[regTime]);
+
     useEffect(() => {
-        console.log('post 렌더링')
-        
-        console.log(postobj['postobj'].length);
-        if(postobj['postobj'].length!= 0)
+        if(likeCount>0)
+            setLikecntVisible(true);
+        else
+            setLikecntVisible(false);
+    },[likeCount])
+
+    useEffect(() => {
+        postobjHandler()
+    },[postobj]);
+
+    const postobjHandler = () => {
+        if(postobj != undefined && postobj != null)
         {
-            let postInfo = postobj['postobj'];
-            if(postInfo['contentImgPath']){
-                let tmp_path = postInfo['contentImgPath'].replace(/\"/gi,"");
+            if(postobj['contentImgPath']){
+                let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
                 let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
-                console.log(tmp_path);
                 setContentImgPath(tmp_path);   
             }
                 
-            setWriterName(postInfo['nickName']);
-            setContent(postInfo['content']);
-            setPostId(postInfo['id']);
-            setCommentCount(postInfo['commentCount']);
-            setPushLike(postInfo['PushLike']);
-            setRegTime(postInfo['regTime']);
-            setLikeCount(postInfo['likeCount']);
-            setProfileImgPath(postInfo['profileImgPath'].replace(/\"/gi,""));
-            if(postInfo['boardMainCommentInfo'])
+            setWriterName(postobj['nickName']);
+            setContent(postobj['content']);
+            setCommentCount(postobj['commentCount']);
+            setRegTime(postobj['regTime']);
+            setPostId(postobj['id']);
+            setLikeCount(postobj['likeCount']);
+            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
+            if(first_like)
             {
-                setCommentContext(postInfo['boardMainCommentInfo']['commentContext']);
-                setCommentUserNickname(postInfo['boardMainCommentInfo']['commentUserNickname']);
+                first_like = true;
+                setLike(postobj['pushLike']);
             }
-            if(postInfo['boardMainLikeInfo'])
+
+            let commentinfo = postobj['boardCommentInfo']
+            let infoctor = commentinfo?.constructor; // 댓글 객체 타입
+            let likeinfo = postobj['boardLikeInfo']
+            let likector = commentinfo?.constructor; // 좋아요 객체 타입
+            if(commentinfo)
             {
-                setLikeUserNickName(postInfo['boardMainLikeInfo']['likeUserNickName']);
+                if (infoctor === Array && postobj['boardCommentInfo'].length != 0)
+                {
+                    setCommentContext(postobj['boardCommentInfo'][0]['commentContext']);
+                    setCommentUserNickname(postobj['boardCommentInfo'][0]['commentUserNickname']);
+                }
+                else
+                {
+                    setCommentContext(postobj['boardCommentInfo']['commentContext']);
+                    setCommentUserNickname(postobj['boardCommentInfo']['commentUserNickname']);
+                }
+            }
+            else
+            {
+                setCommentUserNickname('');
+            }
+            if(likeinfo)
+            {
+                if (likector === Array)
+                {
+                    setLikeUserNickName(postobj['boardLikeInfo'][0]['likeUserNickName']);
+                }
+                else
+                    setLikeUserNickName(postobj['boardLikeInfo']['likeUserNickName']);
             }
         }
+        /*
         else
-            console.log("obj없음");
-        },[postobj]);
-
-
-    const likeHandler = () => {
-        let tmp = `localhost:8080/api/boards/${PostId}/like`;
-        console.log(tmp);
-        let acctoken = localStorage.getItem('accessToken');
-        console.log(acctoken);
-
-        axios.post('/api/boards/20/like', {headers : 
-            {'Authorization': acctoken}})
-        .then((res) => {
-            console.log(res.data);
-        });
-        setLike(!like);
+            dispatch(addPostobj());
+        */
     };
+    const likeHandler = () => {
+        console.log("like 호출");
+        let likeAPI = `/api/boards/${PostId}/like`;
+
+        let acctoken = localStorage.getItem('accessToken');
+
+        axios.post(likeAPI, {}, {
+            headers : 
+                {'Authorization': acctoken}
+        })
+        .then((res) => res.data);
+        dispatch(updatePostobj(postobj));
+        setLike(!like);
+
+    };
+
 
     const writetimeHandler = (regTime) => {
 
@@ -158,6 +206,7 @@ const Post = (postobj) => {
     }
 
     const viewMoreHandler = () => {
+
         if(ismoreView)
         {
             setIsmoreView(!ismoreView);
@@ -171,9 +220,9 @@ const Post = (postobj) => {
         }
     };
 
-    const imgHandler = () => {
-        console.log("img");
-        document.getElementById("ci").src = contentImgPath;
+
+    const openModalHandler = () => {
+        detailRef.current?.modalHandler(true);
     }
 
     /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
@@ -183,7 +232,7 @@ const Post = (postobj) => {
 
     return(
         <div>
-            {/* 피드 */}
+        {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
                     <img className={styles.profileImg} src={`${profileImgPath}`}/>
@@ -192,33 +241,36 @@ const Post = (postobj) => {
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
-        <img id="ci" className={styles.photo} src={contentImgPath}></img>
+        <img onClick={openModalHandler} id="contentImg" className={styles.photo} src={contentImgPath}></img>
         <div className={styles.icon_form}>
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
-                like ? (<BsHeart className={styles.likeIcon}/>) : (<BsHeartFill className={styles.likeIcon}/>)
+                like ? (<BsHeartFill className={styles.likeIcon}/>) : (<BsHeart className={styles.likeIcon}/>)
             }
             </div>
-            <SlSpeech className={styles.icon}/>
+            <SlSpeech className={styles.icon} onClick={openModalHandler}/>
         </div>
         <div className={styles.comment_form}>
-            <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span><span className={styles.span}>님 </span><span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span><span className={styles.span}>이 좋아합니다</span>
+            {likecntVisible && <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span>}
+            {likecntVisible && <span className={styles.span}>님 </span>}
+            {likecntVisible && <span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span>}
+            {likecntVisible && <span className={styles.span}>이 좋아합니다</span>}
         </div>
    
         <div className={styles.content}>
             <span className={styles.span}>{content}</span>
-            <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>
+            {ismoreView && <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>}
         </div>
 
         <div className={styles.content_comment}>
-        <button className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
-        <ul className={styles.comment_ul}>
+        <button onClick={openModalHandler} className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
+        {(commentUserNickname && commentContext) ? <ul className={styles.comment_ul}>
             <span className={`${styles.comment_span} ${styles.bold} `}>{commentUserNickname}</span> 
             <span className={`${styles.comment_span}`}>{commentContext}</span>
-        </ul> 
-        <button className={styles.tpBtn}>댓글 쓰기</button>       
+        </ul> : <br/>}
+        <button onClick={openModalHandler} className={styles.tpBtn}>댓글 쓰기</button>       
         </div>
-        
+            <Detail ref={detailRef} id= {id['id']}/>
         </div>
     )
 

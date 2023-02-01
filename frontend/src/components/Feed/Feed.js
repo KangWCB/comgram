@@ -5,81 +5,42 @@ import styles from './Feed.module.css'
 import axios from 'axios';
 import Post from './Post';
 
-const Feed = (inherit_token) => {
+
+import { addPostobj, resetPostobj, updatePostobj} from '../../redux/action';
+import { useSelector, useDispatch } from 'react-redux';
+
+const Feed = () => {
+
     const [postobj, setPostobj] = useState([]);
-    let obj_table = {
-        boardMainCommentInfo : [],
-        boardMainLikeInfo : [],
-        id: 'id',
-        content: 'content',
-        contentImgPath: 'contentImgPath',
-        commentCount: 'commentCount',
-        likeCount: 'likeCount',
-        regTime: 'null',
-        profileImgPath : 'profileImgPath',
-        nickName : 'nickname',
-    };
-
-
-    async function GetPostobj() {
-        let acctoken = await localStorage.getItem('accessToken');
-        let obj_arr = [];
-        console.log(acctoken);
-        const config = {"21wContent-Type" : 'application/json'};
-        await axios.get('/api/boards/list', {headers : 
-            {'Authorization': acctoken}},config)
-        .then((res) => {
-            
-            let rd = res.data['data'];
-            let rd_len = rd['length'];
-            
-            for(var i=0;i<rd_len;i++)
-            {
-                obj_table = {
-                    boardMainCommentInfo : rd[i]['boardMainCommentInfo'],
-                    boardMainLikeInfo : rd[i]['boardMainLikeInfo'],
-                    id: rd[i]['id'],
-                    content: rd[i]['content'],
-                    contentImgPath: rd[i]['contentImgPath'],
-                    commentCount: rd[i]['commentCount'],
-                    likeCount: rd[i]['likeCount'],
-                    regTime: rd[i]['regTime'],
-                    profileImgPath : rd[i]['profileImgPath'],
-                    nickName: rd[i]['nickName'],
-                }
-                obj_arr = obj_arr.concat(obj_table);
-                
-            }
-            console.log(obj_arr);
-            setPostobj(obj_arr);
-            console.log(postobj);
-            
-
-
-            
-
-            
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    };
+    const dispatch = useDispatch();
+    const selectorData = useSelector(state => state.postobjReducer);
+    const [data, setData] = useState(selectorData);
+    
+    useEffect(() => {
+      setData(selectorData)
+      setPostobj(data.postobj);
+    }, [selectorData])
 
     useEffect(() => {
-        GetPostobj();    
-        
+        dispatch(updatePostobj(postobj));
+    },[postobj])
+
+    useEffect(() => {
+        dispatch(addPostobj());    
     },[]);
 
 
-    
+    const resetobj = () => {
+        dispatch(resetPostobj());
+    }
 
     
 
     return (
         <div className={styles.contents}>
-
-                {postobj.map((obj) => 
-                <Post postobj={obj}/>)}
+            <button onClick={resetobj}>RESET POSTOBJ</button>
+            {postobj && postobj.map((obj) => 
+            <Post id={obj.id}/>)}
 
         
         </div>

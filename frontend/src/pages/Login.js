@@ -1,8 +1,7 @@
 import {useState, React, useEffect} from 'react';
-import {Link, useNavigate, useLocation, useParams} from 'react-router-dom'
+import { useNavigate, useLocation, useParams} from 'react-router-dom'
 import axios from 'axios';
 import styles from './Login.module.css';
-import OAuthLogin from './OAuthLogin';
 
 const LoginPage = () => {
     const [email, setEmail] = useState(""); 
@@ -10,24 +9,31 @@ const LoginPage = () => {
     const [name, setName] = useState(""); 
     const [nickname, setNickname] = useState(""); 
     const [status, setStatus] = useState("");
-    const [text, setText] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
     const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
-
+    const naverLoginUrl = 'http://localhost:8080/oauth2/authorization/naver';
+    const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
     useEffect(() => {
       console.log(location);
       console.log(params);
     },[location])
+
     useEffect(() => {
-      
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
-      if(acctoken && islogin) // 토큰 있고 로그인 성공하면 메인페이지 이동
+      console.log(islogin)
+      if(acctoken && islogin != 'false') // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
-        navigate("/");
-        console.log(`to1ken: ${acctoken}`);
+        console.log("islogin")
+        console.log(islogin)
+        navigate("/",{state:
+          {
+            islogin : true,
+          }
+        });
+        console.log(`token: ${acctoken}`);
       }
     },[]);
 
@@ -57,33 +63,41 @@ const LoginPage = () => {
             'email' : email,
             'password' : password,
         };
-        const config = {"Content-Type" : 'application/json'};
-        axios.post('/api/members/login', userObject, config)
-        .then((res) => {
-          console.log(res.data);
-          console.log(res.data['accessToken']);
-            localStorage.setItem('grantType', res.data['token']['grantType']);
-            localStorage.setItem('refreshToken', res.data['token']['refreshToken']);
-            localStorage.setItem('accessToken', res.data['token']['accessToken']);
-            axios.defaults.headers.common['x-access-token'] = res.data[`token`];
-            
-            localStorage.setItem('userId', res.data[`id`]);
-            
-            setStatus("로그인 성공");
+        console.log(email,password)
+        if(email == '' || password == '')
+        {
+          setStatus("이메일 혹은 패스워드가 입력되지 않았습니다.");
 
-            let acctoken = localStorage.getItem('accessToken');
-            console.log(`test: ${acctoken}`);
-            let asd = localStorage.getItem('userId');
-            console.log(`test: ${asd}`);
-
-            localStorage.setItem('IsLogin', true);
-        })
-        .catch((err) => {
-            console.log(err);
-            setStatus("로그인 실패");
-            localStorage.setItem('IsLogin', false);
-        });
+        }
+        else
+        {
+          const config = {"Content-Type" : 'application/json'};
+          axios.post('/api/members/login', userObject, config)
+          .then((res) => {
+              localStorage.setItem('grantType', res.data['token']['grantType']);
+              localStorage.setItem('refreshToken', res.data['token']['refreshToken']);
+              localStorage.setItem('accessToken', res.data['token']['accessToken']);
+              axios.defaults.headers.common['x-access-token'] = res.data[`token`];
+              
+              localStorage.setItem('userId', res.data[`id`]);
+              
+              setStatus("로그인 성공");
+              localStorage.setItem('IsLogin', true);
+              navigate("/");    // 리다이렉트
+          })
+          .catch((err) => {
+              console.log(err.toJSON());
+              setStatus("로그인 실패");
+              localStorage.setItem('IsLogin', false);
+          });
+      }
     };
+
+    const keyHandler = (e) => {
+      if(e.key === 'Enter') {
+          loginHandler();
+      }
+  }
 
     const OAuth2LoginHandler = (url) => {
         window.location.href = url;
@@ -110,7 +124,7 @@ const LoginPage = () => {
           <form className={styles.form}>
             {/*test*/}
             <h5>status:{status}</h5> 
-            <h5>text:{text}</h5> 
+
             {/*test*/}
             <h1 className={styles.h1}>Create Account</h1>
             <div className={styles.social_container}>
@@ -132,22 +146,22 @@ const LoginPage = () => {
         <div className={`${styles.form_container} ${styles.sign_in_container}`}>
           <form className={styles.form}>
             {/*test*/}
-            <h5>status:{status}</h5> 
-            <h5>text:{text}</h5> 
+            <h5>{status}</h5> 
+
             {/*test*/}
             <h1>Sign in</h1>
             <div className={styles.social_container}>
-              <img onClick={() => OAuth2LoginHandler(kakaoLoginUrl)} src="/img/kakao_login_small.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(kakaoLoginUrl)} src="/img/kakao_login_small.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(naverLoginUrl)} src="/img/naver_login.png"></img>
+              <img className={styles.social_login_img} onClick={() => OAuth2LoginHandler(googleLoginUrl)} src="/img/google_login.png"></img>
             </div>
             <span>or use your account</span>
             <input className={styles.input} type="email" placeholder="Email"
             onChange={(e) => setEmail((e.target.value))}/>
-            <input className={styles.input} type="password" placeholder="Password"
+            <input className={styles.input} type="password" onKeyPress={keyHandler} placeholder="Password"
             onChange={(e) => setPassword((e.target.value))}/>
             <a href="#">Forgot your password?</a>
-            <Link to="/">
-              <button className={styles.button} onClick={() => loginHandler()}>Sign In</button>
-            </Link>
+            <button type="button" className={styles.button} onClick={() => loginHandler()}>Sign In</button>
           </form>
         </div>
         <div className={styles.overlay_container}>

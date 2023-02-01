@@ -1,0 +1,140 @@
+button:hover {
+    cursor: pointer;
+}
+.modal_background {
+    top:0;
+    left:0;
+    bottom:0;
+    right: 0;
+    z-index: 5555;
+    position: fixed;
+    background : rgba(0, 0, 0, 0.2)
+}
+
+.photo_container {
+    float: left;
+    position: relative;
+    text-align: left;
+    width: 65%;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.content{
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    float:right;
+    width: 35%;
+    height: 100%;
+    text-align: left;
+    overflow: hidden;
+}
+.photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.box{
+    width: 35px;
+    height: 35px; 
+    border-radius: 70%;
+    overflow: hidden;
+    border: 2pt groove #000000;
+    display: inline-block;
+    vertical-align: middle;
+}
+.profileImg{
+    
+    width: 100%;
+    height: 100%;
+}
+
+.span{
+    padding-left: 5px;
+    text-align: left;
+    font-size: 14px;
+}
+.bold{
+    font-weight: bold;
+}
+.gray{
+    padding-left: 5px;
+    color: gray;
+    font-size: 11px;
+}
+.comment{
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1pt groove white;
+
+}
+
+.comment_li{
+    margin-top: 10px;
+    list-style: none;
+}
+
+.comment_span {
+    text-align: left;
+    font-size: 14px;
+    padding-right: 4px;
+    
+}
+
+.comment_container{
+    position: absolute;
+    bottom: 0;
+    width: 33%;
+
+    border-top: 1pt groove white;
+}
+
+.comment_btn{
+    margin-top: 5px;
+    color: blue;
+    font-size: 14px;
+    float: right;
+    border: none;
+    font-weight: bold;
+    background: transparent; 
+}
+
+.comment_btn:disabled,
+.comment_btn[disabled]{
+    color: gray;
+    font-weight: lighter;
+}
+
+.comment_input{
+    width: 75%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border:none;
+    background: transparent; 
+}
+
+.comment_input:focus{
+    outline:none;
+}
+
+.deleteBtn{
+    background-color:transparent;
+    background-image: none !important;
+    border-color: transparent;
+    border: none;
+    color: gray;
+    padding-left: 5px;
+    font-size: 11px;
+}
+
+.closeBtn{
+    float:right;
+}
+.closeBtn:hover {
+    cursor: pointer;
+}
+ 
