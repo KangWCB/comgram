@@ -89,7 +89,7 @@ public class BoardService {
                     photoService.noPhotoFinder(board.getMember()));
             if (!board.getComments().isEmpty()) {
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment));
+                boardMainDto.setBoardCommentInfo(BoardCommentInfo.toDto(comment));
             }
             if (!board.getLikes().isEmpty()) {
                 Member likeMember = boardLikeRepositoryImpl.findLikeMember(board).get(0);

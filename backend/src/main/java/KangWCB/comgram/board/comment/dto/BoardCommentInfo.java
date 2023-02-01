@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class BoardCommentInfo {
 
     private Long commentId;
@@ -18,12 +17,25 @@ public class BoardCommentInfo {
     private String createdDate;
     private String modifiedDate;
 
-    public BoardCommentInfo(Comment comment){
-        this.commentUserId = comment.getMember().getId();
-        this.commentId = comment.getId();
-        this.commentUserNickname = comment.getMember().getNickName();
-        this.commentContext = comment.getComment();
-        this.createdDate = comment.getCreatedDate();
-        this.modifiedDate = comment.getModifiedDate();
+    @Builder
+    public BoardCommentInfo(Long commentId, String commentUserNickname, Long commentUserId, String commentContext, String createdDate, String modifiedDate) {
+        this.commentId = commentId;
+        this.commentUserNickname = commentUserNickname;
+        this.commentUserId = commentUserId;
+        this.commentContext = commentContext;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+    }
+
+    public static BoardCommentInfo toDto(Comment comment){
+        BoardCommentInfo dto = BoardCommentInfo.builder()
+                .commentId(comment.getId())
+                .commentUserId(comment.getMember().getId())
+                .commentContext(comment.getComment())
+                .commentUserNickname(comment.getMember().getNickName())
+                .createdDate(comment.getCreatedDate())
+                .modifiedDate(comment.getModifiedDate())
+                .build();
+        return dto;
     }
 }

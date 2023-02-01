@@ -29,6 +29,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
         List<BoardCommentInfo> result = queryFactory.select(Projections.constructor(BoardCommentInfo.class,
                         qComment.id,
                         qComment.member.nickName,
+                        qComment.member.id,
                         qComment.comment,
                         qComment.createdDate,
                         qComment.modifiedDate))

@@ -69,21 +69,16 @@ public class MemberController {
     // 회원 정보 출력
     @GetMapping("/info")
     public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
-        return MemberInfoDto.builder()
-                .email(member.getMember().getEmail())
-                .nickname(member.getMember().getNickName())
-                .profilePhotoUrl(photoService.noPhotoFinder(member.getMember()))
-                .name(member.getMember().getName())
-                .build();
+        return memberService.findMemberInfo(member.getMember().getId());
     }
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(@RequestBody(required = false) @Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
+    public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
                                        @PathVariable(name = "id") Long memberId,
                                        @AuthenticationPrincipal SecurityUser member){
         memberService.update(memberUpdateForm, memberId,file);
-        return new ResponseEntity<>(memberInfo(member), HttpStatus.OK);
+        return new ResponseEntity<>(memberService.findMemberInfo(memberId), HttpStatus.OK);
     }
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
