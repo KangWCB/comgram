@@ -8,6 +8,7 @@ import KangWCB.comgram.board.dto.BoardFormDto;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.board.dto.BoardMainDto;
 import KangWCB.comgram.board.boardLike.dto.BoardLikeInfo;
+import KangWCB.comgram.board.dto.BoardMyListDto;
 import KangWCB.comgram.board.repository.BoardRepository;
 import KangWCB.comgram.member.Member;
 import KangWCB.comgram.member.MemberRepository;
@@ -69,17 +70,15 @@ public class BoardService {
         List<Member> likeMember = boardLikeRepositoryImpl.findLikeMember(board);
         if (!likeMember.isEmpty()) {
             boardLikeInfos = likeMember.stream()
-                    .map(member -> new BoardLikeInfo(member.getNickName(), photoService.noPhotoFinder(member)))
+                    .map(member -> new BoardLikeInfo(member.getId(),member.getNickName(), photoService.noPhotoFinder(member)))
                     .collect(Collectors.toList());
             boardDetailDto.setBoardLikeInfo(boardLikeInfos);
         }
         return boardDetailDto;
     }
-
     private boolean isPushLike(Member member, Board board) {
         return boardLikeRepositoryImpl.isPush(member, board);
     }
-
     private List<BoardMainDto> getBoardMainDtos(List<Board> allBoard, Member member) {
         List<BoardMainDto> boardMainDtos = new ArrayList<>();
         for (Board board : allBoard) {
@@ -88,18 +87,31 @@ public class BoardService {
                     isPushLike(member, board),
                     saveImgPath, board,
                     photoService.noPhotoFinder(board.getMember()));
-
             if (!board.getComments().isEmpty()) {
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment.getId(),comment.getMember().getNickName(), comment.getComment(), comment.getCreatedDate(), comment.getModifiedDate()));
+                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment));
             }
             if (!board.getLikes().isEmpty()) {
                 Member likeMember = boardLikeRepositoryImpl.findLikeMember(board).get(0);
-                boardMainDto.setBoardLikeInfo(new BoardLikeInfo(likeMember.getNickName(), photoService.noPhotoFinder(likeMember)));
+                boardMainDto.setBoardLikeInfo(new BoardLikeInfo(likeMember.getId(),likeMember.getNickName(), photoService.noPhotoFinder(likeMember)));
             }
             boardMainDtos.add(boardMainDto);
         }
         return boardMainDtos;
     }
 
+    public List<BoardMyListDto> findMyList(Long id) {
+        List<BoardMyListDto> myList = boardRepository.findMyList(id);
+        return myList;
+    }
+
+    public Long countMyList(Long id){
+        Long count = boardRepository.countMyBoard(id);
+        return count;
+    }
+    @Transactional
+    public void delete(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalStateException("없는 게시물"));
+        boardRepository.delete(board);
+    }
 }

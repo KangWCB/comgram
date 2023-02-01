@@ -24,6 +24,7 @@ public class BoardDetailDto {
 
     // 작성자
     private String nickName; // 작성자 별명
+    private Long writerId; // 작성자 id
     private String profileImgPath; // 작성자 사진
     private Boolean pushLike; // 좋아요 누른지 안누른지
 
@@ -34,12 +35,13 @@ public class BoardDetailDto {
     private List<BoardCommentInfo> boardCommentInfo;
 
     @Builder
-    public BoardDetailDto(Long id, String content, String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
+    public BoardDetailDto(Long id, String content, Long writerId,String contentImgPath, Long likeCount, String nickName, String profileImgPath, Boolean pushLike, LocalDateTime regTime, Long commentCount) {
         this.id = id;
         this.content = content;
         this.contentImgPath = contentImgPath;
         this.likeCount = likeCount;
         this.nickName = nickName;
+        this.writerId = writerId;
         this.profileImgPath = profileImgPath;
         this.pushLike = pushLike;
         this.regTime = regTime;
@@ -52,6 +54,7 @@ public class BoardDetailDto {
                 .content(board.getContent())
                 .contentImgPath(contextImgPath)
                 .likeCount(board.getLikes().stream().count())
+                .writerId(board.getMember().getId())
                 .nickName(board.getMember().getNickName())
                 .commentCount(board.getComments().stream().count())
                 .profileImgPath(savedImgPath)

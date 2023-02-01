@@ -56,9 +56,19 @@ public class BoardController {
     public Result<List> list(@AuthenticationPrincipal SecurityUser user){
         return new Result<>(boardService.allMyList(user.getMember().getId()));
     }
+
+    /**
+     * 페이지 하나 상세
+     */
     @GetMapping("{boardId}")
     public BoardDetailDto boardDetail(@PathVariable(name="boardId") Long boardId){
         return boardService.findBoardDetail(boardId);
+    }
+
+    @DeleteMapping("{boardId}")
+    public ResponseEntity boardDelete(@PathVariable(name="boardId") Long boardId){
+        boardService.delete(boardId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Data

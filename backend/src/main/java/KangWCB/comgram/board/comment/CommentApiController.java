@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
 public class CommentApiController {
@@ -19,15 +19,14 @@ public class CommentApiController {
     /**
      * 댓글 생성 API
      */
-    @PostMapping("/{id}/comments")
-    public ResponseEntity commentSave(@PathVariable Long id, @RequestBody CommentRequestDto dto,
+    @PostMapping("/{boardId}/comment")
+    public ResponseEntity commentSave(@PathVariable(name = "boardId") Long boardId, @RequestBody CommentRequestDto dto,
                                       @AuthenticationPrincipal SecurityUser user){
-        Long savedId = commentService.commentSave(user.getMember().getEmail(), id, dto);
+        Long savedId = commentService.commentSave(user.getMember().getEmail(), boardId, dto);
         return ResponseEntity.ok(savedId);
     }
-
-    @DeleteMapping("/comments/{id}")
-    public ResponseEntity deleteComment(@PathVariable(name = "id") Long commentId,
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity deleteComment(@PathVariable(name = "commentId") Long commentId,
                                         @AuthenticationPrincipal SecurityUser user){
         String message = commentService.delete(commentId, user.getMember().getEmail());
         return ResponseEntity.ok(message);
