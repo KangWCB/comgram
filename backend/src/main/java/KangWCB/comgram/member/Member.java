@@ -61,8 +61,10 @@ public class Member extends BaseTimeEntity {
         return member;
     }
     public void updateMember(MemberUpdateForm memberUpdateForm){
-        this.nickName = memberUpdateForm.getNickname();
-        this.name = memberUpdateForm.getName();
+        if (memberUpdateForm.getNickname() != null)
+            this.nickName = memberUpdateForm.getNickname();
+        if (memberUpdateForm.getName() != null)
+            this.name = memberUpdateForm.getName();
     }
     public void updatePhoto(Photo photo) {
         this.photo = photo;
