@@ -9,4 +9,5 @@ public class MemberInfoDto {
     private String nickname;
     private String email;
     private String profilePhotoUrl;
+    private String name;
 }
