@@ -59,10 +59,15 @@ const Profile = (nick, ppath) => {
         })
     };
 
+    const infoHandler = () => {
+        navigate('/info')
+    }
+    
+
     return (
         <div className={styles.container}>
                 <div className={styles.box}>
-                    <img className={styles.profileImg} src={`${profileImgPath}`}/>
+                    <img onClick={infoHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <div className={styles.profile_container}>
                     <span className={`${styles.email_span}`}>{email}</span>

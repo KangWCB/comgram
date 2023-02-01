@@ -1,5 +1,5 @@
 import styles from './Detail.module.css'
-import React, {useState, useEffect, ReactDOM, forwardRef, useImperativeHandle} from 'react'
+import React, {useState, useEffect, forwardRef, useImperativeHandle} from 'react'
 import Modal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -40,21 +40,10 @@ const Detail = forwardRef(({id}, detailRef) => {
 
 
     
-    useEffect(() => {
-        let data = selectorData;
-        
-        if(data)
-        {
-            let objidx = data.findIndex(obj => obj.id === id['id'])
-            setPostobj(data[objidx]);
-        }
-        
-
-    }, [selectorData])
-
 
     useEffect(() => {
         let data = selectorData;
+
         if(data)
         {
             let objidx = data.findIndex(obj => obj.id === id)
@@ -88,6 +77,8 @@ const Detail = forwardRef(({id}, detailRef) => {
             let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
             let likector = commentinfo?.constructor; // 좋아요 객체 타입
+
+            console.log(commentinfo,postobj['id'])
             if(commentinfo)
             {
                 if (infoctor === Array)
@@ -165,9 +156,9 @@ const Detail = forwardRef(({id}, detailRef) => {
 
     const commentWriteHandler = () => {
         console.log(commentText);
-        if(commentList != null)
-        {
-            let writeAPI = `/api/boards/${PostId}/comments`;
+        console.log(PostId);
+
+            let writeAPI = `/api/${PostId}/comment`;
             let acctoken = localStorage.getItem('accessToken');
             const config = {"Content-Type" : 'application/json'};
             const obj = {
@@ -183,9 +174,10 @@ const Detail = forwardRef(({id}, detailRef) => {
             .then((res) => {
                 console.log(res.data)
                 setCommentText('');
-            });
+            })
+            .catch((err) => {console.log(err)});
             dispatch(updatePostobj(postobj));
-        }
+    
     }
 
     const commentDeleteHandler = (commentId) => {

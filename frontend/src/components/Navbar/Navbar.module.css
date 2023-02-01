@@ -19,10 +19,10 @@
     
 }
 
-.navbar-logo{
-    color: rgb(0, 0, 0);
+.logo{
+    width: 70%;
+    height: 100%;
     justify-self: start;
-    margin-left: 10px;
     cursor: pointer;
 }
 
@@ -34,10 +34,9 @@
 }
 
 .bars{
-    display: flex;
+    position: relative;
     font-size: 25px;
     margin-left: 50px;
-    
 }
 .link{
     display: flex;

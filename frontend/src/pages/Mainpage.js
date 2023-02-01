@@ -29,6 +29,7 @@ const Mainpage = () => {
             console.log(nickname)
         }
         else {
+            localStorage.removeItem("accessToken");
             navigate("/login");
         }
     },[]);
@@ -55,6 +56,7 @@ const Mainpage = () => {
             setNickname(res.data['nickname']);
         })
         .catch((err) => {
+            localStorage.removeItem("accessToken");
             navigate("/login");
         });
     };

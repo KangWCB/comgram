@@ -61,7 +61,7 @@
     border-radius: 7px;
     color: white;
     cursor: pointer;
-    bottom: 20px
+    bottom: 20px;
 }
 
 .submitBtn{
@@ -72,6 +72,7 @@
     border-radius: 7px;
     color: white;
     cursor: pointer;
+    border :none;
 }
 
 .submitBtn:disabled,

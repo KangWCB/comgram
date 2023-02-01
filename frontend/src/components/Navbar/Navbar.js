@@ -1,14 +1,15 @@
 import React, {useState} from "react";
 import { FaBars } from "react-icons/fa";
 
-import { NavLink, useLocation } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 
 import styles from './Navbar.module.css';
 import {Items} from './Items';
 
 const Navbar = () => {
-  const[isOpen ,setIsOpen] = useState(false);
-  const toggle = () => setIsOpen (!isOpen);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggle = () => setIsOpen(!isOpen);
+  const navigate = useNavigate();
   let location = useLocation();
   
   if(location.pathname != "/login") {
@@ -16,8 +17,8 @@ const Navbar = () => {
       <div className={styles.container}>
         <div style={{width: isOpen ? "200px" : "50px"}} className={styles.Navbar}>
           <div className={styles.top_section}>
-            <h1 style={{display: isOpen ? "block" : "none"}} className={styles.logo}>Logo</h1>
-            <div style={{marginLeft: isOpen ? "50px" : "0px"}} className={styles.bars}>
+            <img onClick={() => navigate('/')}src='img/comgram-logo.png'style={{display: isOpen ? "block" : "none"}} className={styles.logo}/>
+            <div style={{marginLeft: isOpen ? "30px" : "0px"}} className={styles.bars}>
               <FaBars onClick={toggle}/>
             </div>
           </div>

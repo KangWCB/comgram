@@ -2,14 +2,17 @@ import {useState, React, useEffect} from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import styles from './Write.module.css'
-import { useNavigate } from 'react-router-dom'
+
+import { addPostobj } from '../redux/action'
+import { useDispatch } from 'react-redux';
 
 const Write = () => {
     const acctoken = localStorage.getItem('accessToken');
     const [boardImg,setBoardImg] = useState('');
     const [encodeImg,setEncodeImg] = useState('');
     const [content, setContent] = useState('');
-    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const imgHandler = (e) => {
         setBoardImg(e.target.files[0]);
@@ -54,7 +57,9 @@ const Write = () => {
        })
         .then(res => {
             console.log(`${res.data}`);
-            navigate("/");
+            dispatch(addPostobj());
+            
+            window.location.replace("/");
         })
         .catch(err => {
             console.log(err);

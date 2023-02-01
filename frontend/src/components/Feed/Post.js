@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useState, React, useEffect, forwardRef, useRef} from 'react';
+import {useState, React, useEffect, useRef} from 'react';
 import styles from './Feed.module.css'
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { SlSpeech } from "react-icons/sl";
@@ -112,6 +112,10 @@ const Post = (id) => {
                     setCommentContext(postobj['boardCommentInfo']['commentContext']);
                     setCommentUserNickname(postobj['boardCommentInfo']['commentUserNickname']);
                 }
+            }
+            else
+            {
+                setCommentUserNickname('');
             }
             if(likeinfo)
             {

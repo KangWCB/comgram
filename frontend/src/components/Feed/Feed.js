@@ -6,7 +6,7 @@ import axios from 'axios';
 import Post from './Post';
 
 
-import { addPostobj, resetPostobj } from '../../redux/action';
+import { addPostobj, resetPostobj, updatePostobj} from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Feed = () => {
@@ -21,7 +21,9 @@ const Feed = () => {
       setPostobj(data.postobj);
     }, [selectorData])
 
-
+    useEffect(() => {
+        dispatch(updatePostobj(postobj));
+    },[postobj])
 
     useEffect(() => {
         dispatch(addPostobj());    
