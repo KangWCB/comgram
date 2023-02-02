@@ -56,6 +56,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
             builder.or(qBoard.member.id.eq(following));
         }
         builder.or(qBoard.member.id.eq(memberId));
+
         // 팔로우한 사람 게시물 찾기
         List<Board> result = queryFactory.select(qBoard)
                 .from(qBoard)

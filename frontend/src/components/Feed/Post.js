@@ -83,6 +83,7 @@ const Post = (id) => {
                 let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
                 let tmp_idx = tmp_path.indexOf("tmp");
                 tmp_path = tmp_path.substring(tmp_idx);
+                console.log(tmp_path)
                 setContentImgPath(tmp_path);   
             }
                 
@@ -93,7 +94,11 @@ const Post = (id) => {
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
+            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
+
             if(first_like)
             {
                 first_like = true;

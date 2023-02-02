@@ -5,8 +5,8 @@ import {
   } from "react-icons/fa";
   // https://react-icons.github.io/react-icons
   // 여기서 아이콘 검색
-import { BsPencilSquare, BsSearch} from "react-icons/bs"
-import { GrLogin, GrLogout} from "react-icons/gr"
+import { BsPencilFill, BsSearch } from "react-icons/bs"
+import { GrLogin, GrLogout } from "react-icons/gr"
 
 export const Items = [
     {
@@ -19,7 +19,7 @@ export const Items = [
         title: '글 쓰기',
         url: '/write',
         className: 'nav-links',
-        icon: <BsPencilSquare/>
+        icon: <BsPencilFill/>
     },
     {
         title: '내 정보',

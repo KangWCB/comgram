@@ -8,6 +8,7 @@ import { IoMdClose } from 'react-icons/io'
 import moment from "moment";
 import { useNavigate } from 'react-router-dom';
 
+
 const Detail = forwardRef(({id}, detailRef) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -82,8 +83,12 @@ const Detail = forwardRef(({id}, detailRef) => {
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
-            
+            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
+
+           
             let commentinfo = postobj['boardCommentInfo']
             let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']

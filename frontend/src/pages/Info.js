@@ -77,7 +77,10 @@ const Info = () => {
             }
         })
         .then((res) => {
-            setProfileImgPath(res.data['profilePhotoUrl'].replace(/\"/gi,""));
+            let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
             setNickname(res.data['nickname']);
         })
         .catch((err) => {
