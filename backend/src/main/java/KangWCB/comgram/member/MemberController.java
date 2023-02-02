@@ -76,15 +76,13 @@ public class MemberController {
     public MemberInfoDto memberInfo(@PathVariable(name = "memberId") Long memberId){
         return memberService.findMemberInfo(memberId);
     }
-    @GetMapping
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
+    public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
-                                       @PathVariable(name = "id") Long memberId,
-                                       @AuthenticationPrincipal SecurityUser member){
-        memberService.update(memberUpdateForm, memberId,file);
-        return new ResponseEntity<>(memberService.findMemberInfo(memberId), HttpStatus.OK);
+                                       @PathVariable(name = "id") Long memberId){
+        Long updateId = memberService.update(memberUpdateForm, memberId, file);
+        return new ResponseEntity<>(memberService.findMemberInfo(updateId), HttpStatus.OK);
     }
     // 회원 삭제
     @DeleteMapping("/{id}/delete")

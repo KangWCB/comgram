@@ -32,7 +32,7 @@ public class MemberService {
                 findMember.updatePhoto(photo);
             }
             // GET으로 줘야함. 나머지 정보들 현재 null 들어옴
-            findMember.updateMember(memberUpdateForm);
+            findMember.updateNickName(memberUpdateForm);
         } catch (Exception e){
             log.info("file_update_error={}",e.getMessage());
         }
