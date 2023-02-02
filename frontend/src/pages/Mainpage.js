@@ -20,7 +20,7 @@ const Mainpage = () => {
     useEffect(() => { // 로그인 여부 검사
         let acctoken = localStorage.getItem('accessToken');
         localStorage.setItem('isLogin', false);
-        console.log(acctoken)
+
         if(acctoken)
         {
             islogin = true; 

@@ -37,20 +37,19 @@ const Profile = (nick, ppath) => {
     };
     
 
-    const modifyProfile = (token, img) => {
+    const modifyProfile = () => {
         console.log("호출");
+        console.log(userid)
         const formData = new FormData();
-        formData.append('photo', img);
+        formData.append('photo', profileImg);
+        console.log(formData.get('photo'))
         let profileUpdateAPI = `api/members/${userid}/update`
-        axios({
-            url: profileUpdateAPI,
-            method: 'POST',
-            data: formData,
-            Headers: {
+        axios.post(profileUpdateAPI, formData,{
+            headers: {
+                'Authorization': acctoken,
                 'Content-Type': 'multipart/form-data',
-                'Authorization': token,
-            }
-        })
+            }}
+        )
         .then(res => {
             console.log(`${res.data}`);
         })
@@ -75,7 +74,7 @@ const Profile = (nick, ppath) => {
                 </div>
                 
                 <input onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
-                <button onClick={() => modifyProfile(acctoken, profileImg)}>업로드</button>
+                <button onClick={() => modifyProfile(profileImg)}>업로드</button>
         </div>
     )
 

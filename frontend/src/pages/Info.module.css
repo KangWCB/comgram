@@ -67,11 +67,12 @@
 .followBtn {
     position: relative;
     padding: 6px 15px;
-    background-color: #458eff;
     font-weight: bold;
     border-radius: 7px;
+    background-color: #458eff;
     color: white;
     cursor: pointer;
     border: none;
 }
+
 

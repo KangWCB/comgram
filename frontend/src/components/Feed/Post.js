@@ -6,11 +6,13 @@ import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
 import { addPostobj, updatePostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import Detail from './Detail';
 
 const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [like, setLike] = useState(false);
     const [ismoreView, setIsmoreView] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
@@ -30,6 +32,7 @@ const Post = (id) => {
     const [commentUserNickname, setCommentUserNickname] = useState("");
     const [profileImgPath,setProfileImgPath] = useState('');
     const [writeTime,setWriteTime] = useState('');
+    const [writerId, setWriterId] = useState(null);
 
     let diffTime = {         
         day:'',
@@ -84,6 +87,7 @@ const Post = (id) => {
             }
                 
             setWriterName(postobj['nickName']);
+            setWriterId(postobj['writerId']);
             setContent(postobj['content']);
             setCommentCount(postobj['commentCount']);
             setRegTime(postobj['regTime']);
@@ -225,17 +229,17 @@ const Post = (id) => {
         detailRef.current?.modalHandler(true);
     }
 
-    /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
-    <span className={`${styles.comment_span} ${styles.bold} `}>{data.userName}</span> 
-    <span className={`${styles.comment_span}`}> {data.comment}</span>
-    </li>)*/
+    const profileClickHandler = () => {
+        navigate("/info", {state: {id: writerId}});
+    }
+
 
     return(
         <div>
         {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
-                    <img className={styles.profileImg} src={`${profileImgPath}`}/>
+                    <img onClick={profileClickHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>

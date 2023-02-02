@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { FaBars } from "react-icons/fa";
 
 import { useNavigate, NavLink, useLocation } from 'react-router-dom';
-
+import { GrLogin, GrLogout} from "react-icons/gr"
 import styles from './Navbar.module.css';
 import {Items} from './Items';
 
@@ -30,6 +30,8 @@ const Navbar = () => {
               </NavLink>
             ))
           }
+          <div className={styles.icon}><GrLogout/></div>
+          
         </div>
       </div>
     );
