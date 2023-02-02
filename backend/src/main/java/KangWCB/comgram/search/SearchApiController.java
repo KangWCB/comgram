@@ -24,15 +24,13 @@ public class SearchApiController {
      * 찾아주기
      */
     @GetMapping
-    public SearchResponseDto find(@RequestBody SearchRequestDto requestDto){
-        String word = requestDto.getWord();
+    public SearchResponseDto find(@RequestParam(name = "word") String word){
         // 빈칸이라면
         assert !word.isBlank() : "검색할 내용이 없습니다.";
         if (word.startsWith("#")){
             word = word.substring(1);
             List<Board> wordContent = boardRepositoryImpl.findWordContent(word);
             List<SearchBoardDto> result = new ArrayList<>();
-
             wordContent.forEach(board -> {
                 String savePath = board.getPhoto().getSavedPath();
                 result.add(new SearchBoardDto(board.getId(), savePath));

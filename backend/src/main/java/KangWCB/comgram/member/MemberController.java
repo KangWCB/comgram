@@ -79,7 +79,7 @@ public class MemberController {
     // 회원수정
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,
-                                       @RequestParam(name = "photo") Optional<MultipartFile> file,
+                                       @RequestParam(value = "photo") Optional<MultipartFile> file,
                                        @PathVariable(name = "id") Long memberId){
         Long updateId = memberService.update(memberUpdateForm, memberId, file);
         return new ResponseEntity<>(memberService.findMemberInfo(updateId), HttpStatus.OK);
