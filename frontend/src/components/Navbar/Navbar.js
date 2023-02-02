@@ -30,7 +30,6 @@ const Navbar = () => {
               </NavLink>
             ))
           }
-          <div className={styles.icon}><GrLogout/></div>
           
         </div>
       </div>

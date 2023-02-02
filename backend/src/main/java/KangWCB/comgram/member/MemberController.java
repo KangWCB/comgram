@@ -76,7 +76,7 @@ public class MemberController {
     public MemberInfoDto memberInfo(@PathVariable(name = "memberId") Long memberId){
         return memberService.findMemberInfo(memberId);
     }
-    @GetMapping
+
     // 회원수정
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,

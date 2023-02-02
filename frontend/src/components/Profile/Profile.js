@@ -10,6 +10,7 @@ const Profile = (nick, ppath) => {
     const [profileImgPath, setProfileImgPath] = useState('');
     const [profileImg, setProfileImg] = useState();
     const [email, setEmail] = useState('');
+    const [newNickname, setNewNickname] = useState('');
     const navigate = useNavigate();
 
 
@@ -61,6 +62,10 @@ const Profile = (nick, ppath) => {
     const infoHandler = () => {
         navigate('/info')
     }
+
+    const newNicknameHandler = (e) => {
+
+    }
     
 
     return (
@@ -73,7 +78,8 @@ const Profile = (nick, ppath) => {
                     <br/><span className={`${styles.span} ${styles.gray} `}>{nickname}</span>
                 </div>
                 
-                <input onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
+                <input onChange={(e) => imgHandler(e)} type="file" accept="image/*" ></input>
+                <input onChange={(e) => newNicknameHandler(e)} placeholder="닉네임"></input>
                 <button onClick={() => modifyProfile(profileImg)}>업로드</button>
         </div>
     )

@@ -5,32 +5,38 @@ import {
   } from "react-icons/fa";
   // https://react-icons.github.io/react-icons
   // 여기서 아이콘 검색
-import { BsPencilSquare } from "react-icons/bs"
+import { BsPencilSquare, BsSearch} from "react-icons/bs"
 import { GrLogin, GrLogout} from "react-icons/gr"
 
 export const Items = [
     {
-        title: 'Home',
+        title: '홈',
         url: '/',
         className: 'nav-links',
         icon: <FaTh/>
     },
     {
-        title: 'Write',
+        title: '글 쓰기',
         url: '/write',
         className: 'nav-links',
         icon: <BsPencilSquare/>
     },
     {
-        title: 'Information',
+        title: '내 정보',
         url: '/info',
         className: 'nav-links',
         icon: <FaUserAlt/>
     },
     {
-        title: 'Login',
+        title: '로그인',
         url: '/login',
         className: 'nav-links',
         icon: <GrLogin/>
+    },
+    {
+        title: '검색',
+        url: '/search',
+        className: 'nav-links',
+        icon: <BsSearch/>
     },
 ]
