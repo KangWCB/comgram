@@ -24,7 +24,7 @@ public class SearchApiController {
      * 찾아주기
      */
     @GetMapping
-    public SearchResponseDto find(@RequestBody SearchRequestDto requestDto){
+    public SearchResponseDto find(@RequestParam("word") SearchRequestDto requestDto){
         String word = requestDto.getWord();
         // 빈칸이라면
         assert !word.isBlank() : "검색할 내용이 없습니다.";
