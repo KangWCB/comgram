@@ -64,7 +64,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(builder)
                 .orderBy(qBoard.regTime.desc())
                 .fetch();
-
         return result;
     }
     
