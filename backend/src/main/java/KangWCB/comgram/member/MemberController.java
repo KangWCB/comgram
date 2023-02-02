@@ -66,11 +66,17 @@ public class MemberController {
         Result<TokenInfo> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
         return result;
     }
-    // 회원 정보 출력
+    // 로그인 회원 정보 출력
     @GetMapping("/info")
-    public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
+    public MemberInfoDto loginMemberInfo(@AuthenticationPrincipal SecurityUser member){
         return memberService.findMemberInfo(member.getMember().getId());
     }
+    // 상세페이지 회원 정보 출력
+    @GetMapping("/{memberId}/info")
+    public MemberInfoDto memberInfo(@PathVariable(name = "memberId") Long memberId){
+        return memberService.findMemberInfo(memberId);
+    }
+    @GetMapping
     // 회원수정
     @PostMapping("/{id}/update")
     public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
@@ -118,7 +124,7 @@ public class MemberController {
                                      @AuthenticationPrincipal SecurityUser user){
         if(id == user.getMember().getId())
             return new isFollow("mine"); // 내 게시물일때
-        if (followJpaRepository.isFollow(id,user.getMember().getId()).isEmpty()){
+        if (followJpaRepository.isFollow(user.getMember().getId(),id).isEmpty()){
             return new isFollow("notFollow"); // 팔로우가 안되어 있을때
         }
         return new isFollow("follow"); //팔로우가 되어있을 때

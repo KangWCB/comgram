@@ -110,8 +110,12 @@ public class BoardService {
         return count;
     }
     @Transactional
-    public void delete(Long boardId) {
+    public void delete(Long boardId,Member loginMember) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalStateException("없는 게시물"));
-        boardRepository.delete(board);
+        if(board.getMember().getId() == loginMember.getId()){
+            boardRepository.delete(board);
+        } else{
+            throw new RuntimeException("글 작성자와 다른 사람이여서 삭제 불가합니다.");
+        }
     }
 }
