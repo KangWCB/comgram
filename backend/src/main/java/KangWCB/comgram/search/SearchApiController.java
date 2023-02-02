@@ -20,6 +20,7 @@ import java.util.List;
 public class SearchApiController {
     private final MemberRepositoryImpl memberRepositoryCustomInmpl;
     private final BoardRepositoryImpl boardRepositoryImpl;
+    private final PhotoService photoService;
     /**
      * 찾아주기
      */
@@ -40,7 +41,7 @@ public class SearchApiController {
             List<SearchMemberDto> result = new ArrayList<>();
 
             memberRepositoryCustomInmpl.findMember(word).forEach(member -> {
-                String savePath = member.getPhoto().getSavedPath();
+                String savePath = photoService.noPhotoFinder(member);
                 result.add(new SearchMemberDto(member.getId(), member.getNickName(), savePath));
             });
             return new SearchResponseDto("Member", memberRepositoryCustomInmpl.findMember(word).size(), result);
