@@ -7,10 +7,13 @@ const Search = () => {
 
     const searchHandler = () => {
         const searchAPI = `/api/search` 
-        axios.get(searchAPI,{params: {word: word}},{
+        axios.get(searchAPI,{
             headers : {
                 "Authorization" : acctoken,
                 "Content-Type" : 'application/json'
+            },
+            params : {
+                "word" : word
             }
         })
         .then((res) => {

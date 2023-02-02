@@ -25,7 +25,7 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
     
     useEffect(() => {
         setNewNickname(nickname);
-    },[])
+    },[nickname])
     const imgHandler = (e) => {
         setProfileImg(e.target.files[0]);
         imgEncoder(e.target.files[0]);
