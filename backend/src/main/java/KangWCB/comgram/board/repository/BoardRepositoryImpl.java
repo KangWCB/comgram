@@ -23,7 +23,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     QBoard qBoard = QBoard.board;
     QFollow qFollow = QFollow.follow;
     QMember qMember = QMember.member;
-    QPhoto qPhoto =QPhoto.photo;
+    QPhoto qPhoto = QPhoto.photo;
 
     /**
      * 내 게시물 올린 갯수 조회
