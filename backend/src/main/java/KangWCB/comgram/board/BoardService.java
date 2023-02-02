@@ -53,6 +53,9 @@ public class BoardService {
     public List<BoardMainDto> allMyList(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         List<Board> boards = boardRepository.findFollowingBoard(memberId);
+        if (boards.isEmpty()){
+            boards = boardRepository.findAll();
+        }
         return getBoardMainDtos(boards, member);
     }
 
