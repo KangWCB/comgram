@@ -66,24 +66,25 @@ public class MemberController {
         Result<TokenInfo> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
         return result;
     }
-    // 회원 정보 출력
+    // 로그인 회원 정보 출력
     @GetMapping("/info")
-    public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
-        return MemberInfoDto.builder()
-                .email(member.getMember().getEmail())
-                .nickname(member.getMember().getNickName())
-                .profilePhotoUrl(photoService.noPhotoFinder(member.getMember()))
-                .name(member.getMember().getName())
-                .build();
+    public MemberInfoDto loginMemberInfo(@AuthenticationPrincipal SecurityUser member){
+        return memberService.findMemberInfo(member.getMember().getId());
     }
+    // 상세페이지 회원 정보 출력
+    @GetMapping("/{memberId}/info")
+    public MemberInfoDto memberInfo(@PathVariable(name = "memberId") Long memberId){
+        return memberService.findMemberInfo(memberId);
+    }
+    @GetMapping
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(@RequestBody(required = false) @Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
+    public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
                                        @RequestParam(name = "photo") Optional<MultipartFile> file,
                                        @PathVariable(name = "id") Long memberId,
                                        @AuthenticationPrincipal SecurityUser member){
         memberService.update(memberUpdateForm, memberId,file);
-        return new ResponseEntity<>(memberInfo(member), HttpStatus.OK);
+        return new ResponseEntity<>(memberService.findMemberInfo(memberId), HttpStatus.OK);
     }
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
@@ -123,7 +124,7 @@ public class MemberController {
                                      @AuthenticationPrincipal SecurityUser user){
         if(id == user.getMember().getId())
             return new isFollow("mine"); // 내 게시물일때
-        if (followJpaRepository.isFollow(id,user.getMember().getId()).isEmpty()){
+        if (followJpaRepository.isFollow(user.getMember().getId(),id).isEmpty()){
             return new isFollow("notFollow"); // 팔로우가 안되어 있을때
         }
         return new isFollow("follow"); //팔로우가 되어있을 때

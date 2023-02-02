@@ -1,5 +1,6 @@
 package KangWCB.comgram.member;
 
+import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
@@ -43,4 +44,14 @@ public class MemberService {
         member.registerRefreshToken(refreshToken);
     }
 
+    public MemberInfoDto findMemberInfo(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("유저 없음"));
+        MemberInfoDto build = MemberInfoDto.builder()
+                .email(member.getEmail())
+                .nickname(member.getNickName())
+                .profilePhotoUrl(photoService.noPhotoFinder(member))
+                .name(member.getName())
+                .build();
+        return build;
+    }
 }

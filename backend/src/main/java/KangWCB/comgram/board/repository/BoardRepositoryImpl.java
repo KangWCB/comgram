@@ -23,7 +23,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     QBoard qBoard = QBoard.board;
     QFollow qFollow = QFollow.follow;
     QMember qMember = QMember.member;
-    QPhoto qPhoto =QPhoto.photo;
+    QPhoto qPhoto = QPhoto.photo;
 
     /**
      * 내 게시물 올린 갯수 조회
@@ -39,9 +39,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .fetchCount();
         return count;
     }
-    //  Page(4) 로 FOLLOWING 하고 있는 사람들 게시물만 가져오기
-//    public Page
-
     /**
      * 내가 팔로우 한 사람의 글만 보여준다.
      * 없으면 전체 사람보여준다.
@@ -58,7 +55,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         for (Long following : followingId) {
             builder.or(qBoard.member.id.eq(following));
         }
-
+        builder.or(qBoard.member.id.eq(memberId));
         // 팔로우한 사람 게시물 찾기
         List<Board> result = queryFactory.select(qBoard)
                 .from(qBoard)
@@ -67,7 +64,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .where(builder)
                 .orderBy(qBoard.regTime.desc())
                 .fetch();
-
         return result;
     }
     
