@@ -170,28 +170,25 @@ const Detail = forwardRef(({id}, detailRef) => {
     }
 
     const commentWriteHandler = () => {
-        console.log(commentText);
-        console.log(PostId);
-
-            let writeAPI = `/api/${PostId}/comment`;
-            let acctoken = localStorage.getItem('accessToken');
-            const config = {"Content-Type" : 'application/json'};
-            const obj = {
-                "comment" : commentText
-            }
-            axios.post(writeAPI, obj, {
-                headers : 
-                    {
-                    'Authorization': acctoken,
-                    'Content-Type' : 'application/json'
-                    }
-            })
-            .then((res) => {
-                console.log(res.data)
-                setCommentText('');
-            })
-            .catch((err) => {console.log(err)});
-            dispatch(updatePostobj(postobj));
+        let writeAPI = `/api/${PostId}/comment`;
+        let acctoken = localStorage.getItem('accessToken');
+        const config = {"Content-Type" : 'application/json'};
+        const obj = {
+            "comment" : commentText
+        }
+        axios.post(writeAPI, obj, {
+            headers : 
+                {
+                'Authorization': acctoken,
+                'Content-Type' : 'application/json'
+                }
+        })
+        .then((res) => {
+            console.log(res.data)
+            setCommentText('');
+        })
+        .catch((err) => {console.log(err)});
+        dispatch(updatePostobj(postobj));
     
     }
 

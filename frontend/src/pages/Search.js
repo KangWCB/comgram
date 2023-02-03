@@ -3,9 +3,12 @@ import styles from './Search.module.css'
 import axios from 'axios';
 import Detail from '../components/Feed/Detail';
 import { BsSearch } from "react-icons/bs"
+import { useNavigate } from 'react-router-dom';
 
 const Search = () => {
     const acctoken = localStorage.getItem('accessToken');
+    const navigate = useNavigate();
+
     const [refRender, setRefRender] = useState(false);
     const [word, setWord] = useState('');
     const [cond, setCond] = useState('');
@@ -70,8 +73,11 @@ const Search = () => {
     }
 
     const openModalHandler = (idx) => {
-        console.log("hi")
         detailRef.current.map((dref, i) => (i === idx && dref.current.modalHandler(true)));
+    }
+
+    const naviProfileHandler = (id) => {
+        navigate("/info", {state: {id: id}});
     }
 
     const keyHandler = (e) => {
@@ -92,15 +98,15 @@ const Search = () => {
 
     const boardsView = searchResult?.map((data, idx) => <li key={idx} style={{ listStyle: 'none', display:'inline-block', width:'33%'}}>
 
-        <div className={styles.list_container}>
-            <img onClick={() => openModalHandler(idx)} id={data?.boardId} className={styles.boardImg} src={imgHandler(data?.imgUrl)}></img>
+        <div onClick={() => openModalHandler(idx)} className={styles.list_container}>
+            <img id={data?.boardId} className={styles.boardImg} src={imgHandler(data?.imgUrl)}></img>
             <Detail ref={detailRef.current[idx]} id={data?.boardId}/>
         </div>
         </li>)
 
     const membersView = searchResult?.map((data, idx) => <li key={idx} style={{ listStyle: 'none', width:'90%'}}>
         
-        <div className={styles.member_container}>
+        <div onClick={() => naviProfileHandler(data?.memberId)}className={styles.member_container}>
             <div className={styles.box}>
                 <img className={styles.profileImg} src={imgHandler(data?.profileImgUrl)}/>
             </div>

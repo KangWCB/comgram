@@ -69,6 +69,7 @@
     border-radius: 5px;
     border: 1pt groove #000000;
     box-shadow: 3px 3px 10px gray;
+    cursor: pointer;
 }
 
 .span_nickname{

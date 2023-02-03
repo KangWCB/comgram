@@ -51,7 +51,9 @@ const Post = (id) => {
     //디테일 페이지 모달핸들링
     const detailRef = useRef();
 
-
+    useEffect(() => {
+        dispatch(addPostobj())
+    },[])
     
     useEffect(() => {
         let data = selectorData;
@@ -206,8 +208,6 @@ const Post = (id) => {
 
 
     const contentHandler = () => {
-        console.log(originContent);
-        console.log(content);
         if(content.length > content_limit)
         {
             if(ismoreView == false)// ismoreview가 false면
