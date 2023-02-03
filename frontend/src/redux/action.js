@@ -27,7 +27,6 @@ export const updatePostobj = (obj) => async dispatch => {
     
     if(boardId != undefined)
     {
-        console.log(boardId)
         await wait(500);
         await axios.get(api, {headers : 
             {'Authorization': acctoken}},config)

@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 const Write = () => {
     const acctoken = localStorage.getItem('accessToken');
+    const [ModalisOpen, setModalisOpen] = useState(true);
     const [boardImg,setBoardImg] = useState('');
     const [encodeImg,setEncodeImg] = useState('');
     const [content, setContent] = useState('');
@@ -74,8 +75,13 @@ const Write = () => {
         },    
     }
 
+    const modalcloseHandler = () => {
+        setModalisOpen(false)
+        window.location.href="/";
+    }
+
     return(
-        <Modal style={modalStyle} isOpen={true} ariaHideApp={false}>
+        <Modal style={modalStyle} isOpen={ModalisOpen} onRequestClose={modalcloseHandler} ariaHideApp={false}>
             <div className={styles.container}>
                 <div className={styles.title_container}>
                 <span className={styles.title}>글 작성</span>

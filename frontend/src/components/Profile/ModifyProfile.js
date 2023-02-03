@@ -81,8 +81,11 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
         content: {
             padding: '0px',    
             transform: 'translateX(50%)',
+            minWidth: '500px',
             width: '50%',
-            height: '70%',
+            
+            minHeight: '600px',
+            height: '70vh',
             padding: '0px'
         }
     }
@@ -120,7 +123,7 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
                         </div>
                         <div>
                             <span style={{fontWeight:'bold', fontSize:'12px'}}>닉네임</span>
-                            <br/><input className={styles.nickinput} value={nickname }onChange={(e) => newNicknameHandler(e)} defaultValue={nickname}></input>
+                            <br/><input className={styles.nickinput} onChange={(e) => newNicknameHandler(e)} defaultValue={nickname}></input>
                         </div>
 
                     </div>

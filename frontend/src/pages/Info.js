@@ -182,8 +182,10 @@ const Info = () => {
     }
     
     const boardsView = boardList?.map((data, idx) => <li style={{ listStyle: 'none', display:'inline-block', width:'33%'}}>
-        <img onClick={() => openModalHandler(idx)} id={data['id']} className={styles.boardImg} src={imgHandler(data['photoUrl'])}></img>
-        <Detail ref={detailRef.current[idx]} id={data['id']}/>
+        <div onClick={() => openModalHandler(idx)} className={styles.list_container}>
+            <img id={data['id']} className={styles.boardImg} src={imgHandler(data['photoUrl'])}></img>
+            <Detail ref={detailRef.current[idx]} id={data['id']}/>
+        </div>
         </li>)
 
     return (

@@ -14,11 +14,22 @@ button:hover {
 .photo_container {
     float: left;
     position: relative;
-    text-align: left;
+    text-align: center;
     width: 65%;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1pt groove white;
+    background-color: gray;
+}
 
+.photo {
+
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
 }
 
 .content{
@@ -32,11 +43,7 @@ button:hover {
     text-align: left;
     overflow: hidden;
 }
-.photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+
 
 .box{
     cursor: pointer;

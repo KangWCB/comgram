@@ -28,12 +28,6 @@ export const Items = [
         icon: <FaUserAlt/>
     },
     {
-        title: '로그인',
-        url: '/login',
-        className: 'nav-links',
-        icon: <GrLogin/>
-    },
-    {
         title: '검색',
         url: '/search',
         className: 'nav-links',

@@ -10,6 +10,7 @@ const OAuthLogin = () => {
         console.log(loc);
         const searchParams = new URLSearchParams(loc.search);
         acctoken = searchParams.get('token');
+        console.log(searchParams)
         console.log(acctoken);
         localStorage.setItem("accessToken",acctoken);
     },[]);

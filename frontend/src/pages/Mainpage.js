@@ -25,8 +25,6 @@ const Mainpage = () => {
         {
             islogin = true; 
             getUserinfo(acctoken);
-            localStorage.setItem('nickName', nickname);
-            console.log(nickname)
         }
         else {
             localStorage.removeItem("accessToken");
@@ -34,10 +32,18 @@ const Mainpage = () => {
         }
     },[]);
 
+    useEffect(() => {
+        localStorage.setItem('nickName', nickname);
+    },[nickname])
+
     useEffect(() => { // 주소 변경시
+        
         if(currentPath === location.pathname)
+        {
             window.location.reload();
-        currentPath = location.pathname;
+            console.log(location,"loc")
+        }
+            currentPath = location.pathname;
     },[location]);
 
 

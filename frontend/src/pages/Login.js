@@ -80,7 +80,6 @@ const LoginPage = () => {
               axios.defaults.headers.common['x-access-token'] = res.data[`token`];
               
               localStorage.setItem('userId', res.data[`id`]);
-              
               setStatus("로그인 성공");
               localStorage.setItem('IsLogin', true);
               navigate("/");    // 리다이렉트
