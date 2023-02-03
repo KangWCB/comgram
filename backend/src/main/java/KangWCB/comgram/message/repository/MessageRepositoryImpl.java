@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * message 개발중
+ */
 @Repository
 @RequiredArgsConstructor
 public class MessageRepositoryImpl implements MessageRepositoryCustom{

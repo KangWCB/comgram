@@ -31,7 +31,8 @@ public class ExAdvice {
     }
 
     /**
-     * @Vaild bindingResult 로 처리
+     * @Vaild 검증 에러
+     *
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex){
@@ -60,14 +61,18 @@ public class ExAdvice {
     @ExceptionHandler
     public ErrorResult exHandle(Exception e) {
         log.error("[exceptionHandle] ex", e);
-        return new ErrorResult("EX", "내부 오류 /"+ e.getMessage() );
+        return new ErrorResult("EX", "내부 오류/ 원인: "+ e.getMessage() );
     }
 
+    /**
+     * 유저 없으면 보내줄 예외 에러
+     * BADREQUEST + 메세지
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UsernameNotFoundException.class)
     public ErrorResult notFoundUser(UsernameNotFoundException e){
         log.error("UserNotFoundExpection", e);
-        return new ErrorResult("NOT FOUND USER", "사용자 없음");
+        return new ErrorResult("NOT FOUND USER", "유저 없음");
     }
 
 }

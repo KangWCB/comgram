@@ -31,11 +31,9 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
 
     @Override
     public boolean isPush(Member member,Board board){
-
         return !queryFactory.select(boardLike)
                 .from(boardLike)
                 .where(boardLike.board.eq(board), boardLike.member.eq(member))
                 .fetch().isEmpty();
-
     }
 }

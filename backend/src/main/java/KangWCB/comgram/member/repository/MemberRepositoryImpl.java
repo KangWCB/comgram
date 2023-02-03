@@ -30,7 +30,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public BooleanExpression likeMember(String word){
-        if(StringUtils.isEmpty(word)){
+        if(!StringUtils.hasText(word)){ //StringUtils.isEmpty(word) deprecate
             return null;
         }
         return qMember.nickName.contains(word);
