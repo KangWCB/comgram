@@ -5,7 +5,6 @@ import KangWCB.comgram.board.comment.QComment;
 import KangWCB.comgram.board.comment.dto.BoardCommentInfo;
 import KangWCB.comgram.member.QMember;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

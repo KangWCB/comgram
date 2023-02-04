@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,8 +43,6 @@ public class MemberController {
     private final BoardService boardService;
 
     private final FollowJpaRepository followJpaRepository;
-    @Value("${default.profile}")
-    private String defaultProfile;
 
 
     // 회원가입
@@ -57,7 +54,7 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public Result<TokenInfo> login(@RequestBody @Valid MemberLoginDto memberLoginDto, BindingResult bindingResult) {
+    public Result<TokenInfo> login(@RequestBody @Valid MemberLoginDto memberLoginDto) {
         Member member = memberRepository.findByEmail(memberLoginDto.getEmail())
                 .orElseThrow(() -> new MemberLoginEx("가입 되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {

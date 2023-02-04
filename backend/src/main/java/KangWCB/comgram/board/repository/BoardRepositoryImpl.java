@@ -31,12 +31,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
      */
     @Override
     public Long countMyBoard(Long memberId){
-        Long count = queryFactory.select(qBoard)
+        Long count = queryFactory.select(qBoard.count())
                 .from(qBoard)
                 .leftJoin(qBoard.member,qMember)
                 .fetchJoin()
                 .where(qBoard.member.id.eq(memberId))
-                .fetchCount();
+                .fetchOne(); // fetchCount는 deprecate
         return count;
     }
     /**
