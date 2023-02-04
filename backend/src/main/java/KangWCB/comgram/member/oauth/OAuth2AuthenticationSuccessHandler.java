@@ -43,7 +43,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         log.info("Principal user attribute {}",attributes);
-
+        Long memberId;
         if(memberRepository.findByEmail(oAuth2User.getName()).isEmpty()){
             String uuid = UUID.randomUUID().toString().substring(0, 6); // 임시 비밀번호 하나 만들어주기 로딩시에 필요함
             String uuid2 = UUID.randomUUID().toString().substring(0, 6); // 저장이름 하나 생성, 비밀번호랑 차별화
@@ -62,12 +62,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     .password(passwordEncoder.encode(uuid))
                     .photo(savedPhoto)
                     .role(Role.USER).build();
-            memberRepository.save(member);
+            Member saveMember = memberRepository.save(member);
+            memberId = saveMember.getId();
+        }
+        else{
+            memberId = memberRepository.findByEmail(oAuth2User.getName()).get().getId();
         }
         // 리프레쉬 토큰 적용
         TokenInfo token = jwtTokenProvider.createToken("oauth", oAuth2User.getName(), Role.USER);
         String jwt = token.getAccessToken();
-        String url = makeRedirectUrl(jwt);
+        String url = makeRedirectUrl(jwt,memberId);
         System.out.println("url: " + url);
         if (response.isCommitted()) {
             logger.debug("응답이 이미 커밋된 상태입니다. " + url + "로 리다이렉트하도록 바꿀 수 없습니다.");
@@ -75,8 +79,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
         getRedirectStrategy().sendRedirect(request, response, url);
     }
-    private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/?token="+token)
+    private String makeRedirectUrl(String token, Long memberId) {
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/?token="+token+"&id="+memberId)
                 .build().toUriString();
     }
 
