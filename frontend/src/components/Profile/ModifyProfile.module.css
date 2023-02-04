@@ -43,7 +43,9 @@
 }
 
 .info_container{
+    border: 1px groove black;
     margin-top: 10px;
+    
 }
 
 

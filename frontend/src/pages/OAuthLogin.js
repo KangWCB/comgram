@@ -6,12 +6,12 @@ const OAuthLogin = () => {
     const loc = useLocation();
     const navigate = useNavigate();
     let acctoken = '';
+    let userid = '';
     useEffect(() => {
-        console.log(loc);
         const searchParams = new URLSearchParams(loc.search);
         acctoken = searchParams.get('token');
-        console.log(searchParams)
-        console.log(acctoken);
+        userid = searchParams.get('id');
+        localStorage.setItem("userId", userid);
         localStorage.setItem("accessToken",acctoken);
     },[]);
 

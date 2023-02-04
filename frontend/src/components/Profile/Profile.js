@@ -26,7 +26,7 @@ const Profile = () => {
         .then((res) => {
             setNickname(res.data['nickname']);
             setName(res.data['name']);
-            console.log(res.data['profilePhotoUrl']);
+            console.log(res.data);
             let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
             let tmp_idx = tmp_path.indexOf("tmp");
             tmp_path = tmp_path.substring(tmp_idx);
@@ -49,7 +49,7 @@ const Profile = () => {
     }
 
 
-    
+    let intromsg = "안녕하세요 박사지망 석사 진행중인 정래원입니다."
 
     return (
         <div className={styles.container}>
@@ -57,9 +57,12 @@ const Profile = () => {
                     <img onClick={infoHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <div className={styles.profile_container}>
-                    <span className={`${styles.email_span}`}>{email}</span>
+                    <span className={`${styles.span_email}`}>{email}</span>
                     <br/><span className={`${styles.span} ${styles.gray} `}>{nickname}</span>
                 </div>
+                <div className={styles.intro_container}>
+                        <span className={`${styles.span_intro} ${styles.gray} `}>{intromsg}</span>
+                    </div>
                 <div onClick={openModalHandler} className={styles.modify_container}>
                     <BsPencilSquare style={{fontSize: '30px'}}/>
                     <span className={styles.span_profile}>프로필 수정</span>
