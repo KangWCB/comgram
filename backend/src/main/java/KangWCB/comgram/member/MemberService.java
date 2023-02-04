@@ -47,6 +47,7 @@ public class MemberService {
     public MemberInfoDto findMemberInfo(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("유저 없음"));
         MemberInfoDto build = MemberInfoDto.builder()
+                .memberId(member.getId())
                 .email(member.getEmail())
                 .nickname(member.getNickName())
                 .profilePhotoUrl(photoService.noPhotoFinder(member))
