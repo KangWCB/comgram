@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class SearchApiController {
-    private final MemberRepositoryImpl memberRepositoryCustomInmpl;
+    private final MemberRepositoryImpl memberRepositoryCustomImpl;
     private final BoardRepositoryImpl boardRepositoryImpl;
     private final PhotoService photoService;
     /**
@@ -43,11 +43,11 @@ public class SearchApiController {
             return new SearchResponseDto("Board", wordContent.size(), result);
         } else {
             List<SearchMemberDto> result = new ArrayList<>();
-            memberRepositoryCustomInmpl.findMember(word).forEach(member -> {
+            memberRepositoryCustomImpl.findMember(word).forEach(member -> {
                 String savePath = photoService.noPhotoFinder(member);
-                result.add(new SearchMemberDto(member.getId(), member.getNickName(), savePath));
+                result.add(new SearchMemberDto(member.getId(), member.getNickName(), savePath, member.getIntroMsg()));
             });
-            return new SearchResponseDto("Member", memberRepositoryCustomInmpl.findMember(word).size(), result);
+            return new SearchResponseDto("Member", memberRepositoryCustomImpl.findMember(word).size(), result);
         }
     }
 

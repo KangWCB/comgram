@@ -52,6 +52,7 @@ public class MemberService {
                 .nickname(member.getNickName())
                 .profilePhotoUrl(photoService.noPhotoFinder(member))
                 .name(member.getName())
+                .introMsg(member.getIntroMsg())
                 .build();
         return build;
     }

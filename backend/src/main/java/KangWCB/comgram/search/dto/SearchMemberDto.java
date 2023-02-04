@@ -9,4 +9,5 @@ public class SearchMemberDto {
     private Long memberId;
     private String nickName;
     private String profileImgUrl;
+    private String introMsg;
 }

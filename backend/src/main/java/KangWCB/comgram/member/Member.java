@@ -29,7 +29,7 @@ public class Member extends BaseTimeEntity {
     private String name; // 이름
     private String nickName; // 닉네임
 
-    // 새롭게 도전하는 포토 리팩토링
+    private String introMsg = ""; // 소개글
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="photo_id")
     private Photo photo;
@@ -40,10 +40,11 @@ public class Member extends BaseTimeEntity {
 
 
     @Builder
-    public Member(String email, String password, String name, String nickname, Role role , Photo photo) {
+    public Member(String email, String password, String name, String nickname, String introMsg, Role role ,Photo photo) {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.introMsg = introMsg;
         this.nickName = nickname;
         this.role = role;
         this.photo = photo;
@@ -62,6 +63,7 @@ public class Member extends BaseTimeEntity {
     }
     public void updateNickName(MemberUpdateForm memberUpdateForm){
         this.nickName = memberUpdateForm.getNickname();
+        this.introMsg = memberUpdateForm.getIntroMsg();
     }
     public void updatePhoto(Photo photo) {
         this.photo = photo;

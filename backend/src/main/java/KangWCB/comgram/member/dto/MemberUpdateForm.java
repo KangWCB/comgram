@@ -9,5 +9,6 @@ public class MemberUpdateForm {
 
     @NotEmpty(message = "닉네임 칸을 채워주세요.")
     private String nickname;
+    private String introMsg = "";
 
 }
