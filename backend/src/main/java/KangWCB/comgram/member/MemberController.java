@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,10 +40,7 @@ public class MemberController {
     private final MemberService memberService;
     private final PhotoService photoService;
     private final BoardService boardService;
-
     private final FollowJpaRepository followJpaRepository;
-
-
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Validated MemberFormDto memberFormDto) {
@@ -60,7 +56,7 @@ public class MemberController {
         if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new MemberLoginEx("이메일 또는 비밀번호가 맞지 않습니다.");
         }
-        Result<TokenInfo> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
+        Result<TokenInfo> result = new Result<>(member.getId(),jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()));
         return result;
     }
     // 로그인 회원 정보 출력
@@ -86,7 +82,6 @@ public class MemberController {
     public void memberDelete(@PathVariable(name = "id") Long memberId){
         memberRepository.deleteById(memberId);
     }
-
     // 테스트용 follow
     @GetMapping("/{id}/followingCount")
     public Count followingCount(@PathVariable(name = "id") Long memberId){
@@ -111,7 +106,6 @@ public class MemberController {
      */
     @GetMapping("/{memberId}/boards")
     public MyList findMyList(@PathVariable(name = "memberId") Long id){
-        List<BoardMyListDto> myList = boardService.findMyList(id);
         return new MyList(boardService.countMyList(id),boardService.findMyList(id));
     }
     @GetMapping("/{memberId}/isFollow")
@@ -130,8 +124,8 @@ public class MemberController {
     @Data
     @AllArgsConstructor
     static class Result<T> {
-        private T token;
         private Long id;
+        private T token;
     }
 
     /**
@@ -154,7 +148,7 @@ public class MemberController {
     }
     @Data
     @AllArgsConstructor
-    static class isFollow<T> {
+    static class isFollow {
         private String isFollow;
     }
 }
