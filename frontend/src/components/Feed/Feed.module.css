@@ -13,7 +13,8 @@
     text-align: center;
 }
 
-.contents {
+.feed_contents {
+    padding-top: 20px;;
     position: relative;
     text-align: center;
     margin-left: 15%;
@@ -115,6 +116,8 @@
 .margin{
     margin-top: 20px;
 }
+
+
 
 .content{
     margin-top: 5px;

@@ -71,12 +71,6 @@ const Mainpage = () => {
 
     return (
         <div className={styles.container}>
-            <Link to="/login">
-                <button>Login</button>
-            </Link>
-            <button onClick={() => logoutHandler()}>Logout</button>
-            <br/>nick : {nickname}
-            <br/>tk : {acctoken ? '있음': '없음'}
             {<Feed/> }
             {<Profile/> }
         </div>

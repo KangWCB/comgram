@@ -152,7 +152,6 @@ const Post = (id) => {
         */
     };
     const likeHandler = () => {
-        console.log("like 호출");
         let likeAPI = `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');

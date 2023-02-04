@@ -74,6 +74,7 @@ const LoginPage = () => {
           const config = {"Content-Type" : 'application/json'};
           axios.post('/api/members/login', userObject, config)
           .then((res) => {
+            console.log(res.data)
               localStorage.setItem('grantType', res.data['token']['grantType']);
               localStorage.setItem('refreshToken', res.data['token']['refreshToken']);
               localStorage.setItem('accessToken', res.data['token']['accessToken']);
