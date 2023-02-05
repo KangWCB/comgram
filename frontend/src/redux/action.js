@@ -9,7 +9,8 @@ export const addPostobj = () => async dispatch => {
     const resdata = await axios.get('/api/boards/list', {headers : 
         {'Authorization': acctoken}},config)
     .then((res) => res.data)
-    .catch((err) => err.status)
+    .catch((err) => err.status);
+
     dispatch ({
         type: "OBJECT_ADD",
         payload: resdata['data']
@@ -26,7 +27,6 @@ export const updatePostobj = (obj) => async dispatch => {
     
     if(boardId != undefined)
     {
-        console.log(boardId)
         await wait(500);
         await axios.get(api, {headers : 
             {'Authorization': acctoken}},config)

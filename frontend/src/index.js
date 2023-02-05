@@ -10,7 +10,6 @@ import { createStore, applyMiddleware, compose} from 'redux';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension'; // 리덕스 개발자 도구
 import rootReducer from "./redux/index";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

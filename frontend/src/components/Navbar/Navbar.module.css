@@ -54,6 +54,11 @@
     background: lightskyblue;
     color: #000;
 }
-.icon, .link_text{
+.icon{
+    padding-top: 3px;
+    font-size: 20px;
+}
+
+.link_text{
     font-size: 20px;
 }

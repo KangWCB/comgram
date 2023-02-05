@@ -6,9 +6,12 @@ import axios from 'axios';
 import { addPostobj, updatePostobj } from '../../redux/action';
 import { IoMdClose } from 'react-icons/io'
 import moment from "moment";
+import { useNavigate } from 'react-router-dom';
+
 
 const Detail = forwardRef(({id}, detailRef) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [ModalisOpen, setModalisOpen] = useState(false);
     const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
@@ -22,10 +25,13 @@ const Detail = forwardRef(({id}, detailRef) => {
     const [commentCount, setCommentCount] = useState(0);
     const [regTime, setRegTime] = useState(null);
     const [likeCount,setLikeCount] = useState(0);
-
+    const [writerId, setWriterId] = useState(null);
+    const [myPost, setMyPost] = useState(false);
     const [profileImgPath,setProfileImgPath] = useState('');
     const [commentList, setCommentList] = useState(null);
     const [commentText, setCommentText] = useState('');
+
+    const userid = localStorage.getItem('userId')
 
     useImperativeHandle(detailRef, () => ({
         modalHandler: (bool) => {
@@ -55,6 +61,11 @@ const Detail = forwardRef(({id}, detailRef) => {
         postobjHandler()
     },[postobj])
 
+    useEffect(() => {
+        if(writerId == userid)
+            setMyPost(true);
+    },[writerId])
+
     const postobjHandler = () => {
         if(postobj != undefined && postobj != null)
         {
@@ -65,20 +76,24 @@ const Detail = forwardRef(({id}, detailRef) => {
                 setContentImgPath(tmp_path);   
             }
                 
+            setWriterId(postobj['writerId']);
             setWriterName(postobj['nickName']);
             setContent(postobj['content']);
             setCommentCount(postobj['commentCount']);
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
-            
+            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
+
+           
             let commentinfo = postobj['boardCommentInfo']
             let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
             let likector = commentinfo?.constructor; // 좋아요 객체 타입
 
-            console.log(commentinfo,postobj['id'])
             if(commentinfo)
             {
                 if (infoctor === Array)
@@ -155,51 +170,71 @@ const Detail = forwardRef(({id}, detailRef) => {
     }
 
     const commentWriteHandler = () => {
-        console.log(commentText);
-        console.log(PostId);
-
-            let writeAPI = `/api/${PostId}/comment`;
-            let acctoken = localStorage.getItem('accessToken');
-            const config = {"Content-Type" : 'application/json'};
-            const obj = {
-                "comment" : commentText
-            }
-            axios.post(writeAPI, obj, {
-                headers : 
-                    {
-                    'Authorization': acctoken,
-                    'Content-Type' : 'application/json'
-                    }
-            })
-            .then((res) => {
-                console.log(res.data)
-                setCommentText('');
-            })
-            .catch((err) => {console.log(err)});
-            dispatch(updatePostobj(postobj));
+        let writeAPI = `/api/${PostId}/comment`;
+        let acctoken = localStorage.getItem('accessToken');
+        const config = {"Content-Type" : 'application/json'};
+        const obj = {
+            "comment" : commentText
+        }
+        axios.post(writeAPI, obj, {
+            headers : 
+                {
+                'Authorization': acctoken,
+                'Content-Type' : 'application/json'
+                }
+        })
+        .then((res) => {
+            console.log(res.data)
+            setCommentText('');
+        })
+        .catch((err) => {console.log(err)});
+        dispatch(updatePostobj(postobj));
     
     }
 
     const commentDeleteHandler = (commentId) => {
         console.log(commentId)
-        let deleteAPI = `/api/boards/comments/${commentId}`;
+        let commentdeleteAPI = `/api/comments/${commentId}`;
+        let acctoken = localStorage.getItem('accessToken');
+        console.log(acctoken)
+        axios.delete(commentdeleteAPI, {
+            headers : 
+                {'Authorization': acctoken}
+        })
+        .then((res) => {
+            console.log(res.data)
+        });
+        dispatch(updatePostobj(postobj));
+    }
+
+    const postDeleteHandler = () => {
+        if(window.confirm("정말 삭제하시겠습니까?"))
+        {
+            let postdeleteAPI = `/api/boards/${PostId}`
             let acctoken = localStorage.getItem('accessToken');
-            console.log(acctoken)
-            axios.delete(deleteAPI, {
-                headers : 
-                    {'Authorization': acctoken}
+            axios.delete(postdeleteAPI, {
+                headers :
+                {'Authorization': acctoken}
             })
             .then((res) => {
                 console.log(res.data)
             });
-            dispatch(updatePostobj(postobj));
+            setModalisOpen(false);
+            window.location.href="/";
+        }
+
+    }
+
+    const profileClickHandler = () => {
+        setModalisOpen(false);
+        navigate("/info", {state: {id: writerId}});
     }
 
     const commentListHandler = commentList?.map((data,idx) => <li className={styles.comment_li}key={idx}>
     <span className={`${styles.comment_span} ${styles.bold} `}>{data.commentUserNickname}</span> 
     <span className={`${styles.comment_span}`}> {data.commentContext}</span>
     <br/><span className={`${styles.gray}`}> {writetimeHandler(data.createdDate)}</span>
-    <button className={styles.deleteBtn} onClick={() => commentDeleteHandler(data.commentId)}>삭제</button>
+    {(data.commentUserId == userid) && <button className={styles.deleteBtn} onClick={() => commentDeleteHandler(data.commentId)}>삭제</button>}
     </li>)
 
 
@@ -212,9 +247,10 @@ const Detail = forwardRef(({id}, detailRef) => {
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                        <img className={styles.profileImg} src={`${profileImgPath}`}/>
+                        <img onClick={profileClickHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                     </div>
                     <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
+                    {myPost && <button onClick={() => postDeleteHandler()}className={styles.deleteBtn}>글 삭제</button>}
                     <IoMdClose className={styles.closeBtn}onClick={() => setModalisOpen(false)}/>
                     <div className={styles.comment}>
                         <div className={styles.box}>

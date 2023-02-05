@@ -1,20 +1,21 @@
-import React ,{ useState, useEffect } from "react";
+import React ,{ useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styles from './Profile.module.css';
 import {useNavigate} from 'react-router-dom'
+import ModifyProfile from "./ModifyProfile";
+import { BsPencilSquare } from "react-icons/bs"
 
-const Profile = (nick, ppath) => {
+const Profile = () => {
     const acctoken = localStorage.getItem('accessToken');
-    const userid = localStorage.getItem('userId');
     const [nickname, setNickname] = useState('');
     const [profileImgPath, setProfileImgPath] = useState('');
-    const [profileImg, setProfileImg] = useState();
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [introMsg, setIntroMsg] = useState('');
     const navigate = useNavigate();
-
+    const modifyRef = useRef();
 
     useEffect(() => {
-        console.log("hi")
         getUserinfo(acctoken);
     },[]);
 
@@ -23,8 +24,12 @@ const Profile = (nick, ppath) => {
             {'Authorization': acctoken}})
         .then((res) => {
             setNickname(res.data['nickname']);
-            console.log(res.data['profilePhotoUrl']);
-            setProfileImgPath(res.data['profilePhotoUrl'].replace(/\"/gi,""));
+            setName(res.data['name']);
+            setIntroMsg(res.data['introMsg']);
+            let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
             setEmail(res.data['email']);
         })
         .catch((err) => {
@@ -32,37 +37,16 @@ const Profile = (nick, ppath) => {
         });
     };
 
-    const imgHandler = (e) => {
-        setProfileImg(e.target.files[0]);
-    };
     
 
-    const modifyProfile = (token, img) => {
-        console.log("호출");
-        const formData = new FormData();
-        formData.append('photo', img);
-        let profileUpdateAPI = `api/members/${userid}/update`
-        axios({
-            url: profileUpdateAPI,
-            method: 'POST',
-            data: formData,
-            Headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': token,
-            }
-        })
-        .then(res => {
-            console.log(`${res.data}`);
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    };
+    const openModalHandler = () => {
+        modifyRef.current?.modalHandler(true);
+    }
 
     const infoHandler = () => {
         navigate('/info')
     }
-    
+
 
     return (
         <div className={styles.container}>
@@ -70,12 +54,18 @@ const Profile = (nick, ppath) => {
                     <img onClick={infoHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <div className={styles.profile_container}>
-                    <span className={`${styles.email_span}`}>{email}</span>
+                    <span className={`${styles.span_email}`}>{email}</span>
                     <br/><span className={`${styles.span} ${styles.gray} `}>{nickname}</span>
                 </div>
-                
-                <input onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
-                <button onClick={() => modifyProfile(acctoken, profileImg)}>업로드</button>
+                <div className={styles.intro_container}>
+                        <span className={`${styles.span_intro} `}>{introMsg}</span>
+                    </div>
+                <div onClick={openModalHandler} className={styles.modify_container}>
+                    <BsPencilSquare style={{fontSize: '30px'}}/>
+                    <span className={styles.span_profile}>프로필 수정</span>
+                </div>
+
+                <ModifyProfile name={name} nickname={nickname} introMsg={introMsg} oldProfileImg={profileImgPath} ref={modifyRef}/>
         </div>
     )
 

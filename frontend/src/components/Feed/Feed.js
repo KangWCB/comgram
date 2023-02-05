@@ -37,10 +37,9 @@ const Feed = () => {
     
 
     return (
-        <div className={styles.contents}>
-            <button onClick={resetobj}>RESET POSTOBJ</button>
-            {postobj && postobj.map((obj) => 
-            <Post id={obj.id}/>)}
+        <div className={styles.feed_contents}>
+            {postobj && postobj.map((obj,idx) => 
+            <Post key={idx} id={obj.id}/>)}
 
         
         </div>

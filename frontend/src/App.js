@@ -6,6 +6,7 @@ import Navbar from './components/Navbar/Navbar';
 import OAuthLogin from './pages/OAuthLogin';
 import Write from './pages/Write';
 import Info from './pages/Info';
+import Search from './pages/Search';
 function App() {
   return (
     <div className="App">
@@ -18,6 +19,7 @@ function App() {
         <Route path="/oauth2/redirect" element={<OAuthLogin/>}/>
         <Route path="/write" element={<Write/>}/>
         <Route path="/info" element={<Info/>}/>
+        <Route path="/search" element={<Search/>}/>
         <Route path="/*" element={<h2>not found</h2>} />
       </Routes>
       </div>

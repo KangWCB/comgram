@@ -8,10 +8,10 @@ import { useDispatch } from 'react-redux';
 
 const Write = () => {
     const acctoken = localStorage.getItem('accessToken');
+    const [ModalisOpen, setModalisOpen] = useState(true);
     const [boardImg,setBoardImg] = useState('');
     const [encodeImg,setEncodeImg] = useState('');
     const [content, setContent] = useState('');
-
     const dispatch = useDispatch();
 
     const imgHandler = (e) => {
@@ -20,10 +20,12 @@ const Write = () => {
     };
     
     const imgEncoder = (file) => {
+        const uploadTextId = document.getElementById('uploadText')
         const reader = new FileReader();
         reader.readAsDataURL(file);
         return new Promise((resolve) => {
             reader.onload = () => {
+                uploadTextId.style.display = 'none';
                 setEncodeImg(reader.result);
                 resolve();
             };
@@ -36,19 +38,8 @@ const Write = () => {
         const formData = new FormData();
         formData.append('content', content);
         formData.append('photo', boardImg);
-        console.log(formData.get('content'));
-        console.log(formData.get('photo'));
         let api = '/api/boards/write'
-        /*axios({
-            url: api,
-            method: 'POST',
-            data: formData,
-            Headers: {
-                'Authorization': acctoken,
-                'Content-Type': 'multipart/form-data',
-            }
-        })
-        */
+
        axios.post(api,formData,{
             headers: {
                 'Authorization': acctoken,
@@ -56,10 +47,9 @@ const Write = () => {
             }
        })
         .then(res => {
-            console.log(`${res.data}`);
             dispatch(addPostobj());
-            
-            window.location.replace("/");
+            window.location.href="/";
+            //window.location.replace("/");
         })
         .catch(err => {
             console.log(err);
@@ -83,8 +73,13 @@ const Write = () => {
         },    
     }
 
+    const modalcloseHandler = () => {
+        setModalisOpen(false)
+        window.location.href="/";
+    }
+
     return(
-        <Modal style={modalStyle} isOpen={true}>
+        <Modal style={modalStyle} isOpen={ModalisOpen} onRequestClose={modalcloseHandler} ariaHideApp={false}>
             <div className={styles.container}>
                 <div className={styles.title_container}>
                 <span className={styles.title}>글 작성</span>
@@ -97,7 +92,7 @@ const Write = () => {
                         <span id="uploadText" className={styles.uploadtext}>Upload your daily life!</span>
                         {encodeImg && <img src={encodeImg}className={styles.boardImg}></img>}
                     </div>
-                    <label className={styles.img_label} for='img_input'>사진 업로드</label>
+                    <label className={styles.img_label} htmlFor='img_input'>사진 업로드</label>
                     <input id="img_input" style={{display:"none"}}onChange={(e) => imgHandler(e)}type="file" accept="image/*" ></input>
                 </div>
                 <div className={styles.context_container}>

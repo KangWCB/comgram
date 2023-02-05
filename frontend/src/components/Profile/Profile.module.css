@@ -5,22 +5,34 @@
 
 .container{
     position: fixed;
-    left: 85%;
+    left: 80%;
     right: 0;
     bottom: 0;
     text-align: left;
     height: 100%;
-    border: 2pt groove #000000;
+    border-left: 2pt groove white;
     padding: 10px;
+    background-color: white;
 }
 
-
+.modify_container{
+    padding-left: 10px;
+    margin-top: 20px;
+    text-align: left;
+    cursor: pointer;
+}
 .profile_container{
     margin: auto;
     display: inline-block;
 }
 
+.intro_container{
+    display: flex;
+    margin-top: 20px;
+}
+
 .profileImg{
+    cursor: pointer;
     width: 100%;
     height: 100%;
 }
@@ -36,19 +48,34 @@
 }
 
 .span{
+    padding-left: 10px;
     text-align: left;
     font-size: 14px;
 }
 
-.email_span{
+.span_profile{
+    position: relative;
+    font-size: 15px;
+    padding-left: 20px;
+    bottom: 8px;
+}
+
+.span_email{
     padding-left: 10px;
     text-align: left;
     font-size: 13px;
+}
+
+.span_intro{
+    text-align: left;
+    font-size: 13px;
+    word-break: keep-all;
 }
 .bold{
     font-weight: bold;
 }
 .gray{
-    padding-left: 10px;
+
     color: gray;
 }
+

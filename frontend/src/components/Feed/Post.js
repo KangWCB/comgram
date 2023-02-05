@@ -6,13 +6,16 @@ import { SlSpeech } from "react-icons/sl";
 import moment from "moment";
 import { addPostobj, updatePostobj } from '../../redux/action';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import Detail from './Detail';
 
 const Post = (id) => {
     const acctoken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [like, setLike] = useState(false);
     const [ismoreView, setIsmoreView] = useState(false);
+    const [moreBtnVisible, setMoreBtnVisible ] = useState(false);
     const [viewMoreText, setViewMoreText] = useState("... 더 보기");
     const [originContent,setOriginContent] = useState('');
     const [likecntVisible, setLikecntVisible] = useState(false);
@@ -30,6 +33,7 @@ const Post = (id) => {
     const [commentUserNickname, setCommentUserNickname] = useState("");
     const [profileImgPath,setProfileImgPath] = useState('');
     const [writeTime,setWriteTime] = useState('');
+    const [writerId, setWriterId] = useState(null);
 
     let diffTime = {         
         day:'',
@@ -40,11 +44,16 @@ const Post = (id) => {
     let origin_content = "";
     let cut_content = "";
     let first_like = false;
+    let content_limit = 50;
     
     const selectorData = useSelector(state => state.postobjReducer.postobj);
     const [postobj, setPostobj] = useState(null);
     //디테일 페이지 모달핸들링
     const detailRef = useRef();
+
+    useEffect(() => {
+        dispatch(addPostobj())
+    },[])
     
     useEffect(() => {
         let data = selectorData;
@@ -71,6 +80,11 @@ const Post = (id) => {
 
     useEffect(() => {
         postobjHandler()
+        if(content.length > content_limit)
+        {
+            setMoreBtnVisible(true);
+            contentHandler();
+        }
     },[postobj]);
 
     const postobjHandler = () => {
@@ -84,12 +98,17 @@ const Post = (id) => {
             }
                 
             setWriterName(postobj['nickName']);
+            setWriterId(postobj['writerId']);
             setContent(postobj['content']);
             setCommentCount(postobj['commentCount']);
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            setProfileImgPath(postobj['profileImgPath'].replace(/\"/gi,""));
+            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
+            let tmp_idx = tmp_path.indexOf("tmp");
+            tmp_path = tmp_path.substring(tmp_idx);
+            setProfileImgPath(tmp_path);
+
             if(first_like)
             {
                 first_like = true;
@@ -133,7 +152,6 @@ const Post = (id) => {
         */
     };
     const likeHandler = () => {
-        console.log("like 호출");
         let likeAPI = `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');
@@ -180,44 +198,47 @@ const Post = (id) => {
 
     }
 
+
+
     useEffect(() => {
-        contentHandler(content);
+        contentHandler();
     },[ismoreView]);
 
 
-    const contentHandler = (content) => {
-        let limit = 50;
-        if(content.length > limit)
+
+    const contentHandler = () => {
+        if(content.length > content_limit)
         {
-            if(!ismoreView)// ismoreview가 false면
+            if(ismoreView == false)// ismoreview가 false면
             {
-                cut_content = content.slice(0,limit);
+                console.log("짧게")
+                cut_content = content.slice(0,content_limit);
+                console.log(cut_content);
                 setOriginContent(content);
-                console.log(origin_content)
                 setContent(cut_content);
             }
-            else if(ismoreView)
-            {
-                if(!content)
-                    setContent(originContent);
-            }
+        }
+        else if(ismoreView == true)
+        {
+                console.log("길게")
+                setContent(originContent);
         }
         
     }
 
     const viewMoreHandler = () => {
-
-        if(ismoreView)
+        if(ismoreView == false)
         {
-            setIsmoreView(!ismoreView);
-            setViewMoreText("... 더 보기");
-        }
-        else
-        {
-            setIsmoreView(!ismoreView);
-            
+            setIsmoreView(true);
             setViewMoreText("접기");
         }
+        else if (ismoreView == true)
+        {
+            setIsmoreView(false);
+            setViewMoreText("... 더 보기");
+            
+        }
+        console.log(ismoreView,"more")
     };
 
 
@@ -225,23 +246,25 @@ const Post = (id) => {
         detailRef.current?.modalHandler(true);
     }
 
-    /*const commentHandler = commentList.map((data,idx) => <li key={idx}>
-    <span className={`${styles.comment_span} ${styles.bold} `}>{data.userName}</span> 
-    <span className={`${styles.comment_span}`}> {data.comment}</span>
-    </li>)*/
+    const profileClickHandler = () => {
+        navigate("/info", {state: {id: writerId}});
+    }
+
 
     return(
         <div>
         {/* 피드 */}
             <div className={styles.profile_form}>
                 <div className={styles.box}>
-                    <img className={styles.profileImg} src={`${profileImgPath}`}/>
+                    <img onClick={profileClickHandler} className={styles.profileImg} src={`${profileImgPath}`}/>
                 </div>
                 <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
                 <span className={`${styles.span} ${styles.gray} `}> •  {writeTime}</span>
             </div>
         {/* 본문 */}
-        <img onClick={openModalHandler} id="contentImg" className={styles.photo} src={contentImgPath}></img>
+        <div onClick={openModalHandler} className={styles.img_container}>
+            <img id="contentImg" className={styles.photo} src={contentImgPath}></img>
+        </div>
         <div className={styles.icon_form}>
             <div className={styles.likeIcon} onClick={likeHandler}>
             {
@@ -252,18 +275,18 @@ const Post = (id) => {
         </div>
         <div className={styles.comment_form}>
             {likecntVisible && <span className={`${styles.span} ${styles.bold} `}>{likeUserNickName}</span>}
-            {likecntVisible && <span className={styles.span}>님 </span>}
-            {likecntVisible && <span className={`${styles.span} ${styles.bold}`}>외 {likeCount-1}명</span>}
+            {likecntVisible && <span className={styles.span}>님</span>}
+            {(likecntVisible && likeCount> 1) && <span className={`${styles.span} ${styles.bold}`}> 외 {likeCount-1}명</span>}
             {likecntVisible && <span className={styles.span}>이 좋아합니다</span>}
         </div>
    
         <div className={styles.content}>
             <span className={styles.span}>{content}</span>
-            {ismoreView && <button className={styles.tpBtn} onClick={viewMoreHandler}>{viewMoreText}</button>}
+            {moreBtnVisible && <button className={styles.tpBtn} onClick={() => viewMoreHandler()}>{viewMoreText}</button>}
         </div>
 
         <div className={styles.content_comment}>
-        <button onClick={openModalHandler} className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>
+        {(commentCount>1) && <button onClick={openModalHandler} className={styles.tpBtn}>댓글 {commentCount}개 모두 보기</button>}
         {(commentUserNickname && commentContext) ? <ul className={styles.comment_ul}>
             <span className={`${styles.comment_span} ${styles.bold} `}>{commentUserNickname}</span> 
             <span className={`${styles.comment_span}`}>{commentContext}</span>
