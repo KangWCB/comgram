@@ -15,25 +15,18 @@ const LoginPage = () => {
     const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
     const naverLoginUrl = 'http://localhost:8080/oauth2/authorization/naver';
     const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
-    useEffect(() => {
-      console.log(location);
-      console.log(params);
-    },[location])
+
 
     useEffect(() => {
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
-      console.log(islogin)
       if(acctoken && islogin != 'false') // 토큰 있고 로그인 성공하면 메인페이지 이동
       {
-        console.log("islogin")
-        console.log(islogin)
         navigate("/",{state:
           {
             islogin : true,
           }
         });
-        console.log(`token: ${acctoken}`);
       }
     },[]);
 
@@ -45,11 +38,9 @@ const LoginPage = () => {
             'name' : name,
             'nickname' : nickname,
         };
-        console.log(userObject);
         const config = {"Content-Type" : 'application/json'};
         axios.post('/api/members/register', userObject, config)
         .then((res) => {
-            console.log(res.data);
             setStatus("가입 성공");
         })
         .catch((err) => {
@@ -63,7 +54,6 @@ const LoginPage = () => {
             'email' : email,
             'password' : password,
         };
-        console.log(email,password)
         if(email == '' || password == '')
         {
           setStatus("이메일 혹은 패스워드가 입력되지 않았습니다.");
@@ -74,7 +64,6 @@ const LoginPage = () => {
           const config = {"Content-Type" : 'application/json'};
           axios.post('/api/members/login', userObject, config)
           .then((res) => {
-            console.log(res.data)
               localStorage.setItem('grantType', res.data['token']['grantType']);
               localStorage.setItem('refreshToken', res.data['token']['refreshToken']);
               localStorage.setItem('accessToken', res.data['token']['accessToken']);

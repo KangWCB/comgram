@@ -43,19 +43,25 @@
 }
 
 .info_container{
-    border: 1px groove black;
+    padding-left:15%;
+    text-align: left;
     margin-top: 10px;
-    
+}
+.span_info{
+    width: 50px;
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 
-.nickinput{
+.infoinput{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom-left-radius: 1px groove black;
-    text-align: center;
-    width: 100px;
+    border-bottom-left-radius:1pt solid white;
+    width: 300px;
+    background: none;
 }
 .submitBtn{
     margin-top: 10px;
@@ -74,8 +80,4 @@
     background-color: rgb(199, 197, 197);
 }
 
-.uploadtext{
-    top: 50%;
-    position: relative;
-}
 

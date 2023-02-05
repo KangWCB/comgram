@@ -41,19 +41,9 @@ const Mainpage = () => {
         if(currentPath === location.pathname)
         {
             window.location.reload();
-            console.log(location,"loc")
         }
             currentPath = location.pathname;
     },[location]);
-
-
-
-
-    const logoutHandler = () => {
-        localStorage.removeItem("accessToken");
-        console.log("remove token");
-        window.location.reload();
-    };
 
     const getUserinfo = async (acctoken) => {
         await axios.get('/api/members/info', {headers : 

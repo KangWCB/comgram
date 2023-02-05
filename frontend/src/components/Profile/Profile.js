@@ -11,12 +11,11 @@ const Profile = () => {
     const [profileImgPath, setProfileImgPath] = useState('');
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
-    
+    const [introMsg, setIntroMsg] = useState('');
     const navigate = useNavigate();
     const modifyRef = useRef();
 
     useEffect(() => {
-        console.log("hi")
         getUserinfo(acctoken);
     },[]);
 
@@ -26,7 +25,7 @@ const Profile = () => {
         .then((res) => {
             setNickname(res.data['nickname']);
             setName(res.data['name']);
-            console.log(res.data);
+            setIntroMsg(res.data['introMsg']);
             let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
             let tmp_idx = tmp_path.indexOf("tmp");
             tmp_path = tmp_path.substring(tmp_idx);
@@ -49,8 +48,6 @@ const Profile = () => {
     }
 
 
-    let intromsg = "안녕하세요 박사지망 석사 진행중인 정래원입니다."
-
     return (
         <div className={styles.container}>
                 <div className={styles.box}>
@@ -61,14 +58,14 @@ const Profile = () => {
                     <br/><span className={`${styles.span} ${styles.gray} `}>{nickname}</span>
                 </div>
                 <div className={styles.intro_container}>
-                        <span className={`${styles.span_intro} ${styles.gray} `}>{intromsg}</span>
+                        <span className={`${styles.span_intro} `}>{introMsg}</span>
                     </div>
                 <div onClick={openModalHandler} className={styles.modify_container}>
                     <BsPencilSquare style={{fontSize: '30px'}}/>
                     <span className={styles.span_profile}>프로필 수정</span>
                 </div>
 
-                <ModifyProfile name={name} nickname={nickname} ref={modifyRef}/>
+                <ModifyProfile name={name} nickname={nickname} introMsg={introMsg} oldProfileImg={profileImgPath} ref={modifyRef}/>
         </div>
     )
 

@@ -38,8 +38,6 @@ const Write = () => {
         const formData = new FormData();
         formData.append('content', content);
         formData.append('photo', boardImg);
-        console.log(formData.get('content'));
-        console.log(formData.get('photo'));
         let api = '/api/boards/write'
 
        axios.post(api,formData,{

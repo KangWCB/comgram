@@ -1,3 +1,18 @@
+@font-face {
+  font-family: 'NanumNeo';
+  font-style: normal;
+  src: local('NanumNeoRg'), url(./fonts/NanumNeoRg.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'NanumNeo';
+  font-style: bold;
+  src: local('NanumNeoBd'), url(./fonts/NanumNeoBd.woff) format('woff');
+}
+
+
+
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

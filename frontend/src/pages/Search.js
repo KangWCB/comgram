@@ -42,7 +42,6 @@ const Search = () => {
                 }
             })
             .then((res) => {
-                console.log(res.data);
                 setSearchResult(res.data['list']);
                 setCond(res.data['cond']);
                 setResultCnt(res.data['count'])
@@ -54,12 +53,6 @@ const Search = () => {
                 {
                     setResultFail(false);
                 }
-                console.log(res.data['cond'])
-                if(res.data['cond'] == 'Board')
-
-                    console.log("보드")
-                if(res.data['cond'] == 'Member')
-                    console.log("멤버")
             })
             .catch((err) => {
                 console.log(err);
@@ -111,6 +104,7 @@ const Search = () => {
                 <img className={styles.profileImg} src={imgHandler(data?.profileImgUrl)}/>
             </div>
             <span className={styles.span_nickname}>{data.nickName}</span>
+            <span className={styles.span_intro}>{data.introMsg}</span>
             
         </div>
     </li>)

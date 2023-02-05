@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-    font-family: 'helvetica neue', 'Apple SD Gothic Neo', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .container {
@@ -106,6 +105,7 @@
     border: 2pt groove #000000;
     display: inline-block;
     vertical-align: middle;
+    margin-right: 5px;
 }
 .profileImg{
     

@@ -22,23 +22,20 @@ const Info = () => {
     const [followingCnt, setFollowingCnt] = useState(0);
     const [isFollow, setIsFollow] = useState('');
     const [followBtnText, setFollowBtnText] = useState('팔로우');
+    const [introMsg, setIntroMsg] = useState('');
     
     const fbtnId = document.getElementById('followBtn');
 
     useEffect(() => {
-        console.log(memberId);
         infoobjHandler();
         boardsHandler();
         isFollowHandler();
         followCountHandler();
-
     }, [])
 
     useEffect(()=> {
-        console.log(isFollow)
         if(isFollow == 'mine')
         {
-            console.log("내꺼")
             fbtnId.style.display = 'none';
         }
         else if(isFollow == 'notFollow')
@@ -68,7 +65,6 @@ const Info = () => {
 
     const infoobjHandler = () => {
         let acctoken = localStorage.getItem('accessToken');
-        console.log(acctoken)
         const getinfoAPI = `api/members/${memberId}/info`
         axios.get(getinfoAPI, {
             headers :
@@ -82,6 +78,7 @@ const Info = () => {
             tmp_path = tmp_path.substring(tmp_idx);
             setProfileImgPath(tmp_path);
             setNickname(res.data['nickname']);
+            setIntroMsg(res.data['introMsg']);
         })
         .catch((err) => {
             console.log(err);
@@ -98,7 +95,6 @@ const Info = () => {
             }
         })
         .then((res) => {
-            console.log(res.data['isFollow'])
             setIsFollow(res.data['isFollow'])
         })
         .catch((err) => {
@@ -148,7 +144,6 @@ const Info = () => {
             }
         })
         .then((res) => {
-            console.log(res);
             followCountHandler();
             isFollowHandler();
         })
@@ -181,7 +176,7 @@ const Info = () => {
         detailRef.current.map((dref, i) => (i === idx && dref.current.modalHandler(true)));
     }
     
-    const boardsView = boardList?.map((data, idx) => <li style={{ listStyle: 'none', display:'inline-block', width:'33%'}}>
+    const boardsView = boardList?.map((data, idx) => <li key={idx} style={{ listStyle: 'none', display:'inline-block', width:'33%'}}>
         <div onClick={() => openModalHandler(idx)} className={styles.list_container}>
             <img id={data['id']} className={styles.boardImg} src={imgHandler(data['photoUrl'])}></img>
             <Detail ref={detailRef.current[idx]} id={data['id']}/>
@@ -207,9 +202,14 @@ const Info = () => {
                     <span className={styles.span}>팔로우</span>
                     <span className={`${styles.num_span} ${styles.bold} `}>{followingCnt}</span>
                 </div>
+                <div className={styles.intro_container}>
+                    <span>{introMsg}</span>
+                </div>
             </div>
             <div className={styles.board_container}>
-                {boardList && boardsView}
+                 {(postcnt != 0) ? boardsView : 
+                 <span className={styles.span_empty}>아직 작성한 글이 없어요!</span>
+                 }
             </div>
             
         </div>

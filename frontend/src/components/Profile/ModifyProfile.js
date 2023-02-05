@@ -1,22 +1,18 @@
 import styles from './ModifyProfile.module.css'
 import React, {useState, useEffect, forwardRef, useImperativeHandle} from 'react'
 import Modal from 'react-modal';
-import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { addPostobj, updatePostobj } from '../../redux/action';
-import { IoMdClose } from 'react-icons/io'
-import moment from "moment";
-import { useNavigate } from 'react-router-dom';
 
-const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
+
+const ModifyProfile = forwardRef(({name, nickname, introMsg, oldProfileImg}, modifyRef) => {
     const [ModalisOpen, setModalisOpen] = useState(false);
     const [profileImg, setProfileImg] = useState();
-    const [newNickname, setNewNickname] = useState('');
-    const [encodeImg,setEncodeImg] = useState('');
-
+    const [newNickname, setNewNickname] = useState(null);
+    const [newIntroMsg, setNewIntroMsg] = useState(null);
+    const [imgsrc, setImgsrc] = useState('');
     const acctoken = localStorage.getItem('accessToken');
     const userid = localStorage.getItem('userId');
-
+    
     useImperativeHandle(modifyRef, () => ({
         modalHandler: (bool) => {
             setModalisOpen(bool);
@@ -26,19 +22,23 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
     useEffect(() => {
         setNewNickname(nickname);
     },[nickname])
+
+
+    useEffect(() => {
+        setImgsrc(oldProfileImg);
+    },[ModalisOpen])
+
     const imgHandler = (e) => {
         setProfileImg(e.target.files[0]);
         imgEncoder(e.target.files[0]);
     };
 
     const imgEncoder = (file) => {
-        const uploadTextId = document.getElementById('uploadText')
         const reader = new FileReader();
         reader.readAsDataURL(file);
         return new Promise((resolve) => {
             reader.onload = () => {
-                uploadTextId.style.display = 'none';
-                setEncodeImg(reader.result);
+                setImgsrc(reader.result);
                 resolve();
             };
         });
@@ -46,13 +46,18 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
     
 
     const modifyProfile = () => {
-        console.log(acctoken);
-        console.log("호출");
-        console.log(userid)
         const formData = new FormData();
         formData.append('photo', profileImg);
-        formData.append('nickname', newNickname)
-        console.log(formData.get('photo'))
+        if(newNickname == null)
+            formData.append('nickname', nickname);
+        else
+            formData.append('nickname', newNickname);
+
+        if(newIntroMsg == null)
+            formData.append('introMsg', introMsg);
+        else
+            formData.append('introMsg', newIntroMsg);
+
         let profileUpdateAPI = `/api/members/${userid}/update`
         axios.post(profileUpdateAPI, formData,{
             headers: {
@@ -73,6 +78,10 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
         setNewNickname(e.target.value);
     }
 
+    const newIntroMsgHandler = (e) => {
+        setNewIntroMsg(e.target.value);
+    }
+
     const modalStyle = {
         overlay: {
             zIndex: 5,
@@ -91,9 +100,6 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
     }
     const modalcloseHandler = () => {
         setModalisOpen(false)
-        setProfileImg('')
-        setEncodeImg('')
-        setNewNickname('')
     }
 
     return (
@@ -105,9 +111,7 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
                     <div className={styles.img_container}>
                         
                         <div className={styles.box}>
-                            
-                            <span id="uploadText" className={styles.uploadtext}>Upload your daily life!</span>
-                            {encodeImg && <img src={encodeImg}className={styles.profileImg}></img>}
+                            <img src={imgsrc} className={styles.profileImg}></img>
                         </div>
                         
                         <input id="img_input" style={{display:"none"}} onChange={(e) => imgHandler(e)} type="file" accept="image/*" ></input>
@@ -118,12 +122,16 @@ const ModifyProfile = forwardRef(({name, nickname}, modifyRef) => {
                         
                         <br/>
                         <div style={{marginBottom:'10px'}}>
-                        <span style={{fontWeight:'bold', fontSize:'12px'}}>이름</span>
-                            <br/><span>{name}</span>
+                        <span className={styles.span_info}>이름</span>
+                            <span> {name}</span>
                         </div>
-                        <div>
-                            <span style={{fontWeight:'bold', fontSize:'12px'}}>닉네임</span>
-                            <br/><input className={styles.nickinput} onChange={(e) => newNicknameHandler(e)} defaultValue={nickname}></input>
+                        <div style={{marginBottom:'10px'}}>
+                            <span className={styles.span_info}>닉네임</span>
+                            <input className={styles.infoinput} onChange={(e) => newNicknameHandler(e)} defaultValue={nickname}></input>
+                        </div>
+                        <div style={{marginBottom:'10px'}}>
+                            <span className={styles.span_info}>소개</span>
+                            <input className={styles.infoinput} onChange={(e) => newIntroMsgHandler(e)} defaultValue={introMsg}></input>
                         </div>
 
                     </div>

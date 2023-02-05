@@ -36,7 +36,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .leftJoin(qBoard.member,qMember)
                 .fetchJoin()
                 .where(qBoard.member.id.eq(memberId))
-                .fetchOne(); // fetchCount는 deprecate
+                .fetchCount(); // fetchCount는 deprecate
         return count;
     }
     /**
