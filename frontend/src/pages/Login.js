@@ -111,10 +111,7 @@ const LoginPage = () => {
     <div className={styles.container} id="container">
         <div className={`${styles.form_container} ${styles.sign_up_container}`}>
           <form className={styles.form}>
-            {/*test*/}
-            <h5>status:{status}</h5> 
 
-            {/*test*/}
             <h1 className={styles.h1}>Create Account</h1>
             <div className={styles.social_container}>
               
