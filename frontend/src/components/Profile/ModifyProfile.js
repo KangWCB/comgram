@@ -58,7 +58,7 @@ const ModifyProfile = forwardRef(({name, nickname, introMsg, oldProfileImg}, mod
         else
             formData.append('introMsg', newIntroMsg);
 
-        let profileUpdateAPI = `/api/members/${userid}/update`
+        let profileUpdateAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${userid}/update`
         axios.post(profileUpdateAPI, formData,{
             headers: {
                 'Authorization': acctoken,

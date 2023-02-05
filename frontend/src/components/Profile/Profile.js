@@ -20,7 +20,8 @@ const Profile = () => {
     },[]);
 
     const getUserinfo = async (acctoken) => {
-        await axios.get('/api/members/info', {headers : 
+        let userInfoAPI = `${process.env.REACT_APP_BACKEND}` + '/api/members/info'
+        await axios.get(userInfoAPI, {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
             setNickname(res.data['nickname']);

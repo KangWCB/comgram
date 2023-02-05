@@ -1,4 +1,4 @@
-import {Link, useLocation, useNavigate} from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {useState, React, useEffect} from 'react';
 import axios from 'axios';
 import styles from './Mainpage.module.css'
@@ -45,7 +45,8 @@ const Mainpage = () => {
     },[location]);
 
     const getUserinfo = async (acctoken) => {
-        await axios.get('/api/members/info', {headers : 
+        let infoAPI = `${process.env.REACT_APP_BACKEND}` + '/api/members/info'
+        await axios.get(infoAPI, {headers : 
             {'Authorization': acctoken}})
         .then((res) => {
             setNickname(res.data['nickname']);

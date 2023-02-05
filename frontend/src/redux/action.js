@@ -6,7 +6,8 @@ import wait from 'waait';
 export const addPostobj = () => async dispatch => {
     let acctoken = localStorage.getItem('accessToken');
     const config = {"Content-Type" : 'application/json'};
-    const resdata = await axios.get('/api/boards/list', {headers : 
+    let listAPI = `${process.env.REACT_APP_BACKEND}` + '/api/boards/list'
+    const resdata = await axios.get(listAPI, {headers : 
         {'Authorization': acctoken}},config)
     .then((res) => res.data)
     .catch((err) => err.status);
@@ -21,14 +22,14 @@ export const updatePostobj = (obj) => async dispatch => {
     let boardId = obj['id'];
     let resdata = '';
     
-    let api = `/api/boards/${boardId}`;
+    let updateAPI = `${process.env.REACT_APP_BACKEND}` + `/api/boards/${boardId}`;
     let acctoken = localStorage.getItem('accessToken');
     const config = {"Content-Type" : 'application/json'};
     
     if(boardId != undefined)
     {
         await wait(500);
-        await axios.get(api, {headers : 
+        await axios.get(updateAPI, {headers : 
             {'Authorization': acctoken}},config)
         .then((res) => {
             resdata = res.data});

@@ -38,9 +38,9 @@ const Write = () => {
         const formData = new FormData();
         formData.append('content', content);
         formData.append('photo', boardImg);
-        let api = '/api/boards/write'
+        let writeAPI = `${process.env.REACT_APP_BACKEND}` + '/api/boards/write'
 
-       axios.post(api,formData,{
+       axios.post(writeAPI,formData,{
             headers: {
                 'Authorization': acctoken,
                 'Content-Type': 'multipart/form-data',

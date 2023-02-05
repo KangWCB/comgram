@@ -3,7 +3,6 @@ import React, {useState, useEffect, useRef, createRef } from 'react';
 import Detail from '../components/Feed/Detail';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import wait from 'waait';
 
 const Info = () => {
     const [refRender, setRefRender] = useState(false);
@@ -65,7 +64,7 @@ const Info = () => {
 
     const infoobjHandler = () => {
         let acctoken = localStorage.getItem('accessToken');
-        const getinfoAPI = `api/members/${memberId}/info`
+        const getinfoAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${memberId}/info`
         axios.get(getinfoAPI, {
             headers :
             {
@@ -86,7 +85,7 @@ const Info = () => {
 
     const isFollowHandler = async () => {
         let acctoken = localStorage.getItem('accessToken');
-        const isFollowAPI = `api/members/${memberId}/isFollow`
+        const isFollowAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${memberId}/isFollow`
         await axios.get(isFollowAPI, {
             headers :
             {
@@ -103,8 +102,8 @@ const Info = () => {
 
     const followCountHandler = () => {
         let acctoken = localStorage.getItem('accessToken');
-        const followingCountAPI = `api/members/${memberId}/followingCount`
-        const followerCountAPI = `api/members/${memberId}/followerCount`
+        const followingCountAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${memberId}/followingCount`
+        const followerCountAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${memberId}/followerCount`
 
         axios.get(followingCountAPI, {
             headers :
@@ -135,7 +134,7 @@ const Info = () => {
 
     const followHandler = async () => {
         let acctoken = localStorage.getItem('accessToken');
-        const followAPI = `api/follow/${memberId}`
+        const followAPI = `${process.env.REACT_APP_BACKEND}` + `/api/follow/${memberId}`
         await axios.post(followAPI, {}, {
             headers :
             {
@@ -153,7 +152,7 @@ const Info = () => {
 
 
     const boardsHandler = async () => {
-        const getBoardsAPI = `api/members/${memberId}/boards`;
+        const getBoardsAPI = `${process.env.REACT_APP_BACKEND}` + `/api/members/${memberId}/boards`;
         await axios.get(getBoardsAPI)
         .then((res) => {
             setPostcnt(res.data['count'])

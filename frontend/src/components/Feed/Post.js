@@ -147,7 +147,7 @@ const Post = (id) => {
         */
     };
     const likeHandler = () => {
-        let likeAPI = `/api/boards/${PostId}/like`;
+        let likeAPI = `${process.env.REACT_APP_BACKEND}` + `/api/boards/${PostId}/like`;
 
         let acctoken = localStorage.getItem('accessToken');
 

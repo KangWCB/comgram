@@ -1,8 +1,5 @@
 import {useState, React, useEffect} from 'react';
-import { BsHeart, BsHeartFill } from "react-icons/bs";
-import { SlSpeech } from "react-icons/sl";
 import styles from './Feed.module.css'
-import axios from 'axios';
 import Post from './Post';
 
 

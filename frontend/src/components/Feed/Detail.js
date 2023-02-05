@@ -3,7 +3,7 @@ import React, {useState, useEffect, forwardRef, useImperativeHandle} from 'react
 import Modal from 'react-modal';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { addPostobj, updatePostobj } from '../../redux/action';
+import { updatePostobj } from '../../redux/action';
 import { IoMdClose } from 'react-icons/io'
 import moment from "moment";
 import { useNavigate } from 'react-router-dom';
@@ -174,7 +174,7 @@ const Detail = forwardRef(({id}, detailRef) => {
     }
 
     const commentWriteHandler = () => {
-        let writeAPI = `/api/${PostId}/comment`;
+        let writeAPI = `${process.env.REACT_APP_BACKEND}` + `/api/${PostId}/comment`;
         let acctoken = localStorage.getItem('accessToken');
         const config = {"Content-Type" : 'application/json'};
         const obj = {
@@ -198,7 +198,7 @@ const Detail = forwardRef(({id}, detailRef) => {
 
     const commentDeleteHandler = (commentId) => {
         console.log(commentId)
-        let commentdeleteAPI = `/api/comments/${commentId}`;
+        let commentdeleteAPI = `${process.env.REACT_APP_BACKEND}` + `/api/comments/${commentId}`;
         let acctoken = localStorage.getItem('accessToken');
         console.log(acctoken)
         axios.delete(commentdeleteAPI, {
@@ -214,7 +214,7 @@ const Detail = forwardRef(({id}, detailRef) => {
     const postDeleteHandler = () => {
         if(window.confirm("정말 삭제하시겠습니까?"))
         {
-            let postdeleteAPI = `/api/boards/${PostId}`
+            let postdeleteAPI = `${process.env.REACT_APP_BACKEND}` + `/api/boards/${PostId}`
             let acctoken = localStorage.getItem('accessToken');
             axios.delete(postdeleteAPI, {
                 headers :

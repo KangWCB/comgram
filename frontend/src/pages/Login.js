@@ -38,7 +38,8 @@ const LoginPage = () => {
             'nickname' : nickname,
         };
         const config = {"Content-Type" : 'application/json'};
-        axios.post('/api/members/register', userObject, config)
+        let regAPI = `${process.env.REACT_APP_BACKEND}` + '/api/members/register'
+        axios.post(regAPI, userObject, config)
         .then((res) => {
             setStatus("가입 성공");
         })
@@ -61,7 +62,9 @@ const LoginPage = () => {
         else
         {
           const config = {"Content-Type" : 'application/json'};
-          axios.post('/api/members/login', userObject, config)
+          let loginAPI = `${process.env.REACT_APP_BACKEND}` +  '/api/members/login'
+          console.log(loginAPI)
+          axios.post(loginAPI, userObject, config)
           .then((res) => {
               localStorage.setItem('grantType', res.data['token']['grantType']);
               localStorage.setItem('refreshToken', res.data['token']['refreshToken']);

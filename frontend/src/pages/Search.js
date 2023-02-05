@@ -31,7 +31,7 @@ const Search = () => {
     const searchHandler = () => {
         if(word != '')
         {
-            const searchAPI = `/api/search` 
+            let searchAPI = `${process.env.REACT_APP_BACKEND}` + `/api/search` 
             axios.get(searchAPI,{
                 headers : {
                     "Authorization" : acctoken,
