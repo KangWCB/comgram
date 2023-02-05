@@ -53,6 +53,9 @@ public class BoardService {
     public List<BoardMainDto> allMyList(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         List<Board> boards = boardRepository.findFollowingBoard(memberId);
+        if (boards.isEmpty()){
+            boards = boardRepository.findAll();
+        }
         return getBoardMainDtos(boards, member);
     }
 
@@ -89,7 +92,7 @@ public class BoardService {
                     photoService.noPhotoFinder(board.getMember()));
             if (!board.getComments().isEmpty()) {
                 Comment comment = board.getComments().get(0);
-                boardMainDto.setBoardCommentInfo(new BoardCommentInfo(comment));
+                boardMainDto.setBoardCommentInfo(BoardCommentInfo.toDto(comment));
             }
             if (!board.getLikes().isEmpty()) {
                 Member likeMember = boardLikeRepositoryImpl.findLikeMember(board).get(0);
@@ -110,8 +113,12 @@ public class BoardService {
         return count;
     }
     @Transactional
-    public void delete(Long boardId) {
+    public void delete(Long boardId,Member loginMember) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalStateException("없는 게시물"));
-        boardRepository.delete(board);
+        if(board.getMember().getId() == loginMember.getId()){
+            boardRepository.delete(board);
+        } else{
+            throw new RuntimeException("글 작성자와 다른 사람이여서 삭제 불가합니다.");
+        }
     }
 }

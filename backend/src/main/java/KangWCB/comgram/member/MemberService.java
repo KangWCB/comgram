@@ -1,5 +1,6 @@
 package KangWCB.comgram.member;
 
+import KangWCB.comgram.member.dto.MemberInfoDto;
 import KangWCB.comgram.member.dto.MemberUpdateForm;
 import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoService;
@@ -31,7 +32,7 @@ public class MemberService {
                 findMember.updatePhoto(photo);
             }
             // GET으로 줘야함. 나머지 정보들 현재 null 들어옴
-            findMember.updateMember(memberUpdateForm);
+            findMember.updateNickName(memberUpdateForm);
         } catch (Exception e){
             log.info("file_update_error={}",e.getMessage());
         }
@@ -43,4 +44,16 @@ public class MemberService {
         member.registerRefreshToken(refreshToken);
     }
 
+    public MemberInfoDto findMemberInfo(Long id) {
+        Member member = memberRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("유저 없음"));
+        MemberInfoDto build = MemberInfoDto.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .nickname(member.getNickName())
+                .profilePhotoUrl(photoService.noPhotoFinder(member))
+                .name(member.getName())
+                .introMsg(member.getIntroMsg())
+                .build();
+        return build;
+    }
 }

@@ -16,13 +16,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,12 +40,7 @@ public class MemberController {
     private final MemberService memberService;
     private final PhotoService photoService;
     private final BoardService boardService;
-
     private final FollowJpaRepository followJpaRepository;
-    @Value("${default.profile}")
-    private String defaultProfile;
-
-
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Validated MemberFormDto memberFormDto) {
@@ -57,40 +50,38 @@ public class MemberController {
 
     // 로그인
     @PostMapping("/login")
-    public Result<TokenInfo> login(@RequestBody @Valid MemberLoginDto memberLoginDto, BindingResult bindingResult) {
+    public Result<TokenInfo> login(@RequestBody @Valid MemberLoginDto memberLoginDto) {
         Member member = memberRepository.findByEmail(memberLoginDto.getEmail())
                 .orElseThrow(() -> new MemberLoginEx("가입 되지 않은 이메일입니다."));
         if (!passwordEncoder.matches(memberLoginDto.getPassword(), member.getPassword())) {
             throw new MemberLoginEx("이메일 또는 비밀번호가 맞지 않습니다.");
         }
-        Result<TokenInfo> result = new Result<>(jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()), member.getId());
+        Result<TokenInfo> result = new Result<>(member.getId(),jwtTokenProvider.createToken("local", member.getEmail(), member.getRole()));
         return result;
     }
-    // 회원 정보 출력
+    // 로그인 회원 정보 출력
     @GetMapping("/info")
-    public MemberInfoDto memberInfo(@AuthenticationPrincipal SecurityUser member){
-        return MemberInfoDto.builder()
-                .email(member.getMember().getEmail())
-                .nickname(member.getMember().getNickName())
-                .profilePhotoUrl(photoService.noPhotoFinder(member.getMember()))
-                .name(member.getMember().getName())
-                .build();
+    public MemberInfoDto loginMemberInfo(@AuthenticationPrincipal SecurityUser member){
+        return memberService.findMemberInfo(member.getMember().getId());
+    }
+    // 상세페이지 회원 정보 출력
+    @GetMapping("/{memberId}/info")
+    public MemberInfoDto memberInfo(@PathVariable(name = "memberId") Long memberId){
+        return memberService.findMemberInfo(memberId);
     }
     // 회원수정
     @PostMapping("/{id}/update")
-    public ResponseEntity memberUpdate(@RequestBody(required = false) @Valid MemberUpdateForm memberUpdateForm,BindingResult bindingResult,
-                                       @RequestParam(name = "photo") Optional<MultipartFile> file,
-                                       @PathVariable(name = "id") Long memberId,
-                                       @AuthenticationPrincipal SecurityUser member){
-        memberService.update(memberUpdateForm, memberId,file);
-        return new ResponseEntity<>(memberInfo(member), HttpStatus.OK);
+    public ResponseEntity memberUpdate(@Valid MemberUpdateForm memberUpdateForm,
+                                       @RequestParam(value = "photo") Optional<MultipartFile> file,
+                                       @PathVariable(name = "id") Long memberId){
+        Long updateId = memberService.update(memberUpdateForm, memberId, file);
+        return new ResponseEntity<>(memberService.findMemberInfo(updateId), HttpStatus.OK);
     }
     // 회원 삭제
     @DeleteMapping("/{id}/delete")
     public void memberDelete(@PathVariable(name = "id") Long memberId){
         memberRepository.deleteById(memberId);
     }
-
     // 테스트용 follow
     @GetMapping("/{id}/followingCount")
     public Count followingCount(@PathVariable(name = "id") Long memberId){
@@ -115,7 +106,6 @@ public class MemberController {
      */
     @GetMapping("/{memberId}/boards")
     public MyList findMyList(@PathVariable(name = "memberId") Long id){
-        List<BoardMyListDto> myList = boardService.findMyList(id);
         return new MyList(boardService.countMyList(id),boardService.findMyList(id));
     }
     @GetMapping("/{memberId}/isFollow")
@@ -123,7 +113,7 @@ public class MemberController {
                                      @AuthenticationPrincipal SecurityUser user){
         if(id == user.getMember().getId())
             return new isFollow("mine"); // 내 게시물일때
-        if (followJpaRepository.isFollow(id,user.getMember().getId()).isEmpty()){
+        if (followJpaRepository.isFollow(user.getMember().getId(),id).isEmpty()){
             return new isFollow("notFollow"); // 팔로우가 안되어 있을때
         }
         return new isFollow("follow"); //팔로우가 되어있을 때
@@ -134,8 +124,8 @@ public class MemberController {
     @Data
     @AllArgsConstructor
     static class Result<T> {
-        private T token;
         private Long id;
+        private T token;
     }
 
     /**
@@ -158,7 +148,7 @@ public class MemberController {
     }
     @Data
     @AllArgsConstructor
-    static class isFollow<T> {
+    static class isFollow {
         private String isFollow;
     }
 }
