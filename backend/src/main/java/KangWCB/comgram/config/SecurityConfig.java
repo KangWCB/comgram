@@ -15,13 +15,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-//    private final UserOAuth2Service userOAuth2Service;
     private final CustomOAuth2UserService customOAuth2UserService;
     // 비밀번호 암호화
     @Bean
@@ -39,9 +42,12 @@ public class SecurityConfig {
         http
                 .httpBasic().disable() // rest api 만을 고려하여 기본설정 해제
                 .csrf().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 안함
                 .and()
                 .authorizeRequests() // 요청에 대한 사용 권한 체크
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")// admin
                 .antMatchers("/api/members/info", "/api/board/**","/api/search/**","/api/message/**","/api/follow/**").authenticated()// 로그인을 제외한 모든 기능은 인증을 거쳐야함.
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
@@ -54,6 +60,23 @@ public class SecurityConfig {
                 .userService(customOAuth2UserService);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.addAllowedOrigin("http://localhost:3000"); // 로컬
+        config.addAllowedOrigin("http://3.37.146.205"); // 프론트 IPv4
+	config.addAllowedOrigin("http://192.168.33.101"); // 내 컴퓨ㅜ터
+
+        config.addAllowedMethod("*"); // 모든 메소드 허용.
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
 }
