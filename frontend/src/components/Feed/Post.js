@@ -91,12 +91,9 @@ const Post = (id) => {
         if(postobj != undefined && postobj != null)
         {
             if(postobj['contentImgPath']){
-                let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
-                let tmp_idx = tmp_path.indexOf("tmp");
-                tmp_path = tmp_path.substring(tmp_idx);
-                setContentImgPath(tmp_path);   
+                setContentImgPath(imgHandler(postobj['contentImgPath']));   
             }
-                
+         
             setWriterName(postobj['nickName']);
             setWriterId(postobj['writerId']);
             setContent(postobj['content']);
@@ -104,10 +101,8 @@ const Post = (id) => {
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("tmp");
-            tmp_path = tmp_path.substring(tmp_idx);
-            setProfileImgPath(tmp_path);
+
+            setProfileImgPath(imgHandler(postobj['profileImgPath']));
 
             if(first_like)
             {
@@ -165,6 +160,16 @@ const Post = (id) => {
         setLike(!like);
 
     };
+
+    const imgHandler = (url) => {
+        let path = url?.replace(/\"/gi,"");
+        let check = path.substring(1,5);
+        if(check == 'home')
+        {
+            path = 'imagePath' + path; 
+        }
+        return path;
+    }
 
 
     const writetimeHandler = (regTime) => {

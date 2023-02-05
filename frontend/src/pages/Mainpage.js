@@ -1,6 +1,5 @@
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import {useState, React, useEffect} from 'react';
-import ReactDOM from 'react-dom/client';
 import axios from 'axios';
 import styles from './Mainpage.module.css'
 import Feed from '../components/Feed/Feed';

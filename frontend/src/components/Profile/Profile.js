@@ -26,10 +26,7 @@ const Profile = () => {
             setNickname(res.data['nickname']);
             setName(res.data['name']);
             setIntroMsg(res.data['introMsg']);
-            let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("tmp");
-            tmp_path = tmp_path.substring(tmp_idx);
-            setProfileImgPath(tmp_path);
+            setProfileImgPath(imgHandler(res.data['profilePhotoUrl']));
             setEmail(res.data['email']);
         })
         .catch((err) => {
@@ -37,7 +34,15 @@ const Profile = () => {
         });
     };
 
-    
+    const imgHandler = (url) => {
+        let path = url?.replace(/\"/gi,"");
+        let check = path.substring(1,5);
+        if(check == 'home')
+        {
+            path = 'imagePath' + path; 
+        }
+        return path;
+    }
 
     const openModalHandler = () => {
         modifyRef.current?.modalHandler(true);

@@ -70,10 +70,7 @@ const Detail = forwardRef(({id}, detailRef) => {
         if(postobj != undefined && postobj != null)
         {
             if(postobj['contentImgPath']){
-                let tmp_path = postobj['contentImgPath'].replace(/\"/gi,"");
-                let tmp_idx = tmp_path.indexOf("tmp");
-                tmp_path = tmp_path.substring(tmp_idx);
-                setContentImgPath(tmp_path);   
+                setContentImgPath(imgHandler(postobj['contentImgPath']));    
             }
                 
             setWriterId(postobj['writerId']);
@@ -83,10 +80,7 @@ const Detail = forwardRef(({id}, detailRef) => {
             setRegTime(postobj['regTime']);
             setPostId(postobj['id']);
             setLikeCount(postobj['likeCount']);
-            let tmp_path = postobj['profileImgPath'].replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("tmp");
-            tmp_path = tmp_path.substring(tmp_idx);
-            setProfileImgPath(tmp_path);
+            setProfileImgPath(imgHandler(postobj['profileImgPath']));
 
            
             let commentinfo = postobj['boardCommentInfo']
@@ -120,6 +114,16 @@ const Detail = forwardRef(({id}, detailRef) => {
             dispatch(addPostobj());
         */
     };
+
+    const imgHandler = (url) => {
+        let path = url?.replace(/\"/gi,"");
+        let check = path.substring(1,5);
+        if(check == 'home')
+        {
+            path = 'imagePath' + path; 
+        }
+        return path;
+    }
 
     const modalStyle = {
         overlay: {

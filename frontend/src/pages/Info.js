@@ -73,10 +73,9 @@ const Info = () => {
             }
         })
         .then((res) => {
-            let tmp_path = res.data['profilePhotoUrl'].replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("tmp");
-            tmp_path = tmp_path.substring(tmp_idx);
-            setProfileImgPath(tmp_path);
+            let img_path = imgHandler(res.data['profilePhotoUrl']);
+
+            setProfileImgPath(img_path);
             setNickname(res.data['nickname']);
             setIntroMsg(res.data['introMsg']);
         })
@@ -166,10 +165,13 @@ const Info = () => {
     };
 
     const imgHandler = (url) => {
-        let tmp_path = url.replace(/\"/gi,"");
-        let tmp_idx = tmp_path.indexOf("tmp");
-        tmp_path = tmp_path.substring(tmp_idx);   
-        return tmp_path;
+        let path = url?.replace(/\"/gi,"");
+        let check = path.substring(1,5);
+        if(check == 'home')
+        {
+            path = 'imagePath' + path; 
+        }
+        return path;
     }
 
     const openModalHandler = (idx) => {

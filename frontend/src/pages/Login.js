@@ -1,5 +1,5 @@
 import {useState, React, useEffect} from 'react';
-import { useNavigate, useLocation, useParams} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import styles from './Login.module.css';
 
@@ -10,14 +10,13 @@ const LoginPage = () => {
     const [nickname, setNickname] = useState(""); 
     const [status, setStatus] = useState("");
     const navigate = useNavigate();
-    const location = useLocation();
-    const params = useParams();
-    const kakaoLoginUrl = 'http://localhost:8080/oauth2/authorization/kakao';
-    const naverLoginUrl = 'http://localhost:8080/oauth2/authorization/naver';
-    const googleLoginUrl = 'http://localhost:8080/oauth2/authorization/google';
+    const kakaoLoginUrl = `http://${process.env.REACT_APP_SERVER_IP}/oauth2/authorization/kakao`;
+    const naverLoginUrl = `http://${process.env.REACT_APP_SERVER_IP}/oauth2/authorization/naver`;
+    const googleLoginUrl = `http://${process.env.REACT_APP_SERVER_IP}/oauth2/authorization/google`;
 
 
     useEffect(() => {
+      console.log(kakaoLoginUrl)
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
       if(acctoken && islogin != 'false') // 토큰 있고 로그인 성공하면 메인페이지 이동

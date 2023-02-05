@@ -82,10 +82,13 @@ const Search = () => {
     const imgHandler = (url) => {
         if(url != null)
         {
-            let tmp_path = url.replace(/\"/gi,"");
-            let tmp_idx = tmp_path.indexOf("tmp");
-            tmp_path = tmp_path.substring(tmp_idx);   
-            return tmp_path;
+            let path = url?.replace(/\"/gi,"");
+            let check = path.substring(1,5);
+            if(check == 'home')
+            {
+                path = 'imagePath' + path; 
+            }
+            return path;
         }
     }
 
