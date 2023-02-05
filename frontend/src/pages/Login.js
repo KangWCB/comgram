@@ -16,7 +16,6 @@ const LoginPage = () => {
 
 
     useEffect(() => {
-      console.log(kakaoLoginUrl)
       let acctoken = localStorage.getItem('accessToken');
       let islogin = localStorage.getItem('isLogin');
       if(acctoken && islogin != 'false') // 토큰 있고 로그인 성공하면 메인페이지 이동
@@ -57,13 +56,11 @@ const LoginPage = () => {
         if(email == '' || password == '')
         {
           setStatus("이메일 혹은 패스워드가 입력되지 않았습니다.");
-
         }
         else
         {
           const config = {"Content-Type" : 'application/json'};
           let loginAPI = `${process.env.REACT_APP_BACKEND}` +  '/api/members/login'
-          console.log(loginAPI)
           const opt = {withCredentails: true};
           axios.post(loginAPI, userObject, config, opt)
           .then((res) => {
@@ -78,7 +75,7 @@ const LoginPage = () => {
               navigate("/");    // 리다이렉트
           })
           .catch((err) => {
-              console.log(err.toJSON());
+              console.log(err);
               setStatus("로그인 실패");
               localStorage.setItem('IsLogin', false);
           });

@@ -197,10 +197,10 @@ const Detail = forwardRef(({id}, detailRef) => {
     }
 
     const commentDeleteHandler = (commentId) => {
-        console.log(commentId)
+
         let commentdeleteAPI = `${process.env.REACT_APP_BACKEND}` + `/api/comments/${commentId}`;
         let acctoken = localStorage.getItem('accessToken');
-        console.log(acctoken)
+
         axios.delete(commentdeleteAPI, {
             headers : 
                 {'Authorization': acctoken}
