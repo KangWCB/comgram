@@ -1,12 +1,12 @@
 @font-face {
   font-family: 'NanumNeo';
-  font-style: normal;
+  font-weight: normal;
   src: local('NanumNeoRg'), url(./fonts/NanumNeoRg.woff) format('woff');
 }
 
 @font-face {
   font-family: 'NanumNeo';
-  font-style: bold;
+  font-weight: bold;
   src: local('NanumNeoBd'), url(./fonts/NanumNeoBd.woff) format('woff');
 }
 

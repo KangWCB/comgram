@@ -120,7 +120,7 @@ const Detail = forwardRef(({id}, detailRef) => {
         let check = path.substring(1,5);
         if(check == 'home')
         {
-            path = 'imagePath' + path; 
+            path = `${process.env.REACT_APP_BACKEND}` + '/' + 'imagePath' + path; 
         }
         return path;
     }
@@ -234,6 +234,12 @@ const Detail = forwardRef(({id}, detailRef) => {
         navigate("/info", {state: {id: writerId}});
     }
 
+    const modalcloseHandler = () => {
+        setModalisOpen(false);
+    }
+
+
+
     const commentListHandler = commentList?.map((data,idx) => <li className={styles.comment_li}key={idx}>
     <span className={`${styles.comment_span} ${styles.bold} `}>{data.commentUserNickname}</span> 
     <span className={`${styles.comment_span}`}> {data.commentContext}</span>
@@ -244,7 +250,7 @@ const Detail = forwardRef(({id}, detailRef) => {
 
     return(
         <div>
-            <Modal style={modalStyle} isOpen={ModalisOpen} onRequestClose={() => setModalisOpen(false)} ariaHideApp={false}>  
+            <Modal style={modalStyle} isOpen={ModalisOpen} onRequestClose={modalcloseHandler} ariaHideApp={false}>  
 
                 <div className={styles.photo_container}>
                     <img className={styles.photo} src={contentImgPath}></img>
@@ -255,7 +261,7 @@ const Detail = forwardRef(({id}, detailRef) => {
                     </div>
                     <span className={`${styles.span} ${styles.bold} `}> {writerName}</span>
                     {myPost && <button onClick={() => postDeleteHandler()}className={styles.deleteBtn}>글 삭제</button>}
-                    <IoMdClose className={styles.closeBtn}onClick={() => setModalisOpen(false)}/>
+                    <IoMdClose className={styles.closeBtn} onMouseDown={modalcloseHandler}/>
                     <div className={styles.comment}>
                         <div className={styles.box}>
                             <img className={styles.profileImg} src={`${profileImgPath}`}/>

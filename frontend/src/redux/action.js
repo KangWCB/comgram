@@ -15,7 +15,7 @@ export const addPostobj = () => async dispatch => {
     dispatch ({
         type: "OBJECT_ADD",
         payload: resdata['data']
-    });
+    }); 
 };
 
 export const updatePostobj = (obj) => async dispatch => {
@@ -26,7 +26,7 @@ export const updatePostobj = (obj) => async dispatch => {
     let acctoken = localStorage.getItem('accessToken');
     const config = {"Content-Type" : 'application/json'};
     
-    if(boardId != undefined)
+    if(boardId !== undefined)
     {
         await wait(500);
         await axios.get(updateAPI, {headers : 

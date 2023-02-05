@@ -64,7 +64,8 @@ const LoginPage = () => {
           const config = {"Content-Type" : 'application/json'};
           let loginAPI = `${process.env.REACT_APP_BACKEND}` +  '/api/members/login'
           console.log(loginAPI)
-          axios.post(loginAPI, userObject, config)
+          const opt = {withCredentails: true};
+          axios.post(loginAPI, userObject, config, opt)
           .then((res) => {
               localStorage.setItem('grantType', res.data['token']['grantType']);
               localStorage.setItem('refreshToken', res.data['token']['refreshToken']);

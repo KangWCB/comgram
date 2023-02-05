@@ -40,7 +40,7 @@ const Profile = () => {
         let check = path.substring(1,5);
         if(check == 'home')
         {
-            path = 'imagePath' + path; 
+            path = `${process.env.REACT_APP_BACKEND}` + '/' + 'imagePath' + path; 
         }
         return path;
     }

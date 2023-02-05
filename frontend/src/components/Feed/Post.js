@@ -166,7 +166,7 @@ const Post = (id) => {
         let check = path.substring(1,5);
         if(check == 'home')
         {
-            path = 'imagePath' + path; 
+            path = `${process.env.REACT_APP_BACKEND}` + '/' + 'imagePath' + path; 
         }
         return path;
     }
@@ -216,16 +216,14 @@ const Post = (id) => {
         {
             if(ismoreView == false)// ismoreview가 false면
             {
-                console.log("짧게")
                 cut_content = content.slice(0,content_limit);
-                console.log(cut_content);
+
                 setOriginContent(content);
                 setContent(cut_content);
             }
         }
         else if(ismoreView == true)
         {
-                console.log("길게")
                 setContent(originContent);
         }
         
@@ -243,7 +241,6 @@ const Post = (id) => {
             setViewMoreText("... 더 보기");
             
         }
-        console.log(ismoreView,"more")
     };
 
 
