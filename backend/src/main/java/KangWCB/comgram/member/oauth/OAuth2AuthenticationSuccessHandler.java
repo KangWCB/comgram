@@ -9,6 +9,7 @@ import KangWCB.comgram.photo.Photo;
 import KangWCB.comgram.photo.PhotoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +35,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Autowired
     private PhotoRepository photoRepository;
     private PasswordEncoder passwordEncoder;
+
+    @Value("${front-end.ip}")
+    String ip;
     public OAuth2AuthenticationSuccessHandler (@Lazy PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
@@ -81,7 +85,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, url);
     }
     private String makeRedirectUrl(String token, Long memberId) {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/?token="+token+"&id="+memberId)
+        return UriComponentsBuilder.fromUriString("http://"+ip+"/oauth2/redirect/?token="+token+"&id="+memberId)
                 .build().toUriString();
     }
 
@@ -91,3 +95,4 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return savedPhoto;
     }
 }
+
