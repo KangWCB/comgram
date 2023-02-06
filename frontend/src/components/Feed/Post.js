@@ -104,12 +104,11 @@ const Post = (id) => {
 
             setProfileImgPath(imgHandler(postobj['profileImgPath']));
 
-            if(first_like)
+            if(!first_like)
             {
                 first_like = true;
                 setLike(postobj['pushLike']);
             }
-
             let commentinfo = postobj['boardCommentInfo']
             let infoctor = commentinfo?.constructor; // 댓글 객체 타입
             let likeinfo = postobj['boardLikeInfo']
