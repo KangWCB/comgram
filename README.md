@@ -10,8 +10,8 @@
 
  **인스타그램 클론 코딩**
 
- **개발기간: 2023.01 ~ 2023.02**
-
+ **개발기간: 2023.01 ~ 2023.02**</br>
+<a href="https://inexpensive-hourglass-2f4.notion.site/Comgram-5d438457af4a4f52b7ec877182c50aaen">Notion</a>
 <table>
   <tr>
     <td align="center">
@@ -35,9 +35,11 @@
 <br/>
 
 - [프로젝트 소개](#프로젝트-소개)
+- [프로젝트 목표](#프로젝트-목표)
 - [주소](#주소)
 - [Stacks](#stacks)
 - [API](#api)
+- [기타](#기타)
 - [시연](#시연)
 <br/>
   
@@ -92,6 +94,10 @@
 ![api](https://user-images.githubusercontent.com/82385650/223118742-f79e56c4-94c3-4471-b67e-cbe7e325997a.png)
 <br/><br/><br/>
 
+# 기타
+
+자세한 API, 라이브러리 명세 및 폴더 트리구조, ERD, 참고 문서 등은 Notion을 통해 확인하실 수 있습니다. </br></br>
+<a href="https://inexpensive-hourglass-2f4.notion.site/Comgram-5d438457af4a4f52b7ec877182c50aaen">Comgram Notion Link</a>
 
 # 시연
 <details>
