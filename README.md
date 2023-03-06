@@ -27,32 +27,146 @@
 </table>  
 </div>
 
+# 목차
+- [프로젝트 소개](#프로젝트-소개)
+- [주소](#주소)
+- [Stacks](#stacks)
+- [시연](#시연)
+  
+# 프로젝트 소개
+> **Comgram 프로젝트**는 인스타그램 오마주를 목표로한 프로젝트입니다.<br/>
+> **ReactJS, Spring Boot, PostgreSQL** 등을 기반으로 인스타그램의 기능을 하나하나 구현하며, 다양한 기술스택을 경험하고자 했습니다.
+
 # 주소
 > **<a href="http://web.comgram.kro.kr">배포 사이트 바로가기</a>**
 
-# 프로젝트 소개
-> **Comgram 프로젝트는 인스타그램 오마주를 목표로 하여 ReactJS, Spring Boot, PostgreSQL 등을 기반으로 기능을 구현한 프로젝트입니다.** 
-
 # Stacks
+
 <table>
 	<tr><th rowspan="5">⚛Front-end</th><td>Language</td><td>JavaScript</td></tr>
 	<tr><td>Library</td><td>React</td></tr>
-	<tr><td>State Container</td><td>Redux</td></tr>
-	<tr><td>Design</td><td>react-modal, react-icons</td></tr>
+	<tr><td>State Container</td><td>Redux, redux-persist, redux-thunk</td></tr>
+	<tr><td>View</td><td>react-modal, react-router</td></tr>
 	<tr><td>Asynchronous</td><td>Axios</td></tr>
-	<tr><th rowspan="8">🌱Back-end</th><td>Language</td><td>Java 11</td></tr>
-	<tr><td>Framework</td><td>Spring Boot 2.5.4</td></tr>
-	<tr><td>ORM</td><td>Spring Data JPA, Querydsl</td></tr>
-	<tr><td>SMTP</td><td>Gmail SMTP</td></tr>
-	<tr><td>Authorization</td><td>Spring Security, JWT</td></tr>
-	<tr><td>Messaging</td><td>WebSocket, STOMP</td></tr>
-	<tr><td>API Documentation</td><td>Swagger</td></tr>
+	<tr><th rowspan="5">🌱Back-end</th><td>Language</td><td>Java 11</td></tr>
+	<tr><td>Framework</td><td>Spring Boot 2.7.7</td></tr>
+	<tr><td>ORM</td><td>Spring Data JPA, querydsl</td></tr>
+	<tr><td>Authorization</td><td>Spring Security, JWT, Oauth 2.0</td></tr>
 	<tr><td>Database</td><td>PostgreSQL</td></tr>
 	<tr><th rowspan="3">👨‍👩‍👦‍👦Collaboration</th><td>Api Test</td><td>Postman</td></tr>
 	<tr><td>Communication</td><td>Notion, Discord</td></tr>
 	<tr><td>Version Control</td><td>Github</td></tr>
 	<tr><th>🛠AWS Public Cloud Service</th><td colspan="2">EC2, Route 53</td></tr>
 </table>
+
+# Comgram API
+
+## Backend Dto List
+
+**MemberFormDto**
+```jsx
+{
+email,
+password,
+name,
+nickname
+}
+```
+
+**MemberLoginDto**
+```jsx
+{
+email, // not null
+password // not null, 4글자 이상 10글자 이하 비밀번호
+}
+```
+
+**MemberInfoDto**
+```jsx
+{
+memberId,
+email,
+nickname,
+profilePhotoUrl,
+name,
+introMsg
+}
+```
+
+**MemberUpdateForm**
+```jsx
+{
+nickname, // not Empty
+introMsg
+}
+```
+
+**BoardMyListDto**
+```jsx
+{
+id, photourl
+}
+```
+
+**BoardMainDto**
+```jsx
+private Long id; // 게시물 id
+private String  content; // 본문
+private String  contentImgPath; //본문 사진
+private Long likeCount = 0L; // 좋아요 수
+
+// 작성자
+private String nickName; // 작성자 별명
+private String profileImgPath; // 작성자 사진
+private Long writerId; // 작성자 아이디
+private Boolean pushLike; // 좋아요 누른지 안누른지
+
+private LocalDateTime regTime; // 글 작성 시간
+private Long commentCount= 0L; // 댓글 갯수
+
+private BoardLikeInfo boardLikeInfo;
+private BoardCommentInfo boardCommentInfo;
+```
+
+**BoardDetailDto**
+```jsx
+private Long id; // 게시물 id
+private String  content; // 본문
+private String  contentImgPath; //본문 사진
+private Long likeCount = 0L; // 좋아요 수
+
+// 작성자
+private String nickName; // 작성자 별명
+private Long writerId; // 작성자 id
+private String profileImgPath; // 작성자 사진
+private Boolean pushLike; // 좋아요 누른지 안누른지
+
+private LocalDateTime regTime; // 글 작성 시간
+private Long commentCount= 0L; // 댓글 갯수
+
+private List<BoardLikeInfo> boardLikeInfo;
+private List<BoardCommentInfo> boardCommentInfo;
+```
+
+**SearchResponseDto**
+```jsx
+private String cond;
+private int count;
+private List<T> list;
+//#일경우 cond = Board
+//없을 경우 cond = Member
+```
+
+**CommentRequestDto**
+```jsx
+private Long id;
+private String comment;
+private String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+private String modifiedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"));
+private Member member;
+private Board boards;
+```
+
 
 # 시연
 <details>
