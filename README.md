@@ -15,12 +15,12 @@
       <a href="https://github.com/shinb-bong">
         <img src="https://avatars.githubusercontent.com/u/81786969?v=4" width="110px;" alt=""/><br />
         <sub><b>신봉규</b></sub></a><br />
-        <sub><b>Back-end</b></sub></a><br />
+        <sub><b>🌱Back-end</b></sub></a><br />
     <td align="center">
       <a href="https://github.com/jw-jin">
         <img src="https://avatars.githubusercontent.com/u/82385650?v=4" width="110px;" alt=""/><br />
         <sub><b>정우진</b></sub></a><br />
-        <sub><b>Front-end</b></sub></a><br />    
+        <sub><b>⚛Front-end</b></sub></a><br />    
     </td>
     
   </tr>
