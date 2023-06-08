@@ -63,7 +63,8 @@
 # 주소
 <br/>
 
-> **<a href="http://web.comgram.kro.kr">배포 사이트 바로가기</a>**
+> ~~<a href="http://web.comgram.kro.kr">배포 사이트 바로가기</a>~~
+> 배포 중단
 <br/>
 
 # Stacks
@@ -97,7 +98,7 @@
 # 기타
 
 자세한 API, 라이브러리 명세 및 폴더 트리구조, ERD, 참고 문서 등은 Notion을 통해 확인하실 수 있습니다. </br></br>
-<a href="https://inexpensive-hourglass-2f4.notion.site/Comgram-5d438457af4a4f52b7ec877182c50aaen">Comgram Notion Link</a>
+<a href="https://available-hamster-35d.notion.site/Comgram-9df658e421244694b949f6de9c2ce99e">Comgram Notion Link</a>
 
 # 시연
 <details>
